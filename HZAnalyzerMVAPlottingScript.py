@@ -179,11 +179,17 @@ def process_files():
     directory.append("0.05")
     directory.append("0.1")
     directory.append("0.15")
+    directory.append("0.175")
     directory.append("0.2")
+    directory.append("0.225")
     directory.append("0.25")
+    directory.append("0.275")
     directory.append("0.3")
+    directory.append("0.325")
     directory.append("0.35")
+    directory.append("0.375")
     directory.append("0.4")
+    directory.append("0.425")
     directory.append("0.45")
     directory.append("0.5")
     directory.append("0.55")
@@ -193,14 +199,18 @@ def process_files():
     directory.append("0.75")
     directory.append("0.8")
     directory.append("0.85")
+    directory.append("0.875")
     directory.append("0.9")
+    directory.append("0.925")
     directory.append("0.95")
+    directory.append("0.975")
     directory.append("1.0")
 
-    file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root")  
-    file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root") 
-    file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root") 
-    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root") 
+    #file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVTrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root")  
+    file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root") 
+    file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root") 
+    file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root") 
+    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root") 
 
     for dir_ind in directory:
         h_mass_sig_hzqq=file_polm80_HZ_SignalHistos_.Get(dir_ind+"/h_jet1_mass")
@@ -213,10 +223,11 @@ def process_files():
 
 
 
-    file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35/MVTrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root")  
-    file_polp80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35/MVTrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root") 
-    file_polp80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35/MVTrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root") 
-    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35/MVTrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage1NCuts20.root") 
+    #file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVTrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root")  
+    file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root")  
+    file_polp80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root") 
+    file_polp80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root") 
+    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20.root") 
     #process_event(final_histo_name_,input_file_,files_weights_)
 
     for dir_ind in directory:
