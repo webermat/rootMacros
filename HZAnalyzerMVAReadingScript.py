@@ -1,6 +1,6 @@
 from ROOT import gROOT, TCanvas, TF1, TH1F, TH1, TH2,  TH2F, TGraph, TCanvas, TLegend, TTree, TLorentzVector, TVector3, TStyle, gPad,gStyle,TColor,TMVA,TCut,TString,TDirectory,TDatabasePDG
 import ROOT as root
-from math import cos, sin, pi, degrees, radians, pow, sqrt,acos
+from math import cos, sin, pi, degrees, radians, pow, sqrt,acos,log,tan
 from array import array
 
 def DeltaPhi( Phi1, Phi2 ):
@@ -182,6 +182,11 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
     v_jet2_phi = array('f',[0])
     tree.SetBranchAddress('jet1_phi',v_jet1_phi)
     tree.SetBranchAddress('jet2_phi',v_jet2_phi)
+
+    v_jet1_Pt = array('f',[0])
+    v_jet2_Pt = array('f',[0])
+    tree.SetBranchAddress('jet1_Pt',v_jet1_Pt)
+    tree.SetBranchAddress('jet2_Pt',v_jet2_Pt)
 
     v_jet1_sj1_E = array('f',[0])
     tree.SetBranchAddress('jet1_sj1_E',v_jet1_sj1_E)
@@ -467,6 +472,12 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
     lim_Efrac_low=0.0
     lim_Efrac_high=0.5
 
+    lim_jetE_ratio_low=0.5
+    lim_jetE_ratio_high=1.5
+
+    lim_jetP_ratio_low=0.5
+    lim_jetP_ratio_high=1.5
+
     nbins_charge=3
     lim_charge_low=-1.50
     lim_charge_high=1.50
@@ -595,6 +606,19 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
             print 'histos should be defined'
             h_jet2_mass_H_matched = TH1F( "h_jet2_mass_H_matched", "",n_bins_high, lim_mass_low, lim_mass_high)
             h_jet2_mass_Z_matched = TH1F( "h_jet2_mass_Z_matched", "",n_bins_high, lim_mass_low, lim_mass_high)
+
+            h_jetE_reco_over_parton_H_matched_orig = TH1F( "h_jetE_reco_over_parton_H_matched_orig", "",n_bins_high,lim_jetE_ratio_low, lim_jetE_ratio_high)
+            h_jetE_reco_over_parton_H_matched_corr = TH1F( "h_jetE_reco_over_parton_H_matched_corr", "",n_bins_high,lim_jetE_ratio_low, lim_jetE_ratio_high)
+
+            h_jetP_reco_over_parton_H_matched_orig = TH1F( "h_jetP_reco_over_parton_H_matched_orig", "",n_bins_high,lim_jetP_ratio_low, lim_jetP_ratio_high)
+            h_jetP_reco_over_parton_H_matched_corr = TH1F( "h_jetP_reco_over_parton_H_matched_corr", "",n_bins_high,lim_jetP_ratio_low, lim_jetP_ratio_high)
+
+            h_jetE_reco_over_parton_Z_matched_orig = TH1F( "h_jetE_reco_over_parton_Z_matched_orig", "",n_bins_high,lim_jetE_ratio_low, lim_jetE_ratio_high)
+            h_jetE_reco_over_parton_Z_matched_corr = TH1F( "h_jetE_reco_over_parton_Z_matched_corr", "",n_bins_high,lim_jetE_ratio_low, lim_jetE_ratio_high)
+
+            h_jetP_reco_over_parton_Z_matched_orig = TH1F( "h_jetP_reco_over_parton_Z_matched_orig", "",n_bins_high,lim_jetP_ratio_low, lim_jetP_ratio_high)
+            h_jetP_reco_over_parton_Z_matched_corr = TH1F( "h_jetP_reco_over_parton_Z_matched_corr", "",n_bins_high,lim_jetP_ratio_low, lim_jetP_ratio_high)
+
             h_jet2_sj_b_cM_jetChargeE_kappa_0_30= TH1F( "h_jet2_sj_b_cM_jetChargeE_kappa_0_30", "",n_bins_high, lim_jetCharge_low, lim_jetCharge_high)
             h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30= TH1F( "h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30", "",n_bins_high, lim_jetCharge_low, lim_jetCharge_high)
             h_jet2_sj_b_dM_jetChargeE_kappa_0_30= TH1F( "h_jet2_sj_b_dM_jetChargeE_kappa_0_30", "",n_bins_high, lim_jetCharge_low, lim_jetCharge_high)
@@ -806,6 +830,16 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
 
             h_signal_jetChargeHistos_1D_hist_list.append(h_jet2_mass_H_matched)
             h_signal_jetChargeHistos_1D_hist_list.append(h_jet2_mass_Z_matched)
+
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetE_reco_over_parton_H_matched_orig)
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetE_reco_over_parton_H_matched_corr)
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetP_reco_over_parton_H_matched_orig)
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetP_reco_over_parton_H_matched_corr)
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetE_reco_over_parton_Z_matched_orig)
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetE_reco_over_parton_Z_matched_corr)
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetP_reco_over_parton_Z_matched_orig)
+            h_signal_jetChargeHistos_1D_hist_list.append(h_jetP_reco_over_parton_Z_matched_corr)
+
             h_signal_jetChargeHistos_1D_hist_list.append(h_jet2_sj_b_cM_jetChargeE_kappa_0_30)
             h_signal_jetChargeHistos_1D_hist_list.append(h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30)
             h_signal_jetChargeHistos_1D_hist_list.append(h_jet2_sj_b_dM_jetChargeE_kappa_0_30)
@@ -1018,28 +1052,111 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 h_jet1_tau21.Fill(v_jet1_tau21[0],v_eventWeight[0])
                 h_jet2_tau21.Fill(v_jet2_tau21[0],v_eventWeight[0])
 
-                jettry1= RecoJet(0,0,0,0,v_jet1_tau21[0],v_jet1_C2_beta1[0],v_jet1_D2_beta1[0],v_jet1_BTag_rfj_BTagMax[0],0,0)
+                obj_jet1= RecoJet(0,0,0,0,v_jet1_tau21[0],v_jet1_C2_beta1[0],v_jet1_D2_beta1[0],v_jet1_BTag_rfj_BTagMax[0],0,0)
 
                 jet_p=sqrt(v_jet1_E[0]*v_jet1_E[0]-v_jet1_mass[0]*v_jet1_mass[0])
-                jettry1.SetPxPyPzE(jet_p*sin(radians(v_jet1_theta[0]))*cos(radians(v_jet1_phi[0])),jet_p*sin(radians(v_jet1_theta[0]))*sin(radians(v_jet1_phi[0])),jet_p*cos(radians(v_jet1_theta[0])),v_jet1_E[0])
+                obj_jet1.SetPtEtaPhiM(v_jet1_Pt[0],-log(tan(radians(v_jet1_theta[0]/2.))),radians(v_jet1_phi[0]),v_jet1_mass[0])
+                obj_jet2= RecoJet(0,0,0,0,v_jet2_tau21[0],v_jet2_C2_beta1[0],v_jet2_D2_beta1[0],0,0,0)
+                jet_p=sqrt(v_jet2_E[0]*v_jet2_E[0]-v_jet2_mass[0]*v_jet2_mass[0])
+                obj_jet2.SetPtEtaPhiM(v_jet2_Pt[0],-log(tan(radians(v_jet2_theta[0]/2.))),radians(v_jet2_phi[0]),v_jet2_mass[0])
 
-                if(abs(degrees(jettry1.Phi())-v_jet1_phi[0])>0.001 or abs(v_jet1_theta[0]-degrees(jettry1.Theta()))>0.001 or (abs(v_jet1_E[0]-jettry1.E())/jettry1.E())>0.001 or (abs(v_jet1_mass[0]-jettry1.M())/jettry1.M())>0.001):
-                    print 'what the fuck rather large differences',abs(degrees(jettry1.Phi())-v_jet1_phi[0]),abs(v_jet1_theta[0]-degrees(jettry1.Theta())),(abs(v_jet1_E[0]-jettry1.E())/jettry1.E()),(abs(v_jet1_mass[0]-jettry1.M())/jettry1.M())
-                    print 'jettry phi/theta/mass/E ',degrees(jettry1.Phi()),degrees(jettry1.Theta()),jettry1.M(),jettry1.E()
+
+
+
+                if(abs(degrees(obj_jet1.Phi())-v_jet1_phi[0])>0.001 or abs(v_jet1_theta[0]-degrees(obj_jet1.Theta()))>0.001 or (abs(v_jet1_E[0]-obj_jet1.E())/obj_jet1.E())>0.001 or (abs(v_jet1_mass[0]-obj_jet1.M())/obj_jet1.M())>0.001):
+                    print 'what the fuck rather large differences',abs(degrees(obj_jet1.Phi())-v_jet1_phi[0]),abs(v_jet1_theta[0]-degrees(obj_jet1.Theta())),(abs(v_jet1_E[0]-obj_jet1.E())/obj_jet1.E()),(abs(v_jet1_mass[0]-obj_jet1.M())/obj_jet1.M())
+                    print 'jettry phi/theta/mass/E ',degrees(obj_jet1.Phi()),degrees(obj_jet1.Theta()),obj_jet1.M(),obj_jet1.E()
                     print 'jet single phi/theta/mass/E ',v_jet1_phi[0],v_jet1_theta[0],v_jet1_mass[0],v_jet1_E[0]
                 elif num_entry%(int(tree.GetEntries()/5.)) == 0:
-                    print 'things are alright',abs(degrees(jettry1.Phi())-v_jet1_phi[0]),abs(v_jet1_theta[0]-degrees(jettry1.Theta())),(abs(v_jet1_E[0]-jettry1.E())/jettry1.E()),(abs(v_jet1_mass[0]-jettry1.M())/jettry1.M())
-                    print 'jettry phi/theta/mass/E ',degrees(jettry1.Phi()),degrees(jettry1.Theta()),jettry1.M(),jettry1.E()
+                    print 'things are alright',abs(degrees(obj_jet1.Phi())-v_jet1_phi[0]),abs(v_jet1_theta[0]-degrees(obj_jet1.Theta())),(abs(v_jet1_E[0]-obj_jet1.E())/obj_jet1.E()),(abs(v_jet1_mass[0]-obj_jet1.M())/obj_jet1.M())
+                    print 'jettry phi/theta/mass/E ',degrees(obj_jet1.Phi()),degrees(obj_jet1.Theta()),obj_jet1.M(),obj_jet1.E()
                     print 'jet single phi/theta/mass/E ',v_jet1_phi[0],v_jet1_theta[0],v_jet1_mass[0],v_jet1_E[0]
-                    print 'other variables',jettry1.tau21, jettry1.C2_beta1,jettry1.D2_beta1,jettry1.BTag_rfj_BTagMax,jettry1.subjetE_ratio,jettry1.subjet_DeltaPhi
+                    print 'other variables',obj_jet1.tau21, obj_jet1.C2_beta1,obj_jet1.D2_beta1,obj_jet1.BTag_rfj_BTagMax,obj_jet1.subjetE_ratio,obj_jet1.subjet_DeltaPhi
                     print 'compared to',v_jet1_tau21[0],v_jet1_C2_beta1[0],v_jet1_D2_beta1[0],v_jet1_BTag_rfj_BTagMax[0],0,0
 
-                #jettry1.SetPhi(v_jet1_phi[0])
-                #jettry1.SetE(v_jet1_E[0])
-
+                temp_rj1=TLorentzVector(0,0,0,0)
+                temp_rj1.SetPtEtaPhiM(v_jet1_Pt[0],-log(tan(radians(v_jet1_theta[0]/2.))),radians(v_jet1_phi[0]),v_jet1_mass[0])
+                temp_rj2=TLorentzVector(0,0,0,0)
+                temp_rj2.SetPtEtaPhiM(v_jet2_Pt[0],-log(tan(radians(v_jet2_theta[0]/2.))),radians(v_jet2_phi[0]),v_jet2_mass[0])
+                temp_rj2_orig_corr=TLorentzVector(0,0,0,0)
+                temp_rj2_orig_corr.SetPtEtaPhiM(v_jet2_Pt[0],-log(tan(radians(v_jet2_theta[0]/2.))),radians(v_jet2_phi[0]),v_jet2_mass[0])
+                temp_rj2_orig=TLorentzVector(0,0,0,0)
+                temp_rj2_orig.SetPxPyPzE(v_jet2_sj1_Px[0]+v_jet2_sj2_Px[0],v_jet2_sj1_Py[0]+v_jet2_sj2_Py[0],v_jet2_sj1_Pz[0]+v_jet2_sj2_Pz[0],v_jet2_sj1_E[0]+v_jet2_sj2_E[0])
+                temp_rj1_orig=TLorentzVector(0,0,0,0)
+                temp_rj1_orig.SetPxPyPzE(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0],v_jet1_sj1_Py[0]+v_jet1_sj2_Py[0],v_jet1_sj1_Pz[0]+v_jet1_sj2_Pz[0],v_jet1_sj1_E[0]+v_jet1_sj2_E[0])
+                if(i_isSignalData):    
+                   tempVecH=TLorentzVector(0,0,0,0)
+                   tempVecH.SetPxPyPzE(v_parton_H_Px[0],v_parton_H_Py[0],v_parton_H_Pz[0],v_parton_H_E[0])
+                   tempVecZ_qneg=TLorentzVector(0,0,0,0)
+                   tempVecZ_qneg.SetPxPyPzE(v_parton_Z_qneg_Px[0],v_parton_Z_qneg_Py[0],v_parton_Z_qneg_Pz[0],v_parton_Z_qneg_E[0])
+                   tempVecZ_qpos=TLorentzVector(0,0,0,0)
+                   tempVecZ_qpos.SetPxPyPzE(v_parton_Z_qpos_Px[0],v_parton_Z_qpos_Py[0],v_parton_Z_qpos_Pz[0],v_parton_Z_qpos_E[0])
+                   tempVecZ=TLorentzVector(0,0,0,0)
+                   tempVecZ=tempVecZ_qneg+tempVecZ_qpos
+                   if (temp_rj1.Angle(tempVecZ.Vect())-temp_rj1_orig.Angle(tempVecZ.Vect())>1.e-5):
+                       print 'angle should be so similarr j1',temp_rj1.Angle(tempVecZ.Vect()),temp_rj1_orig.Angle(tempVecZ.Vect())
+                   if (temp_rj2.Angle(tempVecZ.Vect())-temp_rj2_orig.Angle(tempVecZ.Vect())>1.e-5):
+                       print 'angle should be so similar rj2',temp_rj2.Angle(tempVecZ.Vect()),temp_rj2_orig.Angle(tempVecZ.Vect())
+                   if temp_rj1.Angle(tempVecZ.Vect())<temp_rj1.Angle(tempVecH.Vect()):
+                       h_jetE_reco_over_parton_Z_matched_orig.Fill(temp_rj1_orig.E()/tempVecZ.E(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_Z_matched_corr.Fill(temp_rj1.E()/tempVecZ.E(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_H_matched_orig.Fill(temp_rj2_orig.E()/tempVecH.E(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_H_matched_corr.Fill(temp_rj2.E()/tempVecH.E(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_Z_matched_orig.Fill(temp_rj1_orig.P()/tempVecZ.P(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_Z_matched_corr.Fill(temp_rj1.P()/tempVecZ.P(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_H_matched_orig.Fill(temp_rj2_orig.P()/tempVecH.P(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_H_matched_corr.Fill(temp_rj2.P()/tempVecH.P(),v_eventWeight[0])
+                   else:
+                       h_jetE_reco_over_parton_Z_matched_orig.Fill(temp_rj2_orig.E()/tempVecZ.E(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_Z_matched_corr.Fill(temp_rj2.E()/tempVecZ.E(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_H_matched_orig.Fill(temp_rj1_orig.E()/tempVecH.E(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_H_matched_corr.Fill(temp_rj1.E()/tempVecH.E(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_Z_matched_orig.Fill(temp_rj2_orig.P()/tempVecZ.P(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_Z_matched_corr.Fill(temp_rj2.P()/tempVecZ.P(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_H_matched_orig.Fill(temp_rj1_orig.P()/tempVecH.P(),v_eventWeight[0])
+                       h_jetP_reco_over_parton_H_matched_corr.Fill(temp_rj1.P()/tempVecH.P(),v_eventWeight[0])
                 #reco level
+                temp_tot_Event_rj_orig=TLorentzVector(0,0,0,0)
+                temp_tot_Event_rj_orig.SetPxPyPzE(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0]+v_jet2_sj1_Px[0]+v_jet2_sj2_Px[0],v_jet1_sj1_Py[0]+v_jet1_sj2_Py[0]+v_jet2_sj1_Py[0]+v_jet2_sj2_Py[0],v_jet1_sj1_Pz[0]+v_jet1_sj2_Pz[0]+v_jet2_sj1_Pz[0]+v_jet2_sj2_Pz[0],v_jet1_sj1_E[0]+v_jet1_sj2_E[0]+v_jet2_sj1_E[0]+v_jet2_sj2_E[0])
                 temp_tot_Event_rj=TLorentzVector(0,0,0,0)
-                temp_tot_Event_rj.SetPxPyPzE(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0]+v_jet2_sj1_Px[0]+v_jet2_sj2_Px[0],v_jet1_sj1_Py[0]+v_jet1_sj2_Py[0]+v_jet2_sj1_Py[0]+v_jet2_sj2_Py[0],v_jet1_sj1_Pz[0]+v_jet1_sj2_Pz[0]+v_jet2_sj1_Pz[0]+v_jet2_sj2_Pz[0],v_jet1_sj1_E[0]+v_jet1_sj2_E[0]+v_jet2_sj1_E[0]+v_jet2_sj2_E[0])
+                temp_tot_Event_rj=temp_rj1+temp_rj2
+                if(v_jet1_sj2_E[0]>v_jet1_sj1_E[0]):
+                    print 'sj1 E<sj2 E', v_jet1_sj1_E[0],v_jet1_sj2_E[0]
+                sf_rj1=obj_jet1.Px()/(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0])
+                if abs(sf_rj1-1.)<1.e-6 :
+                    sf_rj1=1.
+                    #print 'wtf scale factor s1 ',sf_rj1,obj_jet1.Px()/(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0])
+                temp_rj1_sj1_orig=TLorentzVector(0,0,0,0)
+                temp_rj1_sj1_orig.SetPxPyPzE(v_jet1_sj1_Px[0],v_jet1_sj1_Py[0],v_jet1_sj1_Pz[0],v_jet1_sj1_E[0])
+                temp_rj1_sj2_orig=TLorentzVector(0,0,0,0)
+                temp_rj1_sj2_orig.SetPxPyPzE(v_jet1_sj2_Px[0],v_jet1_sj2_Py[0],v_jet1_sj2_Pz[0],v_jet1_sj2_E[0])
+                temp_rj1_sj1=TLorentzVector(0,0,0,0)
+                if sf_rj1==1.:
+                    temp_rj1_sj1=temp_rj1_sj1_orig
+                else:
+                    temp_rj1_sj1.SetPxPyPzE(sf_rj1*v_jet1_sj1_Px[0],sf_rj1*v_jet1_sj1_Py[0],sf_rj1*v_jet1_sj1_Pz[0],v_jet1_sj1_E[0]+v_jet1_sj1_E[0]/(v_jet1_sj1_E[0]+v_jet1_sj2_E[0])*(obj_jet1.E()-(v_jet1_sj1_E[0]+v_jet1_sj2_E[0])))
+                temp_rj1_sj2=TLorentzVector(0,0,0,0)
+                if sf_rj1==1.:
+                    temp_rj1_sj2=temp_rj1_sj2_orig
+                else:
+                   temp_rj1_sj2.SetPxPyPzE(sf_rj1*v_jet1_sj2_Px[0],sf_rj1*v_jet1_sj2_Py[0],sf_rj1*v_jet1_sj2_Pz[0],v_jet1_sj2_E[0]+v_jet1_sj2_E[0]/(v_jet1_sj1_E[0]+v_jet1_sj2_E[0])*(obj_jet1.E()-(v_jet1_sj1_E[0]+v_jet1_sj2_E[0])))
+                sf_rj2=obj_jet2.Px()/(v_jet2_sj1_Px[0]+v_jet2_sj2_Px[0])
+                if abs(sf_rj2-1.)<1.e-6 :
+                    sf_rj2=1.
+                temp_rj2_sj1_orig=TLorentzVector(0,0,0,0)
+                temp_rj2_sj1_orig.SetPxPyPzE(v_jet2_sj1_Px[0],v_jet2_sj1_Py[0],v_jet2_sj1_Pz[0],v_jet2_sj1_E[0])
+                temp_rj2_sj2_orig=TLorentzVector(0,0,0,0)
+                temp_rj2_sj2_orig.SetPxPyPzE(v_jet2_sj2_Px[0],v_jet2_sj2_Py[0],v_jet2_sj2_Pz[0],v_jet2_sj2_E[0])
+                temp_rj2_sj1=TLorentzVector(0,0,0,0)
+                if(sf_rj2==1):
+                    temp_rj2_sj1=temp_rj2_sj1_orig
+                else:
+                    temp_rj2_sj1.SetPxPyPzE(sf_rj2*v_jet2_sj1_Px[0],sf_rj2*v_jet2_sj1_Py[0],sf_rj2*v_jet2_sj1_Pz[0],v_jet2_sj1_E[0]+v_jet2_sj1_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0])*(obj_jet2.E()-(v_jet2_sj1_E[0]+v_jet2_sj2_E[0])))
+                temp_rj2_sj2=TLorentzVector(0,0,0,0)
+                if(sf_rj2==1):
+                    temp_rj2_sj2=temp_rj2_sj2_orig
+                else:
+                    temp_rj2_sj2.SetPxPyPzE(sf_rj2*v_jet2_sj2_Px[0],sf_rj2*v_jet2_sj2_Py[0],sf_rj2*v_jet2_sj2_Pz[0],v_jet2_sj2_E[0]+v_jet2_sj2_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0])*(obj_jet2.E()-(v_jet2_sj1_E[0]+v_jet2_sj2_E[0])))
                 temp_ep_approx_rj=TLorentzVector(0,0,0,0)
                 temp_ep_approx_E_rj=sqrt(pow(0.5*temp_tot_Event_rj.E()-0.5*temp_tot_Event_rj.Pz(),2)+pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2))
                 temp_ep_approx_rj.SetPxPyPzE(0.,0.,-0.5*temp_tot_Event_rj.E()+0.5*temp_tot_Event_rj.Pz(),temp_ep_approx_E_rj)
@@ -1048,28 +1165,26 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 temp_ep_approx_rj.Boost(boostE_tot_COM_rj)
                 if temp_ep_approx_rj.Pz()>0 :
                     print 'pz should have been negative per principle ',0.5*temp_tot_Event_rj.E()-0.5*temp_tot_Event_rj.Pz(),temp_ep_approx_rj.Pz(),temp_tot_Event_rj.Pz(),temp_tot_Event_rj.Px(),temp_tot_Event_rj.Py()
-                #if (temp_ep_approx_rj.E()/temp_ep_approx.E())<0.10 or (temp_ep_approx_rj.E()/temp_ep_approx.E())>1.10 :
-                #    print 'huge difference in energy ',temp_tot_Event_rj.E(),temp_tot_Event.E()
-                #if degrees(temp_ep_approx_rj.Angle(temp_ep_approx.Vect()))>25.:
-                #    print 'huge difference in angle ',degrees(temp_ep_approx_rj.Angle(temp_ep_approx.Vect())),temp_ep_approx_rj.Vect().Unit().Px(),temp_ep_approx_rj.Vect().Unit().Py(),temp_ep_approx_rj.Vect().Unit().Pz(),temp_ep_approx.Vect().Unit().Px(),temp_ep_approx.Vect().Unit().Py(),temp_ep_approx.Vect().Unit().Pz()
-                #if degrees(temp_ep_approx_rj.Angle(temp_ep.Vect()))>20.:
-                #    print 'huge difference in real angle ',degrees(temp_ep_approx_rj.Angle(temp_ep.Vect())),temp_ep_approx_rj.Vect().Unit().Px(),temp_ep_approx_rj.Vect().Unit().Py(),temp_ep_approx_rj.Vect().Unit().Pz(),temp_ep.Vect().Unit().Px(),temp_ep.Vect().Unit().Py(),temp_ep.Vect().Unit().Pz(),temp_ep_approx_rj.E(),temp_ep.E(),temp_tot_Event_rj.E(),temp_tot_Event.E()
-                temp_rj1=TLorentzVector(0,0,0,0)
-                temp_rj1.SetPxPyPzE(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0],v_jet1_sj1_Py[0]+v_jet1_sj2_Py[0],v_jet1_sj1_Pz[0]+v_jet1_sj2_Pz[0],v_jet1_sj1_E[0]+v_jet1_sj2_E[0])
+                if((temp_rj1_sj1+temp_rj1_sj2).Angle(obj_jet1.Vect())<0.01 and abs((temp_rj1_sj1+temp_rj1_sj2).E()-obj_jet1.E())>0.01) :
+                    print 'energy of new calc/rescaled rj1 big',  degrees((temp_rj1_sj1+temp_rj1_sj2).Angle(obj_jet1.Vect())),obj_jet1.E(),(temp_rj1_sj1+temp_rj1_sj2).E()
+
+                if((temp_rj1_sj1+temp_rj1_sj2).Angle(obj_jet1.Vect()))>0.01 :
+                    print 'delta angle new calc/rescaled rj1 big',  degrees((temp_rj1_sj1+temp_rj1_sj2).Angle(obj_jet1.Vect())),obj_jet1.E(),(temp_rj1_sj1+temp_rj1_sj2).E()
+                #if temp_rj1_sj1.M()<=0 or temp_rj1_sj2.M()<=0 :
+                #    print 'wtf with masses rj1 ',temp_rj1_sj1.M(),temp_rj1_sj1.P(),temp_rj1_sj1.E(),temp_rj1_sj2.M(),temp_rj1_sj2.P(),temp_rj1_sj2.E(),sf_rj1,temp_tot_Event_rj.M()/temp_tot_Event_rj_orig.M()
+                if((temp_rj2_sj1+temp_rj2_sj2).Angle(obj_jet2.Vect())<0.01 and abs((temp_rj2_sj1+temp_rj2_sj2).E()-obj_jet2.E())>0.01) :
+                    print 'energy of new calc/rescaled rj2 big',  degrees((temp_rj2_sj1+temp_rj2_sj2).Angle(obj_jet2.Vect())),obj_jet2.E(),(temp_rj2_sj1+temp_rj2_sj2).E()
+                if((temp_rj2_sj1+temp_rj2_sj2).Angle(obj_jet2.Vect()))>0.01 :
+                    print 'delta angle new calc/rescaled rj2 big',  degrees((temp_rj2_sj1+temp_rj2_sj2).Angle(obj_jet2.Vect())),obj_jet2.E(),(temp_rj2_sj1+temp_rj2_sj2).E()
+                #defined after rescaling with MET projection above
                 temp_rj1.Boost(boostE_tot_COM_rj)
                 plane_rj1_ep_approx_rj_boost=TVector3(0,0,0)
                 plane_rj1_ep_approx_rj_boost=temp_rj1.Vect().Cross(temp_ep_approx_rj.Vect()).Unit()
-                temp_rj2=TLorentzVector(0,0,0,0)
-                temp_rj2.SetPxPyPzE(v_jet2_sj1_Px[0]+v_jet2_sj2_Px[0],v_jet2_sj1_Py[0]+v_jet2_sj2_Py[0],v_jet2_sj1_Pz[0]+v_jet2_sj2_Pz[0],v_jet2_sj1_E[0]+v_jet2_sj2_E[0])
+                #if temp_rj2_sj1.M()<=0 or temp_rj2_sj2.M()<=0 :
+                #    print 'wtf with masses rj2 ',temp_rj2_sj1.M(),temp_rj2_sj1.P(),temp_rj2_sj1.E(),temp_rj2_sj2.M(),temp_rj2_sj2.P(),temp_rj2_sj2.E(),sf_rj2,temp_tot_Event_rj.M()/temp_tot_Event_rj_orig.M(),temp_tot_Event_rj.M()
                 temp_rj2.Boost(boostE_tot_COM_rj)
-                temp_rj2_sj1=TLorentzVector(0,0,0,0)
-                temp_rj2_sj1.SetPxPyPzE(v_jet2_sj1_Px[0],v_jet2_sj1_Py[0],v_jet2_sj1_Pz[0],v_jet2_sj1_E[0])
-                temp_rj2_sj2=TLorentzVector(0,0,0,0)
-                temp_rj2_sj2.SetPxPyPzE(v_jet2_sj2_Px[0],v_jet2_sj2_Py[0],v_jet2_sj2_Pz[0],v_jet2_sj2_E[0])
-                temp_rj2_orig=TLorentzVector(0,0,0,0)
-                temp_rj2_orig.SetPxPyPzE(v_jet2_sj1_Px[0]+v_jet2_sj2_Px[0],v_jet2_sj1_Py[0]+v_jet2_sj2_Py[0],v_jet2_sj1_Pz[0]+v_jet2_sj2_Pz[0],v_jet2_sj1_E[0]+v_jet2_sj2_E[0])
                 boostrj2_COM=TVector3(0,0,0) 
-                boostrj2_COM=-temp_rj2_orig.BoostVector()
+                boostrj2_COM=-temp_rj2_orig_corr.BoostVector()
                 temp_rj2_sj1.Boost(boostrj2_COM)
                 temp_rj2_sj2.Boost(boostrj2_COM)
 
