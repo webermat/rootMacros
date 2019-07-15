@@ -23,7 +23,7 @@ def setUpperCanvas(canvas_name) :
     c1.cd()
     gPad.SetTopMargin(0.06)
     return c1
- 
+
 def CLICdpStyle(): 
     gROOT.SetStyle("Plain") 
     gStyle.SetCanvasColor(root.kWhite)
