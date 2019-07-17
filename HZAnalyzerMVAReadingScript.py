@@ -513,6 +513,8 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
     lim_cosProdNorm_low=-1.55
     lim_cosProdNorm_high=1.55
 
+    n_bins_high_2D=40
+
 
     BDT_cuts=[]
     #print 'do i get here maybe 1'
@@ -595,6 +597,7 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
 
         h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com = TH1F( "h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com", "", n_bins_high, lim_cosProd_low,lim_cosProd_high)
         h_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com = TH1F( "h_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com", "", n_bins_high, lim_cosProd_low,lim_cosProd_high)
+
         h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com = TH1F( "h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com", "", n_bins_high, lim_cosProd_low,lim_cosProd_high)
         h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com = TH1F( "h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com", "", n_bins_high, lim_cosProd_low,lim_cosProd_high)
 
@@ -659,6 +662,15 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
         for hist in h_signal_background_1D_hist_list:
             hist.Sumw2()
 
+
+        h_2D_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM = TH2F( "h_2D_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+        h_2D_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM = TH2F( "h_2D_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+        h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM = TH2F( "h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+        h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM = TH2F( "h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+        h_2D_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Sumw2()
+        h_2D_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Sumw2()
+        h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Sumw2()
+        h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Sumw2()
 
         h_signal_jetChargeHistos_1D_hist_list=[]
         if(i_isSignalData):    
@@ -1251,6 +1263,21 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
 
             for hist in h_signal_jetChargeHistos_1D_hist_list:
                 hist.Sumw2()
+ 
+            h_2D_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM = TH2F( "h_2D_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+            h_2D_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM = TH2F( "h_2D_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM = TH2F( "h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM = TH2F( "h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+            h_2D_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Sumw2()
+            h_2D_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Sumw2()
+            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Sumw2()
+            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Sumw2()
+
+            h_2D_parton_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM = TH2F( "h_2D_parton_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+            h_2D_parton_sgncostheta1_costheta1_costheta1_Z_qpos_Zcom_vs_sgncostheta2_costheta2_H_ep_HZ_COM = TH2F( "h_2D_parton_sgncostheta1_costheta1_Z_qpos_Zcom_vs_sgncostheta2_costheta2_H_ep_HZ_COM", "", n_bins_high_2D, lim_cosProd_low,lim_cosProd_high,n_bins_high_2D, lim_cosProd_low,lim_cosProd_high)
+            h_2D_parton_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Sumw2()
+            h_2D_parton_sgncostheta1_costheta1_costheta1_Z_qpos_Zcom_vs_sgncostheta2_costheta2_H_ep_HZ_COM.Sumw2()
+
 
         num_entry=-1
         #BDTCut=0.50
@@ -1646,6 +1673,15 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                     h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
                 if cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))!=0:
                     h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+
+
+                h_2D_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_approx_rj.Vect())),v_eventWeight[0])
+                h_2D_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_approx_rj.Vect())),v_eventWeight[0])
+                if cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))!=0 and cos(temp_rj1.Angle(temp_ep_approx_rj.Vect()))!=0:
+                    h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_approx_rj.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_approx_rj.Vect())))*cos(temp_rj1.Angle(temp_ep_approx_rj.Vect())),v_eventWeight[0])
+                if cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))!=0 and cos(temp_rj1.Angle(temp_ep_approx_rj.Vect()))!=0:
+                    h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_approx_rj.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_approx_rj.Vect())))*cos(temp_rj1.Angle(temp_ep_approx_rj.Vect())),v_eventWeight[0])
+
                 #print 'degrees phi plane ',degrees(phi_plane_rj1_ep_rj2_sj_jcE_pos)
                 phi_plane_rj1_ep_rj2_sj_jcE_pos_rad = radians(phi_plane_rj1_ep_rj2_sj_jcE_pos)
                 if sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)!=0:
@@ -1719,6 +1755,10 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                     h_parton_costheta1_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))*degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
                     if cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0 :
                         h_parton_sgncos2theta1_costheta1_Z_qpos_Zcom.Fill(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))*degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                    h_2D_parton_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
+                    if cos(temp_H.Angle(temp_ep.Vect()))!=0 and cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
+                        h_2D_parton_sgncostheta1_costheta1_costheta1_Z_qpos_Zcom_vs_sgncostheta2_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect()))/abs(cos(temp_H.Angle(temp_ep.Vect())))*cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
+ 
                     h_parton_theta_Z_qpos_Z_qneg_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z_qneg_boostZ_COM.Vect())),v_eventWeight[0])
                     h_parton_cosTheta_Z_qneg_Zcom.Fill(cos(temp_Z_qneg_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
                     h_parton_cosTheta_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
@@ -1932,6 +1972,14 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                         h_genjet_sgncos2theta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
                     if cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))!=0:
                         h_genjet_sgncos2theta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
+
+
+                    h_2D_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_approx_gj.Vect())),v_eventWeight[0])
+                    h_2D_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_approx_gj.Vect())),v_eventWeight[0])
+                    if cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))!=0 and cos(temp_gj1.Angle(temp_ep_approx_gj.Vect()))!=0:
+                        h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_approx_gj.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_approx_gj.Vect())))*cos(temp_gj1.Angle(temp_ep_approx_gj.Vect())),v_eventWeight[0])
+                    if cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))!=0 and cos(temp_gj1.Angle(temp_ep_approx_gj.Vect()))!=0:
+                        h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_approx_gj.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_approx_gj.Vect())))*cos(temp_gj1.Angle(temp_ep_approx_gj.Vect())),v_eventWeight[0])
 
 
                     h_genjet_theta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
