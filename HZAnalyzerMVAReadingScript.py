@@ -1559,8 +1559,21 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 boostE_tot_COM_rj=TVector3(0,0,0) 
                 boostE_tot_COM_rj=-temp_tot_Event_rj.BoostVector()
                 temp_ep_approx_rj.Boost(boostE_tot_COM_rj)
+
+
+                temp_ep_real_rj=TLorentzVector(0,0,0,0)
+                temp_pz_ep_reco=temp_tot_Event_rj.Pz()*0.5-0.5*sqrt(temp_tot_Event_rj.E()*temp_tot_Event_rj.E()-(temp_tot_Event_rj.Pz()*temp_tot_Event_rj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2)))
+                temp_ep_real_E_rj=sqrt(pow(temp_tot_Event_rj.Pz()*0.5-0.5*sqrt(temp_tot_Event_rj.E()*temp_tot_Event_rj.E()-(temp_tot_Event_rj.Pz()*temp_tot_Event_rj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2))),2)+pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2))
+                temp_ep_real_rj.SetPxPyPzE(0,0,temp_pz_ep_reco,temp_ep_approx_E_rj)
+                temp_ep_real_rj_boost=TLorentzVector(0,0,0,0)
+                temp_ep_real_rj_boost.SetPxPyPzE(0,0,temp_pz_ep_reco,temp_ep_approx_E_rj)
+                temp_ep_real_rj_boost.Boost(boostE_tot_COM_rj)
+                if (temp_tot_Event_rj.E()*temp_tot_Event_rj.E()-(temp_tot_Event_rj.Pz()*temp_tot_Event_rj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2)))<0:
+                    print 'warning seems wasnt really working ', (temp_tot_Event_rj.E()*temp_tot_Event_rj.E()-(temp_tot_Event_rj.Pz()*temp_tot_Event_rj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2)))
                 if temp_ep_approx_rj.Pz()>0 :
-                    print 'pz should have been negative per principle ',0.5*temp_tot_Event_rj.E()-0.5*temp_tot_Event_rj.Pz(),temp_ep_approx_rj.Pz(),temp_tot_Event_rj.Pz(),temp_tot_Event_rj.Px(),temp_tot_Event_rj.Py()
+                    print 'pz should have been negative per principle reco ',0.5*temp_tot_Event_rj.E()-0.5*temp_tot_Event_rj.Pz(),temp_ep_approx_rj.Pz(),temp_tot_Event_rj.Pz(),temp_tot_Event_rj.Px(),temp_tot_Event_rj.Py()
+                    print' pz approx/real/after scale ',-0.5*temp_tot_Event_rj.E()+0.5*temp_tot_Event_rj.Pz(),temp_ep_real_rj.Pz(),temp_ep_approx_rj.Pz(),temp_ep_real_rj_boost.Pz()
+                    print' pz before/after boost/boost ',temp_ep_real_rj.Pz(),temp_ep_real_rj_boost.Pz(),temp_tot_Event_rj.Pz()
                 if((temp_rj1_sj1+temp_rj1_sj2).Angle(obj_jet1.Vect())<0.01 and abs((temp_rj1_sj1+temp_rj1_sj2).E()-obj_jet1.E())>0.01) :
                     print 'energy of new calc/rescaled rj1 big',  degrees((temp_rj1_sj1+temp_rj1_sj2).Angle(obj_jet1.Vect())),obj_jet1.E(),(temp_rj1_sj1+temp_rj1_sj2).E()
 
@@ -1572,12 +1585,13 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                     print 'energy of new calc/rescaled rj2 big',  degrees((temp_rj2_sj1+temp_rj2_sj2).Angle(obj_jet2.Vect())),obj_jet2.E(),(temp_rj2_sj1+temp_rj2_sj2).E()
                 if((temp_rj2_sj1+temp_rj2_sj2).Angle(obj_jet2.Vect()))>0.01 :
                     print 'delta angle new calc/rescaled rj2 big',  degrees((temp_rj2_sj1+temp_rj2_sj2).Angle(obj_jet2.Vect())),obj_jet2.E(),(temp_rj2_sj1+temp_rj2_sj2).E()
-                #defined after rescaling with MET projection above
+                #defined after rescaling with MET projection above, from now on also only boosted quantities in COM regime
                 temp_rj1.Boost(boostE_tot_COM_rj)
                 plane_rj1_ep_approx_rj_boost=TVector3(0,0,0)
                 plane_rj1_ep_approx_rj_boost=temp_rj1.Vect().Cross(temp_ep_approx_rj.Vect()).Unit()
                 #if temp_rj2_sj1.M()<=0 or temp_rj2_sj2.M()<=0 :
                 #    print 'wtf with masses rj2 ',temp_rj2_sj1.M(),temp_rj2_sj1.P(),temp_rj2_sj1.E(),temp_rj2_sj2.M(),temp_rj2_sj2.P(),temp_rj2_sj2.E(),sf_rj2,temp_tot_Event_rj.M()/temp_tot_Event_rj_orig.M(),temp_tot_Event_rj.M()
+                #from now on ALL rj2 quantities are in COM regime
                 temp_rj2.Boost(boostE_tot_COM_rj)
                 boostrj2_COM=TVector3(0,0,0) 
                 boostrj2_COM=-temp_rj2_orig_corr.BoostVector()
@@ -1916,27 +1930,28 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                     temp_Z_qpos.SetPxPyPzE(v_parton_Z_qpos_Px[0],v_parton_Z_qpos_Py[0],v_parton_Z_qpos_Pz[0],v_parton_Z_qpos_E[0])
                     temp_Z=TLorentzVector(0,0,0,0)
                     temp_Z=temp_Z_qneg+temp_Z_qpos
-                    #print 'Z before COM boost ',temp_Z.M(),temp_Z.Px(),temp_Z.Py(),temp_Z.Pz(),temp_Z.E()
+                    temp_Z_orig=temp_Z_qneg+temp_Z_qpos
+                    boostZ_COM_orig=TVector3(0,0,0) 
+                    boostZ_COM_orig=-temp_Z_orig.BoostVector()
                     temp_Z.Boost(boostE_tot_COM)
-                    #print 'Z after COM boost ',temp_Z.M(),temp_Z.Px(),temp_Z.Py(),temp_Z.Pz(),temp_Z.E()
-                    #print 'event boost',temp_tot_Event.M(),temp_tot_Event.Px(),temp_tot_Event.Py(),temp_tot_Event.Pz(),temp_tot_Event.E()
                     boostZ_COM=TVector3(0,0,0) 
                     boostZ_COM=-temp_Z.BoostVector()
                     temp_Z_qpos_boostZ_COM=TLorentzVector(0,0,0,0)
                     temp_Z_qpos_boostZ_COM.SetPxPyPzE(v_parton_Z_qpos_Px[0],v_parton_Z_qpos_Py[0],v_parton_Z_qpos_Pz[0],v_parton_Z_qpos_E[0])
+                    temp_Z_qpos_boostZ_COM_orig=TLorentzVector(0,0,0,0)
+                    temp_Z_qpos_boostZ_COM_orig.SetPxPyPzE(v_parton_Z_qpos_Px[0],v_parton_Z_qpos_Py[0],v_parton_Z_qpos_Pz[0],v_parton_Z_qpos_E[0])
+                    temp_Z_qpos_boostZ_COM_orig.Boost(boostZ_COM_orig)
                     temp_Z_qpos_boostZ_COM.Boost(boostE_tot_COM)
-                    temp_Z_qpos_boostZ_COM.Boost(boostZ_COM)
                     temp_Z_qneg_boostZ_COM=TLorentzVector(0,0,0,0)
                     temp_Z_qneg_boostZ_COM.SetPxPyPzE(v_parton_Z_qneg_Px[0],v_parton_Z_qneg_Py[0],v_parton_Z_qneg_Pz[0],v_parton_Z_qneg_E[0])
                     temp_Z_qneg_boostZ_COM.Boost(boostE_tot_COM)
+                    temp_Z_qpos_boostZ_COM.Boost(boostZ_COM)
                     temp_Z_qneg_boostZ_COM.Boost(boostZ_COM)
                     temp_Z_sum=TLorentzVector(0,0,0,0)
                     temp_Z_sum=temp_Z_qpos_boostZ_COM+temp_Z_qneg_boostZ_COM
                     temp_Z_COM=TLorentzVector(0,0,0,0)
                     temp_Z_COM.SetPxPyPzE(temp_Z.Px(),temp_Z.Py(),temp_Z.Pz(),temp_Z.E())
                     temp_Z_COM.Boost(boostZ_COM)
-                    #print 'Z COM', temp_Z_COM.M(),temp_Z_COM.Px(),temp_Z_COM.Py(),temp_Z_COM.Pz(),temp_Z_COM.E()
-                    #print 'Z sum', temp_Z_sum.M(),temp_Z_sum.Px(),temp_Z_sum.Py(),temp_Z_sum.Pz(),temp_Z_sum.E()
                     h_parton_theta2_H_ep_HZ_COM.Fill(degrees(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
                     h_parton_theta_Z_qneg_Zcom.Fill(degrees(temp_Z_qneg_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
                     h_parton_theta1_Z_qpos_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
@@ -2048,14 +2063,19 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                     boostE_tot_COM_gj=TVector3(0,0,0) 
                     boostE_tot_COM_gj=-temp_tot_Event_gj.BoostVector()
                     temp_ep_approx_gj.Boost(boostE_tot_COM_gj)
+                    temp_ep_real_gj=TLorentzVector(0,0,0,0)
+                    temp_pz_ep_gen=temp_tot_Event_gj.Pz()*0.5-0.5*sqrt(temp_tot_Event_gj.E()*temp_tot_Event_gj.E()-(temp_tot_Event_gj.Pz()*temp_tot_Event_gj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2)))
+                    temp_ep_real_E_gj=sqrt(pow(temp_tot_Event_gj.Pz()*0.5-0.5*sqrt(temp_tot_Event_gj.E()*temp_tot_Event_gj.E()-(temp_tot_Event_gj.Pz()*temp_tot_Event_gj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2))),2)+pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2))
+                    temp_ep_real_gj.SetPxPyPzE(0,0,temp_pz_ep_gen,temp_ep_approx_E_gj)
+                    temp_ep_real_gj_boost=TLorentzVector(0,0,0,0)
+                    temp_ep_real_gj_boost.SetPxPyPzE(0,0,temp_pz_ep_gen,temp_ep_approx_E_gj)
+                    temp_ep_real_gj_boost.Boost(boostE_tot_COM_gj)
+                    if (temp_tot_Event_gj.E()*temp_tot_Event_gj.E()-(temp_tot_Event_gj.Pz()*temp_tot_Event_gj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2)))<0:
+                        print 'warning seems wasnt really working gen ', (temp_tot_Event_gj.E()*temp_tot_Event_gj.E()-(temp_tot_Event_gj.Pz()*temp_tot_Event_gj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2)))
                     if temp_ep_approx_gj.Pz()>0 :
-                        print 'pz should have been negative per principle ',0.5*temp_tot_Event_gj.E()-0.5*temp_tot_Event_gj.Pz(),temp_ep_approx_gj.Pz(),temp_tot_Event_gj.Pz(),temp_tot_Event_gj.Px(),temp_tot_Event_gj.Py()
-                    #if (temp_ep_approx_gj.E()/temp_ep_approx.E())<0.10 or (temp_ep_approx_gj.E()/temp_ep_approx.E())>1.10 :
-                    #    print 'huge difference in energy ',temp_tot_Event_gj.E(),temp_tot_Event.E()
-                    #if degrees(temp_ep_approx_gj.Angle(temp_ep_approx.Vect()))>25.:
-                    #    print 'huge difference in angle ',degrees(temp_ep_approx_gj.Angle(temp_ep_approx.Vect())),temp_ep_approx_gj.Vect().Unit().Px(),temp_ep_approx_gj.Vect().Unit().Py(),temp_ep_approx_gj.Vect().Unit().Pz(),temp_ep_approx.Vect().Unit().Px(),temp_ep_approx.Vect().Unit().Py(),temp_ep_approx.Vect().Unit().Pz()
-                    #if degrees(temp_ep_approx_gj.Angle(temp_ep.Vect()))>20.:
-                    #    print 'huge difference in real angle ',degrees(temp_ep_approx_gj.Angle(temp_ep.Vect())),temp_ep_approx_gj.Vect().Unit().Px(),temp_ep_approx_gj.Vect().Unit().Py(),temp_ep_approx_gj.Vect().Unit().Pz(),temp_ep.Vect().Unit().Px(),temp_ep.Vect().Unit().Py(),temp_ep.Vect().Unit().Pz(),temp_ep_approx_gj.E(),temp_ep.E(),temp_tot_Event_gj.E(),temp_tot_Event.E()
+                        print 'pz should have been negative per principle gen ',0.5*temp_tot_Event_gj.E()-0.5*temp_tot_Event_gj.Pz(),temp_ep_approx_gj.Pz(),temp_tot_Event_gj.Pz(),temp_tot_Event_gj.Px(),temp_tot_Event_gj.Py()
+                        print' pz approx/real/after scale gen ',-0.5*temp_tot_Event_gj.E()+0.5*temp_tot_Event_gj.Pz(),temp_ep_real_gj.Pz(),temp_ep_approx_gj.Pz(),temp_ep_real_gj_boost.Pz()
+                        print' pz before/after boost/boost gen ',temp_ep_real_gj.Pz(),temp_ep_real_gj_boost.Pz(),temp_tot_Event_gj.Pz()
                     temp_gj1=TLorentzVector(0,0,0,0)
                     temp_gj1.SetPxPyPzE(v_genjet1_sj1_Px[0]+v_genjet1_sj2_Px[0],v_genjet1_sj1_Py[0]+v_genjet1_sj2_Py[0],v_genjet1_sj1_Pz[0]+v_genjet1_sj2_Pz[0],v_genjet1_sj1_E[0]+v_genjet1_sj2_E[0])
                     temp_gj1.Boost(boostE_tot_COM_gj)
@@ -2580,57 +2600,57 @@ def process_files():
 
     isSignalData_=True
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=True
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_AllEvents.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_AllEvents.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test_AllEvents.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
  
     isSignalData_=False
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
                      
-    #files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_qqqq2TeV_allVar/dataset/weights/TMVAClassification_BDT.weights.xml'           /eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar/dataset/weights/
-    files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar/dataset/weights/TMVAClassification_BDT.weights.xml'
+    #files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_qqqq2TeV_allVar/dataset/weights/TMVAClassification_BDT.weights.xml'           /eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar/dataset/weights/
+    files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar/dataset/weights/TMVAClassification_BDT.weights.xml'
 
     isSignalData_=True
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_AllEvents.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_AllEvents.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test_AllEvents.root"  
     isSignalData_=True
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root" 
     isSignalData_=False
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
     input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_test.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
 
