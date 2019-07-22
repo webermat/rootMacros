@@ -4,6 +4,9 @@ from math import cos, sin, pi, degrees, radians, pow, sqrt,acos
 from array import array
 import os
 
+from rootpy.interactive import wait
+from rootpy.plotting import Canvas, Pad
+
 def DeltaPhi( Phi1, Phi2 ):
     deltaphi=abs(Phi1-Phi2)
     if (deltaphi>M_PI):
@@ -264,7 +267,7 @@ def process_files():
 
 
 
-
+    wait()
 
 
     return None
