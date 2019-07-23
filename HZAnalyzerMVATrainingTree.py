@@ -645,6 +645,213 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
         pass_parton_selection = False
         num_entry+=1
 
+
+
+        t_var_sqrtS[0]=-10
+        t_var_sqrtS_orig[0]=-10
+        t_var_sqrtS_gen[0]=-10
+        t_var_sqrtS_orig_gen[0]=-10
+        t_var_sqrtS_parton[0]=-10
+        t_var_nLeptons[0]=-10
+        t_var_nLeptons_gen[0]=-10
+        t_var_MET[0]=-10
+        t_var_jet1_mass[0]=-10
+        t_var_jet2_mass[0]=-10
+        t_var_jet1_min_jet2_mass[0]=-10
+        t_var_jet1_BTag_rfj_BTagMax[0]=-10
+        t_var_jet1_CTag_rfj_BTagMax[0]=-10
+        t_var_jet1_LTag_rfj_BTagMax[0]=-10
+        t_var_jet1_E[0]=-10
+        t_var_jet2_E[0]=-10
+        t_var_jet1_Pt[0]=-10
+        t_var_jet2_Pt[0]=-10
+        t_var_jet1_theta[0]=-10
+        t_var_jet2_theta[0]=-10
+        t_var_jet1_min_jet2_theta[0]=-10
+        t_var_jet1_phi[0]=-10
+        t_var_jet2_phi[0]=-10
+        t_var_dphi_j1j2[0]=-10
+        t_var_angle_j1j2[0]=-10
+        t_var_jet1_D2_beta1[0]=-10
+        t_var_jet2_D2_beta1[0]=-10
+        t_var_jet1_D2_beta0_5[0]=-10
+        t_var_jet2_D2_beta0_5[0]=-10
+        t_var_jet1_C2_beta1[0]=-10
+        t_var_jet2_C2_beta1[0]=-10
+        t_var_jet1_C2_beta0_5[0]=-10
+        t_var_jet2_C2_beta0_5[0]=-10
+        t_var_jet1_tau21[0]=-10
+        t_var_jet2_tau21[0]=-10
+        t_var_jet1_tau32[0]=-10
+        t_var_jet2_tau32[0]=-10
+        
+        t_var_jet1_sj1_E[0]=-10
+        t_var_jet1_sj1_Px[0]=-10
+        t_var_jet1_sj1_Py[0]=-10
+        t_var_jet1_sj1_Pz[0]=-10
+        t_var_jet1_sj1_jetChargePt_kappa_0_30[0]=-10
+        t_var_jet1_sj1_jetChargeE_kappa_0_30[0]=-10
+        t_var_jet1_sj1_jetChargePt_kappa_0_25[0]=-10
+        t_var_jet1_sj1_jetChargeE_kappa_0_25[0]=-10
+        t_var_jet1_sj1_nTracks[0]=-10
+        t_var_jet1_sj1_chFrac[0]=-10
+        t_var_jet1_sj1_closestMatch[0]=-10
+        t_var_jet1_sj1_decMatch[0]=-10
+        t_var_jet1_sj1_Angle_closestMatch[0]=-10
+        t_var_jet1_sj1_Angle_decMatch[0]=-10
+        
+        t_var_jet1_sj2_E[0]=-10
+        t_var_jet1_sj2_Px[0]=-10
+        t_var_jet1_sj2_Py[0]=-10
+        t_var_jet1_sj2_Pz[0]=-10
+        t_var_jet1_sj2_jetChargePt_kappa_0_30[0]=-10
+        t_var_jet1_sj2_jetChargeE_kappa_0_30[0]=-10
+        t_var_jet1_sj2_jetChargePt_kappa_0_25[0]=-10
+        t_var_jet1_sj2_jetChargeE_kappa_0_25[0]=-10
+        t_var_jet1_sj2_nTracks[0]=-10
+        t_var_jet1_sj2_chFrac[0]=-10
+
+        t_var_jet1_sj2_closestMatch[0]=-10
+    
+        t_var_jet1_sj2_decMatch[0]=-10
+        t_var_jet1_sj2_Angle_closestMatch[0]=-10
+        t_var_jet1_sj2_Angle_decMatch[0]=-10
+        t_var_jet1_dAlpha_sj1sj2[0]=-10
+        
+        t_var_jet2_sj1_E[0]=-10
+        t_var_jet2_sj1_Px[0]=-10
+        t_var_jet2_sj1_Py[0]=-10
+        t_var_jet2_sj1_Pz[0]=-10
+        t_var_jet2_sj1_jetChargePt_kappa_0_30[0]=-10
+        t_var_jet2_sj1_jetChargeE_kappa_0_30[0]=-10
+        t_var_jet2_sj1_jetChargePt_kappa_0_25[0]=-10
+        t_var_jet2_sj1_jetChargeE_kappa_0_25[0]=-10
+        t_var_jet2_sj1_nTracks[0]=-10
+        t_var_jet2_sj1_chFrac[0]=-10
+        t_var_jet2_sj1_closestMatch[0]=-10
+        t_var_jet2_sj1_decMatch[0]=-10
+        t_var_jet2_sj1_Angle_closestMatch[0]=-10
+        t_var_jet2_sj1_Angle_decMatch[0]=-10
+        
+        t_var_jet2_sj2_E[0]=-10
+        t_var_jet2_sj2_Px[0]=-10
+        t_var_jet2_sj2_Py[0]=-10
+        t_var_jet2_sj2_Pz[0]=-10
+        t_var_jet2_sj2_jetChargePt_kappa_0_30[0]=-10
+        t_var_jet2_sj2_jetChargeE_kappa_0_30[0]=-10
+        t_var_jet2_sj2_jetChargePt_kappa_0_25[0]=-10
+        t_var_jet2_sj2_jetChargeE_kappa_0_25[0]=-10
+        t_var_jet2_sj2_nTracks[0]=-10
+        t_var_jet2_sj2_chFrac[0]=-10
+        t_var_jet2_sj2_closestMatch[0]=-10
+        t_var_jet2_sj2_decMatch[0]=-10
+        t_var_jet2_sj2_Angle_closestMatch[0]=-10
+        t_var_jet2_sj2_Angle_decMatch[0]=-10
+        t_var_jet2_dAlpha_sj1sj2[0]=-10
+        
+        t_var_genInv_E[0]=-10
+        t_var_genInv_Px[0]=-10
+        t_var_genInv_Py[0]=-10
+        t_var_genInv_Pz[0]=-10
+        
+        
+        t_var_genjet1_sj1_E[0]=-10
+        t_var_genjet1_sj1_Px[0]=-10
+        t_var_genjet1_sj1_Py[0]=-10
+        t_var_genjet1_sj1_Pz[0]=-10
+        t_var_genjet1_sj1_jetChargePt_kappa_0_30[0]=-10
+        t_var_genjet1_sj1_jetChargeE_kappa_0_30[0]=-10
+        t_var_genjet1_sj1_jetChargePt_kappa_0_25[0]=-10
+        t_var_genjet1_sj1_jetChargeE_kappa_0_25[0]=-10
+        t_var_genjet1_sj1_nTracks[0]=-10
+        t_var_genjet1_sj1_chFrac[0]=-10
+        
+        t_var_genjet1_sj2_E[0]=-10
+        t_var_genjet1_sj2_Px[0]=-10
+        t_var_genjet1_sj2_Py[0]=-10
+        t_var_genjet1_sj2_Pz[0]=-10
+        t_var_genjet1_sj2_jetChargePt_kappa_0_30[0]=-10
+        t_var_genjet1_sj2_jetChargeE_kappa_0_30[0]=-10
+        t_var_genjet1_sj2_jetChargePt_kappa_0_25[0]=-10
+        t_var_genjet1_sj2_jetChargeE_kappa_0_25[0]=-10
+        t_var_genjet1_sj2_nTracks[0]=-10
+        t_var_genjet1_sj2_chFrac[0]=-10
+        t_var_genjet1_dAlpha_sj1sj2[0]=-10
+        
+        t_var_genjet1_dAlpha_sj1_rjsj1[0]=-10
+        t_var_genjet1_dAlpha_sj1_rjsj2[0]=-10
+        t_var_genjet1_dAlpha_sj1_qmin[0]=-10
+        t_var_genjet1_dAlpha_sj1_qplus[0]=-10
+        t_var_genjet1_dAlpha_H[0]=-10
+        
+        t_var_parton_ep_E[0]=-10
+        t_var_parton_ep_Px[0]=-10
+        t_var_parton_ep_Pz[0]=-10
+        t_var_parton_ep_Py[0]=-10
+        
+        t_var_parton_em_E[0]=-10
+        t_var_parton_em_Px[0]=-10
+        t_var_parton_em_Pz[0]=-10
+        t_var_parton_em_Py[0]=-10
+        
+        t_var_parton_H_E[0]=-10
+        t_var_parton_H_Px[0]=-10
+        t_var_parton_H_Pz[0]=-10
+        t_var_parton_H_Py[0]=-10
+        t_var_parton_H_PDG_Daughter0[0]=-10
+        
+        t_var_parton_Z_qpos_E[0]=-10
+        t_var_parton_Z_qpos_Px[0]=-10
+        t_var_parton_Z_qpos_Pz[0]=-10
+        t_var_parton_Z_qpos_Py[0]=-10
+        t_var_parton_Z_qpos_PDGID[0]=-10
+        
+        t_var_parton_Z_qneg_E[0]=-10
+        t_var_parton_Z_qneg_Px[0]=-10
+        t_var_parton_Z_qneg_Pz[0]=-10
+        t_var_parton_Z_qneg_Py[0]=-10
+        t_var_parton_Z_qneg_PDGID[0]=-10
+        
+        t_var_genjet2_sj1_E[0]=-10
+        t_var_genjet2_sj1_Px[0]=-10
+        t_var_genjet2_sj1_Py[0]=-10
+        t_var_genjet2_sj1_Pz[0]=-10
+        t_var_genjet2_sj1_jetChargePt_kappa_0_30[0]=-10
+        t_var_genjet2_sj1_jetChargeE_kappa_0_30[0]=-10
+        t_var_genjet2_sj1_jetChargePt_kappa_0_25[0]=-10
+        t_var_genjet2_sj1_jetChargeE_kappa_0_25[0]=-10
+        t_var_genjet2_sj1_nTracks[0]=-10
+        t_var_genjet2_sj1_chFrac[0]=-10
+        
+        
+        t_var_genjet2_sj2_E[0]=-10
+        t_var_genjet2_sj2_Px[0]=-10
+        t_var_genjet2_sj2_Py[0]=-10
+        t_var_genjet2_sj2_Pz[0]=-10
+        t_var_genjet2_sj2_jetChargePt_kappa_0_30[0]=-10
+        t_var_genjet2_sj2_jetChargeE_kappa_0_30[0]=-10
+        t_var_genjet2_sj2_jetChargePt_kappa_0_25[0]=-10
+        t_var_genjet2_sj2_jetChargeE_kappa_0_25[0]=-10
+        t_var_genjet2_sj2_nTracks[0]=-10
+        t_var_genjet2_sj2_chFrac[0]=-10
+        t_var_genjet2_dAlpha_sj1sj2[0]=-10
+        
+        t_var_genjet2_dAlpha_sj1_rjsj1[0]=-10
+        t_var_genjet2_dAlpha_sj1_rjsj2[0]=-10
+        t_var_genjet2_dAlpha_sj1_qmin[0]=-10
+        t_var_genjet2_dAlpha_sj1_qplus[0]=-10
+        t_var_genjet2_dAlpha_H[0]=-10
+        t_var_GenLevelFilled[0]=-10
+        t_var_eventWeight[0]=-10
+
+
+
+
+
+
+        t_var_eventWeight[0]=weight
+
+
         if num_entry%(int(tree.GetEntries()/5.)) == 0:
             print "sig BG in entry ",num_entry
 
@@ -732,6 +939,7 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
             tempem=TLorentzVector(0,0,0,0);
             tempep.SetPxPyPzE(trueME_Px[ind_ep],trueME_Py[ind_ep],trueME_Pz[ind_ep],trueME_E[ind_ep])
             tempem.SetPxPyPzE(trueME_Px[ind_em],trueME_Py[ind_em],trueME_Pz[ind_em],trueME_E[ind_em])
+            t_var_sqrtS_parton[0]=(tempep+tempem).M()
 
 
             if trueME_PDGID[index_firstH+3]==5 :
@@ -896,8 +1104,7 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
                 print 'b and bbar in H COM not back to back now ',degrees(tempH_bbar_H_COM_parton.Angle(tempH_b_H_COM_parton.Vect())),H_decays_bbar,tempH_b_H_COM_parton.P(),tempH_bbar_H_COM_parton.P()
 
 
-            t_var_sqrtS_parton[0]=(tempep+tempem).M()
-
+ 
             h_parton_theta1_Z_qpos_vs_Z.Fill(degrees(tempZ_q_pos_Z_COM_parton.Angle(tempZP4_in_E_tot_COM_parton.Vect())),weight)
             h_parton_costheta1_Z_qpos_vs_Z.Fill(cos(tempZ_q_pos_Z_COM_parton.Angle(tempZP4_in_E_tot_COM_parton.Vect())),weight)
             h_parton_theta1_H_bbar_vs_H.Fill(degrees(tempH_bbar_H_COM_parton.Angle(tempHP4_in_E_tot_COM_parton.Vect())),weight)
@@ -1172,6 +1379,13 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
         t_var_sqrtS_orig[0]=(rj_m1_orig+rj_m2_orig).M()
         t_var_nLeptons[0] = n_IsoLep_reco
         
+
+        #if abs(t_var_sqrtS[0]-t_var_sqrtS_parton[0])<1.0:
+        #    print 'values damned close ',t_var_sqrtS[0],t_var_sqrtS_parton[0],(rj_m1+rj_m2+tempRecoEMissCorrP4).M(),(tempep+tempem).M(),(rj_m1_orig+rj_m2_orig).M(),(tempTotRecoP4-tempRecoIsoPhP4+tempRecoEMissCorrP4).M()
+
+        #if t_var_sqrtS_parton[0]<t_var_sqrtS[0]:
+        #    print 'for once the value is smaller',t_var_sqrtS_parton[0],t_var_sqrtS[0]
+
         pass_mass_cut=True
 
         fCut_pass_ellipse_mass_cut=False
@@ -1206,6 +1420,10 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
         #    print 'fail sqrtS part,sqrtReco,nlep,masscut/thetacut/pass_parton ',(tempep+tempem).M(),sqrtS_eff_reco,n_IsoLep_reco,pass_mass_cut,pass_theta_cut,pass_parton_selection,pass_reco_selection
 
         #if (len(genjet_E)==2 and n_IsoLep_gen<m_cut_nLeptons and sqrtS_eff_gen>sqrtS_high and pass_gen_mass_cut):
+        #if not pass_reco_selection:
+        #    if n_IsoLep_reco<m_cut_nLeptons and sqrtS_eff_reco>sqrtS_high:
+        #        print 'basic cuts survived, but still fail ',fCut_pass_ellipse_mass_cut,len(recojet_subjet_rfj_j_E),len(recojet_subjet_E),len(recojet_E)
+
         if pass_reco_selection:
             #print 'pass sqrtS part,sqrtReco,nlep,masscut/thetacut/pass_parton ',(tempep+tempem).M(),sqrtS_eff_reco,n_IsoLep_reco,pass_mass_cut,pass_theta_cut,pass_parton_selection
         #if t_var_sqrtS_parton[0]>sqrtS_high:
@@ -1407,7 +1625,6 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
                     t_var_jet2_tau32[0]=ientry.recojet_nsubjettiness3[ind_jetM2]/ientry.recojet_nsubjettiness2[ind_jetM2]
                 else:
                     t_var_jet2_tau32[0]=-1
-                t_var_eventWeight[0]=weight
                 #print 'get to filling of weight ',t_var_eventWeight
 
                 t_var_jet1_sj1_closestMatch[0]=-1
@@ -1885,7 +2102,7 @@ def process_files():
     use_partonInfo_=False
     fillGenInfo_=True
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
-    ##input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qqqq_13394_to_13397_RunEventStatisticsHistogram.root"
+    ##input_file_name2_="/eos/user/w/weberma/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qqqq_13394_to_13397_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qqqq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
     cross_section_= 902.
