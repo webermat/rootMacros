@@ -2305,9 +2305,11 @@ void JERPlotsFull(){
   TFile* file_CLIC_200_CT_noSC=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds200_11849_noOverlay_CLIC_o3_v14_CT_PandoraPFOs_noSC_real.root");
   TFile* file_CLIC_200_CT_noSC_wO=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds200_11850_3TeVOverlay_CLIC_o3_v14_CT_TightSelectedPandoraPFOs_noSC.root");
   TFile* file_CLIC_200_CT_wO_380=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds200_11801_380GeVOverlay_CLIC_o3_v14_CT_LE_LooseSelectedPandoraPFOs.root");
-  
-  TFile* file_CLIC_380_CT=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds380_11779_noOverlay_CLIC_o3_v14_CT_PandoraPFOs.root");
-  TFile* file_CLIC_380_CT_wO=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds380_11780_3TeVOverlay_CLIC_o3_v14_CT_TightSelectedPandoraPFOs.root");
+ 
+  TFile* file_CLIC_380_CT=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/190709_gcc62/JetStudy_Zuds500_13835_noOverlay_CLIC_o3_v14_CT_PandoraPFOs.root");
+  TFile* file_CLIC_380_CT_wO=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/190709_gcc62/JetStudy_Zuds500_13836_3TeVOverlay_CLIC_o3_v14_CT_TightSelectedPandoraPFOs.root");
+  //TFile* file_CLIC_380_CT=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds380_11779_noOverlay_CLIC_o3_v14_CT_PandoraPFOs.root");
+  //TFile* file_CLIC_380_CT_wO=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds380_11780_3TeVOverlay_CLIC_o3_v14_CT_TightSelectedPandoraPFOs.root");
   //TFile* file_CLIC_380_CT_noSC=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds380_11857_noOverlay_CLIC_o3_v14_CT_PandoraPFOs_noSC.root");
   TFile* file_CLIC_380_CT_noSC=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds380_11857_noOverlay_CLIC_o3_v14_CT_PandoraPFOs_noSC_real.root");
   TFile* file_CLIC_380_CT_noSC_wO=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181101_gcc62/JetStudy_Zuds380_11858_3TeVOverlay_CLIC_o3_v14_CT_TightSelectedPandoraPFOs_noSC.root");
