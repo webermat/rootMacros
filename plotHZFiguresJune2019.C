@@ -361,6 +361,7 @@ void drawFancyPlots(){
  
   CLICdpStyle();
 
+  std::cout<<"do i get anywhere here"<<std::endl;
 
   TLatex* l = new TLatex();
   l->SetNDC();
@@ -386,6 +387,7 @@ void drawFancyPlots(){
 
   bool draw_kappa_plots=true;
 
+  std::cout<<"do i get anywhere here"<<std::endl;
 
   TFile* file_polm80_hzqq_SignalHistos_=TFile::Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth4NTrees400AdaBoostBeta020.root");  
   TFile* file_polm80_ee_qq_mqq_1TeV_BGHistos_=TFile::Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth4NTrees400AdaBoostBeta020.root"); 
@@ -411,6 +413,8 @@ void drawFancyPlots(){
   h_ee_qqqqqq_BDT_polm80_jet1_mass->GetYaxis()->SetTitle("Events");
   h_ee_qqqqqq_BDT_polm80_jet1_mass->SetFillColor(kGreen-2);
   h_ee_qqqqqq_BDT_polm80_jet1_mass->SetLineColor(kGreen-2);
+
+  std::cout<<"do i get anywhere here"<<std::endl;
 
   THStack* hzqq_sig_BG_Stack_polm80= new THStack("hzqq_sig_BG_Stack_polm80", "");
   hzqq_sig_BG_Stack_polm80->Add(h_ee_qqqqqq_BDT_polm80_jet1_mass);
@@ -514,14 +518,16 @@ void drawFancyPlots(){
 
 
 
+  std::cout<<"do i get anywhere here"<<std::endl;
+
+
+  TFile* file_BDT_HZqq_BG_qq_1TeV_qqqq_2TeV_qqqqqq_polm80=TFile::Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug5/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar_no_Jet2_C2_D2.root");
+  //eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar.root");
 
 
 
-  TFile* file_BDT_HZqq_BG_qq_1TeV_qqqq_2TeV_qqqqqq_polm80=TFile::Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35/MVTrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar.root");
-
-
-
-  TFile* file_BDT_HZqq_BG_qq_1TeV_qqqq_2TeV_qqqqqq_polp80=TFile::Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35/MVTrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NCuts20___hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar.root");
+  TFile* file_BDT_HZqq_BG_qq_1TeV_qqqq_2TeV_qqqqqq_polp80=TFile::Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug5/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees250NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar_no_Jet2_C2_D2.root");
+  //eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35/MVTrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NCuts20___hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar.root");
 
   TH1F* h_BDT_Signal_polm80_test=(TH1F*)file_BDT_HZqq_BG_qq_1TeV_qqqq_2TeV_qqqqqq_polm80->Get("dataset/Method_BDT/BDT/MVA_BDT_S");
   h_BDT_Signal_polm80_test->SetFillColor(kBlue-2);
