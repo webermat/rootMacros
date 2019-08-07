@@ -210,7 +210,7 @@ def process_event(i_final_histo_name_,i_input_signal_file_name_,i_input_bkg_file
     factory.BookMethod(dataloader, root.TMVA.Types.kBDT, "BDT",
                        ":".join(["!H",
                                  "V",
-                                 "NTrees=250",
+                                 "NTrees=300",
                                  "MaxDepth=3",
                                  #"BoostType=Grad",
                                  #"Shrinkage=1.00",
@@ -249,12 +249,12 @@ def process_files():
     input_files_bkg.append(input_file_ee_qqqqqq_)
 
     os.chdir('/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/')
-    #os.rmdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20')
-    os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
-    os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
+    #os.rmdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20')
+    os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
+    os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
 
                        
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees250NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar_no_Jet2_C2_D2.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar_no_Jet2_C2_D2.root"  
     process_event(final_histo_name_,input_file_signal_,input_files_bkg)
 
     input_file_signal_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_withPartonHistos.root"
@@ -268,12 +268,12 @@ def process_files():
     input_files_bkg.append(input_file_ee_qqqq_)
     input_files_bkg.append(input_file_ee_qqqqqq_)
      
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees250NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar_no_Jet2_C2_D2.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_allVar_no_Jet2_C2_D2.root"  
 
     os.chdir('/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/')
-    #os.rmdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20')
-    os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
-    os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
+    #os.rmdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20')
+    os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
+    os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2')
 
     process_event(final_histo_name_,input_file_signal_,input_files_bkg)
 
