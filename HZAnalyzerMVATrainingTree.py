@@ -234,6 +234,11 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
     t_var_jet2_sj2_Angle_decMatch = array('f',[0])
     t_var_jet2_dAlpha_sj1sj2 = array('f',[0])
 
+    t_var_costheta1_for_Atheta1 = array('f',[0])
+    t_var_costheta2_for_Atheta1theta2 = array('f',[0])
+    t_var_phi_for_Aphis = array('f',[0])
+
+
     t_var_genInv_E = array('f',[0])
     t_var_genInv_Px = array('f',[0])
     t_var_genInv_Py = array('f',[0])
@@ -426,6 +431,10 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
     mytree.Branch('jet2_sj2_Angle_closestMatch', t_var_jet2_sj2_Angle_closestMatch, 'jet2_sj2_Angle_closestMatch/F')
     mytree.Branch('jet2_sj2_Angle_decMatch', t_var_jet2_sj2_Angle_decMatch, 'jet2_sj2_Angle_decMatch/F')
     mytree.Branch('jet2_dAlpha_sj1sj2',t_var_jet2_dAlpha_sj1sj2,'jet2_dAlpha_sj1sj2/F')
+    mytree.Branch('costheta1_for_Atheta1',t_var_costheta1_for_Atheta1,'costheta1_for_Atheta1/F')
+    mytree.Branch('costheta2_for_Atheta1theta2',t_var_costheta2_for_Atheta1theta2,'costheta2_for_Atheta1theta2/F')
+    mytree.Branch('phi_for_Aphis',t_var_phi_for_Aphis,'phi_for_Aphis/F')
+
     mytree.Branch('GenLevelFilled',t_var_GenLevelFilled,'GenLevelFilled/I')
     mytree.Branch('eventWeight', t_var_eventWeight , 'eventWeight/F')
 
@@ -644,8 +653,12 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
         pass_reco_selection=True
         pass_parton_selection = False
         num_entry+=1
+        #if num_entry!=-1:
+        #    continue
 
-
+        t_var_costheta1_for_Atheta1[0]=-10.
+        t_var_costheta2_for_Atheta1theta2[0]=-10.
+        t_var_phi_for_Aphis[0]=-10.
 
         t_var_sqrtS[0]=-10
         t_var_sqrtS_orig[0]=-10
@@ -1039,8 +1052,10 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
            
 
             #angular histograms for parton level at HIGH sqrtS
-            if (tempep+tempem).M()>sqrtS_high:
-                pass_parton_selection = True
+            #if (tempep+tempem).M()>sqrtS_high and abs(degrees(tempZP4.Theta())-90.)<55. and abs(degrees(tempHP4.Theta())-90.)<55. and abs(degrees(tempHP4.Theta()-tempZP4.Theta()))<100 :
+            if (tempep+tempem).M()>sqrtS_high :
+                #pass_parton_selection = True
+                #print 'parton Z/H/delta ',degrees(tempZP4.Theta()),degrees(tempHP4.Theta()),degrees(tempHP4.Theta()-tempZP4.Theta())
                 h_parton_costheta1_Z_qpos_vs_Z.Fill(cos(tempZ_q_pos_Z_COM_parton.Angle(tempZP4_in_E_tot_COM_parton.Vect())),weight)
 
                 #angle theta1 --> between tempZ in E_tot_COM system and tempZ_q_pos_Z_COM_parton direction
@@ -1311,6 +1326,7 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
         if len(recojet_E)<2 : 
             #print "less than two jets in event, skip"
             pass_reco_selection=False
+            continue;
         recojet_Px=ientry.recojet_Px
         recojet_Py=ientry.recojet_Py
         recojet_Pz=ientry.recojet_Pz
@@ -1587,6 +1603,106 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
                 rj2_sj2.SetPxPyPzE(t_var_jet2_sj2_Px[0],t_var_jet2_sj2_Py[0],t_var_jet2_sj2_Pz[0],t_var_jet2_sj2_E[0])
                 t_var_jet2_dAlpha_sj1sj2[0]=degrees(rj2_sj1.Angle(rj2_sj2.Vect()))
 
+
+
+                #scale subjets
+                sf_rj1=rj_m1.Px()/(rj1_sj1.Px()+rj1_sj2.Px())
+                if abs(sf_rj1-1.)<1.e-6 :
+                    sf_rj1=1.
+                #if sf_rj1>1:
+                #    print 'sf1 large ',sf_rj1
+                #take recojets from above to boost subjets in com system
+                temp_rj1_sj1=TLorentzVector(0,0,0,0)
+                temp_rj1_sj2=TLorentzVector(0,0,0,0)
+                if sf_rj1==1.:
+                    temp_rj1_sj1=rj1_sj1
+                    temp_rj1_sj2=rj1_sj2
+                else:
+                    temp_rj1_sj1.SetPxPyPzE(sf_rj1*rj1_sj1.Px(),sf_rj1*rj1_sj1.Py(),sf_rj1*rj1_sj1.Pz(),rj1_sj1.E()+rj1_sj1.E()/(rj1_sj1.E()+rj1_sj2.E())*(rj_m1.E()-(rj1_sj1.E()+rj1_sj2.E())))
+                    temp_rj1_sj1.SetPxPyPzE(sf_rj1*rj1_sj2.Px(),sf_rj1*rj1_sj2.Py(),sf_rj1*rj1_sj2.Pz(),rj1_sj2.E()+rj1_sj2.E()/(rj1_sj1.E()+rj1_sj2.E())*(rj_m1.E()-(rj1_sj1.E()+rj1_sj2.E())))
+                sf_rj2=rj_m2.Px()/(rj2_sj1.Px()+rj2_sj2.Px())
+                if abs(sf_rj2-1.)<1.e-6 :
+                    sf_rj2=1.
+                #if sf_rj2>1:
+                #    print 'sf2 large ',sf_rj2
+                #take recojets from above to boost subjets in com system
+                temp_rj2_sj1=TLorentzVector(0,0,0,0)
+                temp_rj2_sj2=TLorentzVector(0,0,0,0)
+                if sf_rj2==1.:
+                    temp_rj2_sj1=rj2_sj1
+                    temp_rj2_sj2=rj2_sj2
+                else:
+                    temp_rj2_sj1.SetPxPyPzE(sf_rj2*rj2_sj1.Px(),sf_rj2*rj2_sj1.Py(),sf_rj2*rj2_sj1.Pz(),rj2_sj1.E()+rj2_sj1.E()/(rj2_sj1.E()+rj2_sj2.E())*(rj_m2.E()-(rj2_sj1.E()+rj2_sj2.E())))
+                    temp_rj2_sj2.SetPxPyPzE(sf_rj2*rj2_sj2.Px(),sf_rj2*rj2_sj2.Py(),sf_rj2*rj2_sj2.Pz(),rj2_sj2.E()+rj2_sj2.E()/(rj2_sj1.E()+rj2_sj2.E())*(rj_m2.E()-(rj2_sj1.E()+rj2_sj2.E())))
+
+
+                temp_tot_Event_rj=TLorentzVector(0,0,0,0)
+                temp_tot_Event_rj=rj_m1+rj_m2
+                temp_ep_real_rj=TLorentzVector(0,0,0,0)
+                temp_pz_ep_reco=temp_tot_Event_rj.Pz()*0.5-0.5*sqrt(temp_tot_Event_rj.E()*temp_tot_Event_rj.E()-(temp_tot_Event_rj.Pz()*temp_tot_Event_rj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2)))
+                temp_ep_real_E_rj=sqrt(pow(temp_tot_Event_rj.Pz()*0.5-0.5*sqrt(temp_tot_Event_rj.E()*temp_tot_Event_rj.E()-(temp_tot_Event_rj.Pz()*temp_tot_Event_rj.Pz()+4*pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2))),2)+pow(root.TDatabasePDG.Instance().GetParticle(11).Mass(),2))
+                temp_ep_real_rj.SetPxPyPzE(0,0,temp_pz_ep_reco,temp_ep_real_E_rj)
+                temp_ep_real_rj_boost=TLorentzVector(0,0,0,0)
+                temp_ep_real_rj_boost.SetPxPyPzE(0,0,temp_pz_ep_reco,temp_ep_real_E_rj)
+                boostE_tot_COM_rj=TVector3(0,0,0) 
+                boostE_tot_COM_rj=-temp_tot_Event_rj.BoostVector()
+                temp_ep_real_rj_boost.Boost(boostE_tot_COM_rj)
+
+
+                temp_rj1=TLorentzVector(0,0,0,0)
+                temp_rj1.SetPxPyPzE(rj_m1.Px(),rj_m1.Py(),rj_m1.Pz(),rj_m1.E())
+                temp_rj1.Boost(boostE_tot_COM_rj)
+                temp_rj2=TLorentzVector(0,0,0,0)
+                temp_rj2.SetPxPyPzE(rj_m2.Px(),rj_m2.Py(),rj_m2.Pz(),rj_m2.E())
+                temp_rj2.Boost(boostE_tot_COM_rj)
+                plane_rj1_ep_approx_rj_boost=TVector3(0,0,0)
+                plane_rj1_ep_approx_rj_boost=temp_rj1.Vect().Cross(temp_ep_real_rj_boost.Vect()).Unit()
+                #if temp_rj2_sj1.M()<=0 or temp_rj2_sj2.M()<=0 :
+                #    print 'wtf with masses rj2 ',temp_rj2_sj1.M(),temp_rj2_sj1.P(),temp_rj2_sj1.E(),temp_rj2_sj2.M(),temp_rj2_sj2.P(),temp_rj2_sj2.E(),sf_rj2,temp_tot_Event_rj.M()/temp_tot_Event_rj_orig.M(),temp_tot_Event_rj.M()
+                #from now on ALL rj2 quantities are in COM regime
+                temp_rj2_orig_corr=TLorentzVector(0,0,0,0)
+                temp_rj2_orig_corr.SetPxPyPzE(rj_m2.Px(),rj_m2.Py(),rj_m2.Pz(),rj_m2.E())
+                boostrj2_COM=TVector3(0,0,0) 
+                boostrj2_COM=-temp_rj2_orig_corr.BoostVector()
+                #boost subjets into rj2 COM
+                temp_rj2_sj1.Boost(boostrj2_COM)
+                temp_rj2_sj2.Boost(boostrj2_COM)
+         
+
+                #decide about positive quark here
+                #print 'ep approx rj',temp_ep_approx_rj.Px(),temp_ep_approx_rj.Py(),temp_ep_approx_rj.Pz(),temp_ep_approx_rj.E()
+                ind_rj2_sj_pos_jcE=-1
+                if abs(t_var_jet2_sj1_jetChargeE_kappa_0_30[0])> abs(t_var_jet2_sj2_jetChargeE_kappa_0_30[0]):
+                    if t_var_jet2_sj1_jetChargeE_kappa_0_30[0]>0:
+                        ind_rj2_sj_pos_jcE=1
+                    else:
+                        ind_rj2_sj_pos_jcE=2
+                else:
+                    if t_var_jet2_sj2_jetChargeE_kappa_0_30[0]>0:
+                        ind_rj2_sj_pos_jcE=2
+                    else:
+                        ind_rj2_sj_pos_jcE=1
+                if ind_rj2_sj_pos_jcE==-1:
+                    print 'sth wrong in jcE rj subjet index'
+                #subjets are already boosted at that point
+                temp_rj2_sj_jcE_pos=TLorentzVector(0,0,0,0)
+                if ind_rj2_sj_pos_jcE==1:
+                    temp_rj2_sj_jcE_pos=temp_rj2_sj1
+                else:
+                    temp_rj2_sj_jcE_pos=temp_rj2_sj2
+
+          
+                plane_rj2_rj2_sj_jcE_pos_boost=TVector3(0,0,0)
+                plane_rj2_rj2_sj_jcE_pos=temp_rj2.Vect().Cross(temp_rj2_sj_jcE_pos.Vect()).Unit()
+
+                t_var_costheta1_for_Atheta1[0]=cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))
+                t_var_costheta2_for_Atheta1theta2[0]=cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))
+ 
+                phi_plane_rj1_ep_rj2_sj_jcE_pos=degrees(acos(plane_rj1_ep_approx_rj_boost.Dot(plane_rj2_rj2_sj_jcE_pos)))
+                #plane is already a TVector3
+                if(degrees(temp_rj2_sj_jcE_pos.Angle(plane_rj1_ep_approx_rj_boost))>90.):
+                    phi_plane_rj1_ep_rj2_sj_jcE_pos=degrees(acos(plane_rj1_ep_approx_rj_boost.Dot(plane_rj2_rj2_sj_jcE_pos)))+180.
+                t_var_phi_for_Aphis[0]=phi_plane_rj1_ep_rj2_sj_jcE_pos
 
 
                 t_var_MET[0]=tempRecoMETP4.Pt()
@@ -2035,12 +2151,37 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
     h_parton_phi_plane_Z_qpos_vs_plane_H_ep.Write()
     h_2D_parton_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Write()
 
-    print 'A_theta1',(h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral()+h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral())/(abs(h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral())+abs(h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral()))
-    print 'A_phi1',(h_parton_pos_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()))
-    print 'A_phi2',(h_parton_pos_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()))
-    print 'A_phi3',(h_parton_pos_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()))
-    print 'A_phi4',(h_parton_pos_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()))
-    print 'A_theta1theta2',(h_2D_parton_pos_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral()+h_2D_parton_neg_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral())/(abs(h_2D_parton_pos_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral())+abs(h_2D_parton_neg_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral()))
+
+    if usePartonInfo:
+        A_pos_theta1_parton=h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral()
+        B_neg_theta1_parton=h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral()
+        alpha_theta1_HZ_error=sqrt(4.*abs(A_pos_theta1_parton)*abs(B_neg_theta1_parton)/pow((abs(A_pos_theta1_parton)+abs(B_neg_theta1_parton)),3))
+        print 'A_theta1',(h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral()+h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral())/(abs(h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral())+abs(h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom.Integral())), 'theta1_error',alpha_theta1_HZ_error
+        
+        A_pos_phi1_parton=h_parton_pos_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        B_neg_phi1_parton=h_parton_neg_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        alpha_phi1_HZ_error=sqrt(4.*abs(A_pos_phi1_parton)*abs(B_neg_phi1_parton)/pow((abs(A_pos_phi1_parton)+abs(B_neg_phi1_parton)),3))
+        print 'A_phi1',(h_parton_pos_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())), 'phi1_error',alpha_phi1_HZ_error
+        
+        A_pos_phi2_parton=h_parton_pos_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        B_neg_phi2_parton=h_parton_neg_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        alpha_phi2_HZ_error=sqrt(4.*abs(A_pos_phi2_parton)*abs(B_neg_phi2_parton)/pow((abs(A_pos_phi2_parton)+abs(B_neg_phi2_parton)),3))
+        print 'A_phi2',(h_parton_pos_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())), 'phi2_error',alpha_phi2_HZ_error
+        
+        A_pos_phi3_parton=h_parton_pos_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        B_neg_phi3_parton=h_parton_neg_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        alpha_phi3_HZ_error=sqrt(4.*abs(A_pos_phi3_parton)*abs(B_neg_phi3_parton)/pow((abs(A_pos_phi3_parton)+abs(B_neg_phi3_parton)),3))
+        print 'A_phi3',(h_parton_pos_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())), 'phi3_error',alpha_phi3_HZ_error
+        
+        A_pos_phi4_parton=h_parton_pos_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        B_neg_phi4_parton=h_parton_neg_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()
+        alpha_phi4_HZ_error=sqrt(4.*abs(A_pos_phi4_parton)*abs(B_neg_phi4_parton)/pow((abs(A_pos_phi4_parton)+abs(B_neg_phi4_parton)),3))
+        print 'A_phi4',(h_parton_pos_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral()+h_parton_neg_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())/(abs(h_parton_pos_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())+abs(h_parton_neg_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Integral())), 'phi4_error',alpha_phi4_HZ_error
+        
+        A_pos_theta12_parton=h_2D_parton_pos_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral()
+        B_neg_theta12_parton=h_2D_parton_neg_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral()
+        alpha_theta12_HZ_error=sqrt(4.*abs(A_pos_theta12_parton)*abs(B_neg_theta12_parton)/pow((abs(A_pos_theta12_parton)+abs(B_neg_theta12_parton)),3))
+        print 'A_theta1theta2',(h_2D_parton_pos_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral()+h_2D_parton_neg_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral())/(abs(h_2D_parton_pos_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral())+abs(h_2D_parton_neg_sgncostheta1_times_sgncostheta2_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Integral())), 'theta12_error',alpha_theta12_HZ_error
 
     return None
 
@@ -2094,17 +2235,17 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/hzqq_13391_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"  
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_FillPartonOnlyHistos_RecoAndParton.root"  
-    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_noMassCut_noThetaCut_MVATrainingTree_OnlyPartonSelection.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_withPartonHistos_AllEvents.root"  
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_noMassCut_noThetaCut_MVATrainingTree_Test_OnlyPartonSelection.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_,fillGenInfo_)
     print 'finished file', final_histo_name_
 
     use_partonInfo_=False
     fillGenInfo_=True
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
-    ##input_file_name2_="/eos/user/w/weberma/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qqqq_13394_to_13397_RunEventStatisticsHistogram.root"
+    #input_file_name2_="/eos/user/w/weberma/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qqqq_13394_to_13397_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qqqq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 902.
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2114,7 +2255,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qqqq_mqqqq_2_TeV_13696_to_13699_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qq_mqq_1TeV_13425_to_13428_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  369.8 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2124,7 +2265,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qq_13399_to_13402_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 1269.
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2135,7 +2276,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qq_mqq_1_TeV_13425_to_13428_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qq_mqq_1TeV_13425_to_13428_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 170.8
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2145,7 +2286,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_bbcbbc_13094_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_bbcbbc_13094_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_bbcbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_bbcbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 9.2271753e-3 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2155,7 +2296,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_bbubbu_13095_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_bbubbu_13095_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_bbubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_bbubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  9.1731760e-3 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2165,7 +2306,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_ddcyyc_13096_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_ddcyyc_13096_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_ddcyyc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_ddcyyc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  1.3757137
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2175,7 +2316,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_dduyyu_13097_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_dduyyu_13097_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_dduyyu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_dduyyu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  14.498909
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2185,7 +2326,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_sscbbc_13098_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_sscbbc_13098_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_sscbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_sscbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  12.499614
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2195,7 +2336,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_sscssc_13099_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_sscssc_13099_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_sscssc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_sscssc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  1.1651315
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2205,7 +2346,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_ssussu_13123_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_ssussu_13123_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_ssussu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_ssussu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  1.2615661e-2
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2215,7 +2356,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_ssubbu_13292_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_ssubbu_13292_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_ssubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_ssubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=   5.4145233e-2 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2225,7 +2366,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yycbbu_13318_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yycbbu_13318_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yycbbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yycbbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  13.394883
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2235,7 +2376,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yycddu_13326_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yycddu_13326_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yycddu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yycddu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=   	2.0054737
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2245,7 +2386,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yycssu_13323_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yycssu_13323_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yycssu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yycssu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 2.0248353
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2255,7 +2396,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yyubbc_13320_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yyubbc_13320_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yyubbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yyubbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=13.330064
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2265,7 +2406,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yyuddc_13328_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yyuddc_13328_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yyuddc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yyuddc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=2.0034170
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2275,7 +2416,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yyussc_13325_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yyussc_13325_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yyussc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polm80/test_ee_yyussc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=2.0189010
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2291,8 +2432,8 @@ def process_files():
     cross_section_= 2.67
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/hzqq_13392_RunEventStatisticsHistogram.root"
-    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_hzqq_noMassCut_noThetaCut_MVATrainingTree_OnlyPartonSelection.root"  
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_FillPartonOnlyHistos_RecoAndParton.root"  
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_hzqq_noMassCut_noThetaCut_MVATrainingTree_RecoSelectionOnly_OnlyPartonSelection.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_withPartonHistos_AllEvents.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
 
@@ -2301,7 +2442,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qqqq_13393_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qqqq_noCuts_noSqrtS.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
     cross_section_= 120.
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2310,7 +2451,7 @@ def process_files():
     fillGenInfo_=True
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qqqq_mqqqq_2_TeV_13700_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7ee_qq_mqq_1_TeV_13429_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
     cross_section_=   49.2
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2319,7 +2460,7 @@ def process_files():
     fillGenInfo_=True
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_qq_13398_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
     cross_section_= 786.
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2328,7 +2469,7 @@ def process_files():
     fillGenInfo_=True
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_qq_mqq_1_TeV_13429_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7ee_qq_mqq_1_TeV_13429_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
     cross_section_=  73.5 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2340,7 +2481,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_bbcbbc_13071_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_bbcbbc_13071_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_bbcbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_bbcbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 2.9986901e-3 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2350,7 +2491,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_bbubbu_13072_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_bbubbu_13072_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_bbubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_bbubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 2.9825397e-3 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2360,7 +2501,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_ddcyyc_13073_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_ddcyyc_13073_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_ddcyyc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_ddcyyc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=1.7824610e-1
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2370,7 +2511,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_dduyyu_13074_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_dduyyu_13074_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_dduyyu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_dduyyu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 5.0109474
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2380,7 +2521,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_sscbbc_13075_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_sscbbc_13075_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_sscbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_sscbbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=4.8938333
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2390,7 +2531,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_sscssc_13076_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_sscssc_13076_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_sscssc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_sscssc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 1.3677677e-1 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2400,7 +2541,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_ssussu_13077_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_ssussu_13077_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_ssussu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_ssussu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 3.3776171e-3 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2410,7 +2551,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_ssubbu_13293_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_ssubbu_13293_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_ssubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_ssubbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 2.3216638e-2 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2420,7 +2561,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yycbbu_13322_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yycbbu_13322_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yycbbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yycbbu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 5.2101109
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2430,7 +2571,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yycddu_13319_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yycddu_13319_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yycddu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yycddu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 4.0984879e-1 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2440,7 +2581,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yycssu_13327_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yycssu_13327_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yycssu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yycssu_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=  4.1853929e-1 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2450,7 +2591,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yyubbc_13324_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yyubbc_13324_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yyubbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yyubbc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 5.2070149
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2460,7 +2601,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yyuddc_13321_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yyuddc_13321_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yyuddc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yyuddc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_= 4.1203686e-1 
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
@@ -2470,7 +2611,7 @@ def process_files():
     input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_ee_yyussc_13329_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_qq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190417_gcc62_CT/VtxVLC7RFJVLC7/ee_yyussc_13329_RunEventStatisticsHistogram.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yyussc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190417Prod/VLC7VtxRFJVLC7/polp80/test_ee_yyussc_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root" 
     cross_section_=4.2245034e-1
     #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
