@@ -187,8 +187,11 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
 
     reader.AddVariable("reco_y32",v_reco_y32)
     reader.AddVariable("reco_y43",v_reco_y43)
-    reader.AddVariable("dphi_j1j2",v_dphi_j1j2)
+    reader.AddSpectator("dphi_j1j2",v_dphi_j1j2)
 
+    v_jet1_d21 = array('f',[0])
+    v_jet1_d32 = array('f',[0])
+    v_jet1_d43 = array('f',[0])
 
     v_jet1_d21 = array('f',[0])
     v_jet1_d32 = array('f',[0])
@@ -196,14 +199,25 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
     v_jet2_d21 = array('f',[0])
     v_jet2_d32 = array('f',[0])
     v_jet2_d43 = array('f',[0])
-    reader.AddSpectator("jet1_d21",v_jet1_d21)
+    reader.AddVariable("jet1_d21",v_jet1_d21)
     reader.AddSpectator("jet1_d32",v_jet1_d32)
     reader.AddSpectator("jet1_d43",v_jet1_d43)
     reader.AddSpectator("jet2_d21",v_jet2_d21)
     reader.AddSpectator("jet2_d32",v_jet2_d32)
     reader.AddSpectator("jet2_d43",v_jet2_d43)
 
-
+    v_jet1_C3_beta1 = array('f',[0])
+    reader.AddVariable('jet1_C3_beta1',v_jet1_C3_beta1)
+    v_jet2_C3_beta1 = array('f',[0])
+    reader.AddSpectator('jet2_C3_beta1',v_jet2_C3_beta1)
+    v_jet1_N2_beta1 = array('f',[0])
+    reader.AddVariable('jet1_N2_beta1',v_jet1_N2_beta1)
+    v_jet2_N2_beta1 = array('f',[0])
+    reader.AddSpectator('jet2_N2_beta1',v_jet2_N2_beta1)
+    v_jet1_N3_beta1 = array('f',[0])
+    reader.AddVariable('jet1_N3_beta1',v_jet1_N2_beta1)
+    v_jet2_N3_beta1 = array('f',[0])
+    reader.AddSpectator('jet2_N3_beta1',v_jet2_N2_beta1)
 
     input_file_=root.TFile.Open(i_input_file_name_)
     tree = input_file_.Get("MVATrainingVariables")
@@ -2794,72 +2808,72 @@ def process_files():
     #files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/dataset/filesPolp80GiniIndexNoNormSkipNormalization/dataset/weights/TMVAClassification_BDT.weights.xml'
     #filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees400Shrinkage0_75NCuts20
     #GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees175NCuts20
-    #files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees175NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2/dataset/weights/TMVAClassification_BDT.weights.xml'
-    files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2/dataset/weights/TMVAClassification_BDT.weights.xml'
+    #files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees175NCuts20_qqqq2TeV_allVar_w_C3_N2_N3_no_Jet2_subStruct/dataset/weights/TMVAClassification_BDT.weights.xml'
+    files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_w_C3_N2_N3_no_Jet2_subStruct_jet1_d21/dataset/weights/TMVAClassification_BDT.weights.xml'
 
     isSignalData_=True
     #input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_FillPartonOnlyHistos_RecoAndParton.root"
-    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug5/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_RecoAndParton.root" 
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug5/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21_RecoAndParton.root" 
     #parton sqrtS and lepton number typically not saved
     #input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree.root"
-    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root" 
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_withPartonHistos.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root"  
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_withPartonHistos_AllEvents.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_AllEvents.root"  
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars_AllEvents.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
  
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     #for negative polarisation, NTrees 300 gives best results, for positive polarisation change to NTrees 250     
              
-    #files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug5/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2/dataset/weights/TMVAClassification_BDT.weights.xml'           /eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2/dataset/weights/
-    files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar_no_Jet2_C2_D2/dataset/weights/TMVAClassification_BDT.weights.xml'
+    #files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug5/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_qqqq2TeV_allVar_w_C3_N2_N3_no_Jet2_subStruct/dataset/weights/TMVAClassification_BDT.weights.xml'           /eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts20_qqqq2TeV_allVar_w_C3_N2_N3_E_theta_no_Jet2_subStruct/dataset/weights/
+    files_weights_='/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees250AdaBoostBeta020NCuts20_qqqq2TeV_allVar_w_C3_N2_N3_no_Jet2_subStruct_jet1_d21/dataset/weights/TMVAClassification_BDT.weights.xml'
 
     isSignalData_=True
     #parton sqrtS and lepton number typically not saved
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_withPartonHistos.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root"  
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root"  
     #input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_FillPartonOnlyHistos_RecoAndParton.root"
-    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_RecoAndParton.root" 
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars_RecoAndParton.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_withPartonHistos_AllEvents.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_AllEvents.root"  
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars_AllEvents.root"  
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_AllEvents_test.root" 
     isSignalData_=False
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root" 
     isSignalData_=False
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_subStruc_Vars.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_)
 
 
