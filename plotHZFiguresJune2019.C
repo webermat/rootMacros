@@ -316,7 +316,7 @@ void CLICdpLabel(Double_t x, Double_t y, std::string status, Color_t color){
   l.SetTextColor(kBlack);
   l.SetTextSize(0.05);
 
-  std::string label = std::string("CLICdp work in progress");
+  std::string label = std::string("CLICdp");
   l.DrawLatex(x,y,label.c_str());
 
   TLatex l2; 

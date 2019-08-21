@@ -2249,16 +2249,134 @@ void fill_jet_histograms(TFile* file, std::vector<TH1F*> h_hist_vec){
 
 
 
+void plotJERPlotsFull(){
 
-
-
-void JERPlotsFull(){
+ 
+  TLatex* l = new TLatex();
+  l->SetNDC();
+  l->SetTextFont(42);
+  l->SetTextColor(kBlack);
+  l->SetTextSize(0.045);
+  std::string label("CLICdp");
+  double x=0.20, y=0.93;
+  
+  TText* leg_label_CLICdp= new TText();
+  leg_label_CLICdp->SetTextSize(0.045);
+  leg_label_CLICdp->SetTextFont(42);
 
   CLICdpStyle();
 
   gROOT->ProcessLine("#include <vector>");
 
   const char* final_histo_name="/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181101_histoFitRange_0_00_to_3_00_SWC_allRange_allSamples_nPFO_1.root";
+  TFile* file_CLIC_JER=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181101_histoFitRange_0_00_to_3_00_SWC_allRange_allSamples_nPFO_1.root");
+
+
+  TH1F* h_380_CT_wO_DR07_E_SigmaCB_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_SigmaCBVsCosTheta_CT_wO_DR07_380");
+  TH1F* h_380_CT_DR07_E_SigmaCB_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_SigmaCBVsCosTheta_CT_DR07_380");
+  TH1F* h_500_CT_wO_DR07_E_SigmaCB_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_SigmaCBVsCosTheta_CT_wO_DR07_500");
+  TH1F* h_500_CT_DR07_E_SigmaCB_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_SigmaCBVsCosTheta_CT_DR07_500");
+
+  TH1F* h_380_CT_wO_DR07_E_RMS90_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_RMS90VsCosTheta_CT_wO_DR07_380");
+  TH1F* h_380_CT_DR07_E_RMS90_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_RMS90VsCosTheta_CT_DR07_380");
+  TH1F* h_500_CT_wO_DR07_E_RMS90_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_RMS90VsCosTheta_CT_wO_DR07_500");
+  TH1F* h_500_CT_DR07_E_RMS90_summary_histogram=(TH1F*)file_CLIC_JER->Get("JER_RMS90VsCosTheta_CT_DR07_500");
+
+  h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineColor(kRed);
+  h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineStyle(2);
+  h_380_CT_wO_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_380_CT_wO_DR07_E_RMS90_summary_histogram->SetLineColor(kRed);
+  h_380_CT_wO_DR07_E_RMS90_summary_histogram->SetLineStyle(2);
+
+  h_380_CT_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_380_CT_DR07_E_SigmaCB_summary_histogram->SetLineColor(kRed);
+  h_380_CT_DR07_E_SigmaCB_summary_histogram->SetLineStyle(1);
+  h_380_CT_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_380_CT_DR07_E_RMS90_summary_histogram->SetLineColor(kRed);
+  h_380_CT_DR07_E_RMS90_summary_histogram->SetLineStyle(1);
+
+  h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineStyle(2);
+  h_500_CT_wO_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_500_CT_wO_DR07_E_RMS90_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_wO_DR07_E_RMS90_summary_histogram->SetLineStyle(2);
+
+  h_500_CT_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_500_CT_DR07_E_SigmaCB_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_DR07_E_SigmaCB_summary_histogram->SetLineStyle(1);
+  h_500_CT_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_500_CT_DR07_E_RMS90_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_DR07_E_RMS90_summary_histogram->SetLineStyle(1);
+
+
+  TCanvas *resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy = setUpperCanvas("resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy");
+  resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy->cd();
+  //TLegend *leg_JER_wO_DR07_RMS90_CT_FullSummary = resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_wO_DR07_RMS90_CT_FullSummary = new TLegend(0.20,0.546,0.50,0.87);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetBorderSize(0);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetTextAlign(12);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetTextSize(0.050);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetTextFont(42);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetMargin(0.15);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetLineColor(1);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetLineStyle(1);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetLineWidth(1);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetFillColor(0);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetFillStyle(1001);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetHeader("VLC7 Jets, #approx 500 GeV");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_500_CT_DR07_E_RMS90_summary_histogram->DrawCopy("h,e"),"18-10-11");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_380_CT_DR07_E_RMS90_summary_histogram->DrawCopy("h,e,same"),"19-07-09");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_500_CT_wO_DR07_E_RMS90_summary_histogram->DrawCopy("h,e,same"),"18-10-11, with 3TeV BG");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_380_CT_wO_DR07_E_RMS90_summary_histogram->DrawCopy("h,e,same"),"19-07-09, with 3TeV BG");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->Draw();
+  l->DrawLatex(x,y,label.c_str());
+
+  TCanvas *resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy = setUpperCanvas("resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy");
+  resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy->cd();
+  //TLegend *leg_JER_wO_DR07_SigmaCB_CT_FullSummary = resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_wO_DR07_SigmaCB_CT_FullSummary = new TLegend(0.20,0.546,0.50,0.87);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetBorderSize(0);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetTextAlign(12);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetTextSize(0.050);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetTextFont(42);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetMargin(0.15);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetLineColor(1);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetLineStyle(1);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetLineWidth(1);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetFillColor(0);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetFillStyle(1001);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetHeader("VLC7 Jets, #approx 500 GeV");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_500_CT_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e"),"18-10-11");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_380_CT_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e,same"),"19-07-09");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e,same"),"18-10-11, with 3TeV BG");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e,same"),"19-07-09, with 3TeV BG");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->Draw();
+  l->DrawLatex(x,y,label.c_str());
+}
+
+
+void JERPlotsFull(){
+
+ 
+  TLatex* l = new TLatex();
+  l->SetNDC();
+  l->SetTextFont(42);
+  l->SetTextColor(kBlack);
+  l->SetTextSize(0.045);
+  std::string label("CLICdp");
+  double x=0.20, y=0.93;
+  
+  TText* leg_label_CLICdp= new TText();
+  leg_label_CLICdp->SetTextSize(0.045);
+  leg_label_CLICdp->SetTextFont(42);
+
+  CLICdpStyle();
+
+  gROOT->ProcessLine("#include <vector>");
+
+  const char* final_histo_name="/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181101_histoFitRange_0_00_to_3_00_SWC_allRange_allSamples_nPFO_1_testNewRelease.root";
 
   //ROOT::Math::Minimizer* pMinimizer = ROOT::Math::Factory::CreateMinimizer("Minuit2", "Migrad");
   //pMinimizer->SetMaxFunctionCalls(10000000);
@@ -2473,10 +2591,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -2487,10 +2605,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -2501,10 +2619,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -2515,10 +2633,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -2529,10 +2647,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -2543,10 +2661,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_100_CT_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_100_CT_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_100_CT_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -3464,10 +3582,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -3478,10 +3596,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -3492,10 +3610,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -3506,10 +3624,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -3520,10 +3638,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -3534,10 +3652,10 @@ void JERPlotsFull(){
   TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_100_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_100_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_100_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_100_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_100_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -4439,10 +4557,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -4453,10 +4571,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -4467,10 +4585,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -4481,10 +4599,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -4495,10 +4613,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -4509,10 +4627,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_200_CT_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_200_CT_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_200_CT_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -5415,10 +5533,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -5429,10 +5547,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -5443,10 +5561,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -5457,10 +5575,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -5471,10 +5589,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -5485,10 +5603,10 @@ void JERPlotsFull(){
   TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_200_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_200_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_200_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_200_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_200_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -6388,10 +6506,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -6402,10 +6520,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -6416,10 +6534,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -6430,10 +6548,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -6444,10 +6562,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -6458,10 +6576,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_380_CT_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_380_CT_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_380_CT_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -7361,10 +7479,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -7375,10 +7493,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -7389,10 +7507,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -7403,10 +7521,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -7417,10 +7535,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -7431,10 +7549,10 @@ void JERPlotsFull(){
   TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_60_to_0_70","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_70_to_0_80","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_80_to_0_90","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_380_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_380_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_380_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_380_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_380_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -12297,7 +12415,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -12311,7 +12429,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -12325,7 +12443,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -12339,7 +12457,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -12353,7 +12471,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -12367,7 +12485,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_3000_CT_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_3000_CT_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_3000_CT_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -13267,7 +13385,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR05_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -13281,7 +13399,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR06_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -13295,7 +13413,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR07_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -13309,7 +13427,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR08_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -13323,7 +13441,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR09_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10 =  new TH1F("h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_to_0_10","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20 =  new TH1F("h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_10_to_0_20","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
@@ -13337,7 +13455,7 @@ void JERPlotsFull(){
   TH1F* h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925 =  new TH1F("h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_900_to_0_925","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950 =  new TH1F("h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_925_to_0_950","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
   TH1F* h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975 =  new TH1F("h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_950_to_0_975","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
-  TH1F* h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER_FW, lim_E_rel_low,lim_E_rel_high);
+  TH1F* h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00 =  new TH1F("h_3000_CT_wO_DR10_E_rel_totVis_RMS_d1_cosT_0_975_to_1_00","", n_binsJER, lim_E_rel_low,lim_E_rel_high);
 
   TH1F* h_3000_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65 =  new TH1F("h_3000_CT_wO_DR05_dphi_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
   TH1F* h_3000_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65 =  new TH1F("h_3000_CT_wO_DR05_dtheta_reco_gen_cosTheta_0_65","", n_bins100, -lim_angleDeg,lim_angleDeg);
@@ -19819,6 +19937,80 @@ std::cout<<"end DR07 wO 3000"<<std::endl;
   gre_DR07_RMS90_JER_0_925_to_1_00_EC_Erat99_allSamples_SC->SetPoint(4,1500,h_3000_CT_EC_Erat99_allSamples_SC_DR07_E_RMS90_summary_histogram->GetBinContent(4));
   gre_DR07_RMS90_JER_0_925_to_1_00_EC_Erat99_allSamples_SC->SetPointError(4,0,h_3000_CT_EC_Erat99_allSamples_SC_DR07_E_RMS90_summary_histogram->GetBinError(4));
 
+
+  h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineColor(kRed);
+  h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineStyle(2);
+  h_380_CT_wO_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_380_CT_wO_DR07_E_RMS90_summary_histogram->SetLineColor(kRed);
+  h_380_CT_wO_DR07_E_RMS90_summary_histogram->SetLineStyle(2);
+
+  h_380_CT_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_380_CT_DR07_E_SigmaCB_summary_histogram->SetLineColor(kRed);
+  h_380_CT_DR07_E_SigmaCB_summary_histogram->SetLineStyle(1);
+  h_380_CT_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_380_CT_DR07_E_RMS90_summary_histogram->SetLineColor(kRed);
+  h_380_CT_DR07_E_RMS90_summary_histogram->SetLineStyle(1);
+
+  h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->SetLineStyle(2);
+  h_500_CT_wO_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_500_CT_wO_DR07_E_RMS90_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_wO_DR07_E_RMS90_summary_histogram->SetLineStyle(2);
+
+  h_500_CT_DR07_E_SigmaCB_summary_histogram->SetLineWidth(2);
+  h_500_CT_DR07_E_SigmaCB_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_DR07_E_SigmaCB_summary_histogram->SetLineStyle(1);
+  h_500_CT_DR07_E_RMS90_summary_histogram->SetLineWidth(2);
+  h_500_CT_DR07_E_RMS90_summary_histogram->SetLineColor(kBlue);
+  h_500_CT_DR07_E_RMS90_summary_histogram->SetLineStyle(1);
+
+
+  TCanvas *resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy = setUpperCanvas("resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy");
+  resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy->cd();
+  //TLegend *leg_JER_wO_DR07_RMS90_CT_FullSummary = resolutionGraphCanvas_JER_wO_DR07_RMS90_CT_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_wO_DR07_RMS90_CT_FullSummary = new TLegend(0.20,0.546,0.50,0.87);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetBorderSize(0);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetTextAlign(12);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetTextSize(0.050);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetTextFont(42);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetMargin(0.15);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetLineColor(1);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetLineStyle(1);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetLineWidth(1);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetFillColor(0);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetFillStyle(1001);
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->SetHeader("VLC7 Jets, #approx 500 GeV");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_500_CT_DR07_E_RMS90_summary_histogram->DrawCopy("h,e"),"18-10-11");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_380_CT_DR07_E_RMS90_summary_histogram->DrawCopy("h,e,same"),"19-07-09");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_500_CT_wO_DR07_E_RMS90_summary_histogram->DrawCopy("h,e,same"),"18-10-11, with 3TeV BG");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->AddEntry(h_380_CT_wO_DR07_E_RMS90_summary_histogram->DrawCopy("h,e,same"),"19-07-09, with 3TeV BG");
+  leg_JER_wO_DR07_RMS90_CT_FullSummary->Draw();
+  l->DrawLatex(x,y,label.c_str());
+
+  TCanvas *resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy = setUpperCanvas("resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy");
+  resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy->cd();
+  //TLegend *leg_JER_wO_DR07_SigmaCB_CT_FullSummary = resolutionGraphCanvas_JER_wO_DR07_SigmaCB_CT_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_wO_DR07_SigmaCB_CT_FullSummary = new TLegend(0.20,0.546,0.50,0.87);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetBorderSize(0);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetTextAlign(12);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetTextSize(0.050);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetTextFont(42);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetMargin(0.15);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetLineColor(1);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetLineStyle(1);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetLineWidth(1);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetFillColor(0);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetFillStyle(1001);
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->SetHeader("VLC7 Jets, #approx 500 GeV");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_500_CT_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e"),"18-10-11");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_380_CT_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e,same"),"19-07-09");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_500_CT_wO_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e,same"),"18-10-11, with 3TeV BG");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->AddEntry(h_380_CT_wO_DR07_E_SigmaCB_summary_histogram->DrawCopy("h,e,same"),"19-07-09, with 3TeV BG");
+  leg_JER_wO_DR07_SigmaCB_CT_FullSummary->Draw();
+  l->DrawLatex(x,y,label.c_str());
+  
   file_histogram->cd();
   gre_DR07_RMS90_JER_0_65_wSC->Write();
   gre_DR07_RMS90_JER_0_65_to_0_80_wSC->Write();
@@ -19848,5 +20040,5 @@ std::cout<<"end DR07 wO 3000"<<std::endl;
 
   file_histogram->Write();
   file_histogram->Close();
-
+  
 }
