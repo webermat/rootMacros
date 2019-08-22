@@ -254,12 +254,12 @@ def process_files():
     #jet1_D2_C2_C3_tau21_jet2_no_subStruct
     #jet1_D2_C2_C3_jet2_no_subStruct
 
-    file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
-    file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_AllEvents.root") 
+    file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_AllEvents.root") 
     #file_polm80_HZ_SignalHistos_AllEvents_noCorr_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AllEvents.root") 
-    file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
-    file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
-    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
                                                   
     #file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21.root") 
     #file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21_AllEvents.root") 
@@ -786,6 +786,11 @@ def process_files():
     y_polm80_purity = array( 'f' )
     y_polm80_efficiency = array( 'f' )
     norm_polm=file_polm80_HZ_SignalHistos_.Get("-0.2/h_BDT_output").Integral()
+
+    y_polm80_AllEvents_significance = array( 'f' )
+    y_polm80_AllEvents_purity = array( 'f' )
+    y_polm80_AllEvents_efficiency = array( 'f' )
+    norm_polm_AllEvents=file_polm80_HZ_SignalHistos_AllEvents_.Get("-0.2/h_BDT_output").Integral()
     #norm_polm=h_mass_sig_hzqq_norm_polm.Integral()
     #norm_polm = 10.
     print 'norm_polm',norm_polm
@@ -793,6 +798,7 @@ def process_files():
     for dir_ind in directory:
         x_polm80_BDTScore.append(float(dir_ind))
         h_mass_polm80_sig_hzqq=file_polm80_HZ_SignalHistos_.Get(dir_ind+"/h_jet1_mass")
+        h_mass_polm80_sig_hzqq_AllEvents=file_polm80_HZ_SignalHistos_AllEvents_.Get(dir_ind+"/h_jet1_mass")
         h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos=file_polm80_ee_qq_mqq_1TeV_BGHistos_.Get(dir_ind+"/h_jet1_mass")
         h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos=file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_.Get(dir_ind+"/h_jet1_mass")
         h_mass_polm80_sig_ee_qqqqqq_BGHistos=file_polm80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_jet1_mass") 
@@ -807,7 +813,17 @@ def process_files():
             y_polm80_efficiency.append(0)
             y_polm80_purity.append(0)
             y_polm80_significance.append(0)
-
+      #print dir_ind,"integral of signal mass",h_mass_polm80_sig_hzqq.Integral(),h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral(),h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral(),h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()
+        if h_mass_polm80_sig_hzqq_AllEvents.Integral()>0:
+            #print '#',dir_ind,"polm significance,purity ",h_mass_polm80_sig_hzqq.Integral()/sqrt(h_mass_polm80_sig_hzqq.Integral()+h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_mass_polm80_sig_hzqq.Integral()/(h_mass_polm80_sig_hzqq.Integral()+h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()),h_mass_polm80_sig_hzqq.Integral(),h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral(),h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral(),h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()
+            y_polm80_AllEvents_efficiency.append(100.*h_mass_polm80_sig_hzqq_AllEvents.Integral()/norm_polm_AllEvents)
+            y_polm80_AllEvents_purity.append(100.*h_mass_polm80_sig_hzqq_AllEvents.Integral()/(h_mass_polm80_sig_hzqq_AllEvents.Integral()+h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()))
+            y_polm80_AllEvents_significance.append(h_mass_polm80_sig_hzqq_AllEvents.Integral()/sqrt(h_mass_polm80_sig_hzqq_AllEvents.Integral()+h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()))
+            print 'at polm ',dir_ind,'signif/pur/eff/events all ',h_mass_polm80_sig_hzqq_AllEvents.Integral()/sqrt(h_mass_polm80_sig_hzqq_AllEvents.Integral()+h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_mass_polm80_sig_hzqq_AllEvents.Integral()/(h_mass_polm80_sig_hzqq_AllEvents.Integral()+h_mass_polm80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_mass_polm80_sig_hzqq_AllEvents.Integral()/norm_polm,h_mass_polm80_sig_hzqq_AllEvents.Integral()
+        else:
+            y_polm80_AllEvents_efficiency.append(0)
+            y_polm80_AllEvents_purity.append(0)
+            y_polm80_AllEvents_significance.append(0)
     canvas_polm80_BDT_significance = setUpperCanvas("canvas_polm80_BDT_significance");
     canvas_polm80_BDT_significance.cd()
     graph_polm80_significance = TGraph( n_graphs, x_polm80_BDTScore, y_polm80_significance )
@@ -844,6 +860,46 @@ def process_files():
     l.DrawLatex(x2,y2,label2);
     canvas_polm80_BDT_purity.Print("hzqq_bbar_vs_totBG_polm80_signal_purity_vs_BDT.eps")
 
+
+
+
+    canvas_polm80_AllEvents_BDT_significance = setUpperCanvas("canvas_polm80_AllEvents_BDT_significance");
+    canvas_polm80_AllEvents_BDT_significance.cd()
+    graph_polm80_AllEvents_significance = TGraph( n_graphs, x_polm80_BDTScore, y_polm80_AllEvents_significance )
+    graph_polm80_AllEvents_significance.SetMarkerStyle(20)
+    graph_polm80_AllEvents_significance.SetMarkerColor(1)
+    graph_polm80_AllEvents_significance.GetXaxis().SetTitle('BDT Score')
+    graph_polm80_AllEvents_significance.GetYaxis().SetTitle('significance [#sigma]')
+    graph_polm80_AllEvents_significance.Draw('AP')
+    #canvas_polm80_AllEvents_BDT_significance.Update()
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polm80_AllEvents_BDT_significance.Print("hzqq_bbar_vs_totBG_polm80_AllEvents_sigificance_vs_BDT.eps")
+    
+    canvas_polm80_AllEvents_BDT_efficiency = setUpperCanvas("canvas_polm80_AllEvents_BDT_efficiency");
+    canvas_polm80_AllEvents_BDT_efficiency.cd()
+    graph_polm80_AllEvents_efficiency = TGraph( n_graphs, x_polm80_BDTScore, y_polm80_AllEvents_efficiency )
+    graph_polm80_AllEvents_efficiency.SetMarkerStyle(21)
+    graph_polm80_AllEvents_efficiency.SetMarkerColor(1)
+    graph_polm80_AllEvents_efficiency.GetXaxis().SetTitle('BDT Score')
+    graph_polm80_AllEvents_efficiency.GetYaxis().SetTitle('signal efficiency [%]')
+    graph_polm80_AllEvents_efficiency.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polm80_AllEvents_BDT_efficiency.Print("hzqq_bbar_vs_totBG_polm80_AllEvents_signal_efficiency_vs_BDT.eps")
+    canvas_polm80_AllEvents_BDT_purity = setUpperCanvas("canvas_polm80_AllEvents_BDT_purity");
+    canvas_polm80_AllEvents_BDT_purity.cd()
+    graph_polm80_AllEvents_purity = TGraph( n_graphs, x_polm80_BDTScore, y_polm80_AllEvents_purity )
+    graph_polm80_AllEvents_purity.SetMarkerStyle(22)
+    graph_polm80_AllEvents_purity.SetMarkerColor(2)
+    graph_polm80_AllEvents_purity.GetXaxis().SetTitle('BDT Score')
+    graph_polm80_AllEvents_purity.GetYaxis().SetTitle('purity [%]')
+    graph_polm80_AllEvents_purity.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polm80_AllEvents_BDT_purity.Print("hzqq_bbar_vs_totBG_polm80_AllEvents_signal_purity_vs_BDT.eps")
+
+
     #file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVTrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj.root")  
     #file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta.root") 
     #file_polp80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta_AllEvents.root") 
@@ -853,11 +909,11 @@ def process_files():
     #file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta.root") 
 
 
-    file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root")  
-    file_polp80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_AllEvents.root")  
-    file_polp80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
-    file_polp80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
-    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root")  
+    file_polp80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_AllEvents.root")  
+    file_polp80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polp80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_hzqqAllEvents_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
     #process_event(final_histo_name_,input_file_,files_weights_)
 
 
@@ -1166,17 +1222,26 @@ def process_files():
 
 
 
+
+
     x_polp80_BDTScore = array( 'f' )
     y_polp80_significance = array( 'f' )
     y_polp80_purity = array( 'f' )
     y_polp80_efficiency = array( 'f' )
     norm_polp=file_polp80_HZ_SignalHistos_.Get("-0.2/h_BDT_output").Integral()
+
+    y_polp80_AllEvents_significance = array( 'f' )
+    y_polp80_AllEvents_purity = array( 'f' )
+    y_polp80_AllEvents_efficiency = array( 'f' )
+    norm_polp_AllEvents=file_polp80_HZ_SignalHistos_AllEvents_.Get("-0.2/h_BDT_output").Integral()
+    #norm_polp=h_mass_sig_hzqq_norm_polp.Integral()
+    #norm_polp = 10.
     print 'norm_polp',norm_polp
 
     for dir_ind in directory:
         x_polp80_BDTScore.append(float(dir_ind))
-        #print 'x polp', x_polp80_BDTScore
         h_mass_polp80_sig_hzqq=file_polp80_HZ_SignalHistos_.Get(dir_ind+"/h_jet1_mass")
+        h_mass_polp80_sig_hzqq_AllEvents=file_polp80_HZ_SignalHistos_AllEvents_.Get(dir_ind+"/h_jet1_mass")
         h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos=file_polp80_ee_qq_mqq_1TeV_BGHistos_.Get(dir_ind+"/h_jet1_mass")
         h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos=file_polp80_ee_qqqq_mqqqq_2TeV_BGHistos_.Get(dir_ind+"/h_jet1_mass")
         h_mass_polp80_sig_ee_qqqqqq_BGHistos=file_polp80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_jet1_mass") 
@@ -1191,7 +1256,17 @@ def process_files():
             y_polp80_efficiency.append(0)
             y_polp80_purity.append(0)
             y_polp80_significance.append(0)
-
+      #print dir_ind,"integral of signal mass",h_mass_polp80_sig_hzqq.Integral(),h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral(),h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral(),h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+        if h_mass_polp80_sig_hzqq_AllEvents.Integral()>0:
+            #print '#',dir_ind,"polp significance,purity ",h_mass_polp80_sig_hzqq.Integral()/sqrt(h_mass_polp80_sig_hzqq.Integral()+h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_mass_polp80_sig_hzqq.Integral()/(h_mass_polp80_sig_hzqq.Integral()+h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_mass_polp80_sig_hzqq.Integral(),h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral(),h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral(),h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+            y_polp80_AllEvents_efficiency.append(100.*h_mass_polp80_sig_hzqq_AllEvents.Integral()/norm_polp_AllEvents)
+            y_polp80_AllEvents_purity.append(100.*h_mass_polp80_sig_hzqq_AllEvents.Integral()/(h_mass_polp80_sig_hzqq_AllEvents.Integral()+h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()))
+            y_polp80_AllEvents_significance.append(h_mass_polp80_sig_hzqq_AllEvents.Integral()/sqrt(h_mass_polp80_sig_hzqq_AllEvents.Integral()+h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()))
+            print 'at polp ',dir_ind,'signif/pur/eff/events all ',h_mass_polp80_sig_hzqq_AllEvents.Integral()/sqrt(h_mass_polp80_sig_hzqq_AllEvents.Integral()+h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_mass_polp80_sig_hzqq_AllEvents.Integral()/(h_mass_polp80_sig_hzqq_AllEvents.Integral()+h_mass_polp80_sig_ee_qq_mqq_1TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqq_mqqqq_2TeV_BGHistos.Integral()+h_mass_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_mass_polp80_sig_hzqq_AllEvents.Integral()/norm_polp,h_mass_polp80_sig_hzqq_AllEvents.Integral()
+        else:
+            y_polp80_AllEvents_efficiency.append(0)
+            y_polp80_AllEvents_purity.append(0)
+            y_polp80_AllEvents_significance.append(0)
     canvas_polp80_BDT_significance = setUpperCanvas("canvas_polp80_BDT_significance");
     canvas_polp80_BDT_significance.cd()
     graph_polp80_significance = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_significance )
@@ -1200,9 +1275,9 @@ def process_files():
     graph_polp80_significance.GetXaxis().SetTitle('BDT Score')
     graph_polp80_significance.GetYaxis().SetTitle('significance [#sigma]')
     graph_polp80_significance.Draw('AP')
-    l.DrawLatex(x,y,label);
-    l.DrawLatex(x2,y2,label3);
     #canvas_polp80_BDT_significance.Update()
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
     canvas_polp80_BDT_significance.Print("hzqq_bbar_vs_totBG_polp80_sigificance_vs_BDT.eps")
     
     canvas_polp80_BDT_efficiency = setUpperCanvas("canvas_polp80_BDT_efficiency");
@@ -1214,7 +1289,7 @@ def process_files():
     graph_polp80_efficiency.GetYaxis().SetTitle('signal efficiency [%]')
     graph_polp80_efficiency.Draw('AP')
     l.DrawLatex(x,y,label);
-    l.DrawLatex(x2,y2,label3);
+    l.DrawLatex(x2,y2,label2);
     canvas_polp80_BDT_efficiency.Print("hzqq_bbar_vs_totBG_polp80_signal_efficiency_vs_BDT.eps")
     canvas_polp80_BDT_purity = setUpperCanvas("canvas_polp80_BDT_purity");
     canvas_polp80_BDT_purity.cd()
@@ -1225,8 +1300,47 @@ def process_files():
     graph_polp80_purity.GetYaxis().SetTitle('purity [%]')
     graph_polp80_purity.Draw('AP')
     l.DrawLatex(x,y,label);
-    l.DrawLatex(x2,y2,label3);
+    l.DrawLatex(x2,y2,label2);
     canvas_polp80_BDT_purity.Print("hzqq_bbar_vs_totBG_polp80_signal_purity_vs_BDT.eps")
+
+
+
+
+    canvas_polp80_AllEvents_BDT_significance = setUpperCanvas("canvas_polp80_AllEvents_BDT_significance");
+    canvas_polp80_AllEvents_BDT_significance.cd()
+    graph_polp80_AllEvents_significance = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_AllEvents_significance )
+    graph_polp80_AllEvents_significance.SetMarkerStyle(20)
+    graph_polp80_AllEvents_significance.SetMarkerColor(1)
+    graph_polp80_AllEvents_significance.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_AllEvents_significance.GetYaxis().SetTitle('significance [#sigma]')
+    graph_polp80_AllEvents_significance.Draw('AP')
+    #canvas_polp80_AllEvents_BDT_significance.Update()
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_AllEvents_BDT_significance.Print("hzqq_bbar_vs_totBG_polp80_AllEvents_sigificance_vs_BDT.eps")
+    
+    canvas_polp80_AllEvents_BDT_efficiency = setUpperCanvas("canvas_polp80_AllEvents_BDT_efficiency");
+    canvas_polp80_AllEvents_BDT_efficiency.cd()
+    graph_polp80_AllEvents_efficiency = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_AllEvents_efficiency )
+    graph_polp80_AllEvents_efficiency.SetMarkerStyle(21)
+    graph_polp80_AllEvents_efficiency.SetMarkerColor(1)
+    graph_polp80_AllEvents_efficiency.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_AllEvents_efficiency.GetYaxis().SetTitle('signal efficiency [%]')
+    graph_polp80_AllEvents_efficiency.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_AllEvents_BDT_efficiency.Print("hzqq_bbar_vs_totBG_polp80_AllEvents_signal_efficiency_vs_BDT.eps")
+    canvas_polp80_AllEvents_BDT_purity = setUpperCanvas("canvas_polp80_AllEvents_BDT_purity");
+    canvas_polp80_AllEvents_BDT_purity.cd()
+    graph_polp80_AllEvents_purity = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_AllEvents_purity )
+    graph_polp80_AllEvents_purity.SetMarkerStyle(22)
+    graph_polp80_AllEvents_purity.SetMarkerColor(2)
+    graph_polp80_AllEvents_purity.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_AllEvents_purity.GetYaxis().SetTitle('purity [%]')
+    graph_polp80_AllEvents_purity.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_AllEvents_BDT_purity.Print("hzqq_bbar_vs_totBG_polp80_AllEvents_signal_purity_vs_BDT.eps")
 
 
 
