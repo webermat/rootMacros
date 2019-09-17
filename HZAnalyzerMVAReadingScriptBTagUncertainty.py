@@ -150,11 +150,13 @@ def BTagNormalisation (i_input_file_list_onlyMassWindowCut,BTagUncValue):
         tree = input_file_.Get("MVATrainingVariables")
         tree.SetBranchAddress('jet1_BTag_rfj_BTagMax',v_jet1_BTag_rfj_BTagMax)
         tree.SetBranchAddress('eventWeight',v_eventWeight)
+        print 'at begin of file',total_weight_default,total_weight_Up,total_weight_Down
         for ientry in range(tree.GetEntries()):
             tree.GetEntry(ientry)
             total_weight_default+=v_eventWeight[0]
             total_weight_Down+=v_eventWeight[0]*BTagReweightFunction(v_jet1_BTag_rfj_BTagMax[0],BTagUncValue,1.0)
             total_weight_Up+=v_eventWeight[0]*BTagReweightFunction(v_jet1_BTag_rfj_BTagMax[0],-BTagUncValue,1.0)
+        print 'at end of file',total_weight_default,total_weight_Up,total_weight_Down
     norm_up=total_weight_Up/total_weight_default
     norm_down=total_weight_Down/total_weight_default
 
@@ -1682,6 +1684,7 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
 
         num_entry=-1
         #BDTCut=0.50
+        total_weight=0
         for ientry in range(tree.GetEntries()):
 
             fCut_bbar_decays=False
@@ -1689,10 +1692,10 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
             num_entry+=1;         
             tree.GetEntry(ientry)
             if num_entry%(int(tree.GetEntries()/5.)) == 0:
-                print "sig BG in entry ",num_entry,bdt_value
-                print"weight before",v_eventWeight[0],' BTAG, Unc, norm',v_jet1_BTag_rfj_BTagMax[0],BTagUncValue,norm
-                v_eventWeight[0] =v_eventWeight[0]* BTagReweightFunction (v_jet1_BTag_rfj_BTagMax[0],BTagUncValue,norm)
-                print"weight after",v_eventWeight[0],' BTAG, Unc, norm', v_jet1_BTag_rfj_BTagMax[0],BTagUncValue,norm
+                print "sig BG in entry ",num_entry,bdt_value,total_weight
+                #print"weight before",v_eventWeight[0],' BTAG, Unc, norm',v_jet1_BTag_rfj_BTagMax[0],BTagUncValue,norm
+                v_eventWeight_new =v_eventWeight[0]* BTagReweightFunction (v_jet1_BTag_rfj_BTagMax[0],BTagUncValue,norm)
+                #print"weight after",v_eventWeight_new,' BTAG, Unc, norm', v_jet1_BTag_rfj_BTagMax[0],BTagUncValue,norm
             #print "sig BG in entry ",num_entry,bdt_value    
 
             #v_nLeptons[0]=v_nLeptons[0]
@@ -1716,13 +1719,13 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
             if len(h_signal_jetChargeHistos_1D_hist_list)>0:
                 temp_tot_Event=TLorentzVector(0,0,0,0)
                 temp_tot_Event.SetPxPyPzE(v_parton_em_Px[0]+v_parton_ep_Px[0],v_parton_em_Py[0]+v_parton_ep_Py[0],v_parton_em_Pz[0]+v_parton_ep_Pz[0],v_parton_em_E[0]+v_parton_ep_E[0])
-                h_parton_sqrtS.Fill(v_sqrtS_parton[0],v_eventWeight[0])
+                h_parton_sqrtS.Fill(v_sqrtS_parton[0],v_eventWeight_new)
                 if (fCut_bbar_decays and (v_sqrtS_parton[0]>fCut_SqrtS_high or (v_sqrtS_j1_j2_EMiss[0]>fCut_SqrtS_high and v_nLeptons[0]<1)) ) :
                     if (fCut_bbar_decays and v_sqrtS_parton[0]>fCut_SqrtS_high):
-                        h_parton_sqrtS__part_2500.Fill(v_sqrtS_parton[0],v_eventWeight[0])
+                        h_parton_sqrtS__part_2500.Fill(v_sqrtS_parton[0],v_eventWeight_new)
                         if(v_sqrtS_j1_j2_EMiss[0]>0):
-                            h_reco_sqrtS_j1_j2_EMiss__part_2500.Fill(v_sqrtS_j1_j2_EMiss[0],v_eventWeight[0])
-                            h_reco_sqrtS_j1_j2_orig__part_2500.Fill(v_sqrtS_j1_j2_orig[0],v_eventWeight[0])
+                            h_reco_sqrtS_j1_j2_EMiss__part_2500.Fill(v_sqrtS_j1_j2_EMiss[0],v_eventWeight_new)
+                            h_reco_sqrtS_j1_j2_orig__part_2500.Fill(v_sqrtS_j1_j2_orig[0],v_eventWeight_new)
                     boostE_tot_COM_part=TVector3(0,0,0) 
                     boostE_tot_COM_part=-temp_tot_Event.BoostVector()
                     temp_ep_orig=TLorentzVector(0,0,0,0)
@@ -1777,15 +1780,15 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                         phi_plane_parton_H_ep_Z_Z_qpos=degrees(acos(plane_H_ep_boost.Dot(plane_Z_Z_qpos_boost)))+180.
                     #now check for those events, where reco cuts are not met, but parton cut
                     if(v_sqrtS_j1_j2_EMiss[0]<fCut_SqrtS_high or v_nLeptons[0]>=1) :
-                        h_parton_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_parton_costheta2_H_ep_approx_HZ_COM_miss_HbbSelection.Fill(cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
-                        h_parton_phi_plane_Z_qpos_vs_plane_H_ep_miss_HbbSelection.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                        h_parton_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_parton_costheta2_H_ep_approx_HZ_COM_miss_HbbSelection.Fill(cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight_new)
+                        h_parton_phi_plane_Z_qpos_vs_plane_H_ep_miss_HbbSelection.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
 
 
                         if(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))))>0:
-                            h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                            h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                         else:
-                            h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),-v_eventWeight[0])
+                            h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),-v_eventWeight_new)
             mvaValue=reader.EvaluateMVA("BDT")
             #print 'input variables ',v_jet1_mass,v_jet2_mass,v_jet1_theta,v_jet2_theta,v_deltatheta,v_jet1_D2_beta1,v_jet2_D2_beta1,v_jet1_BTag_rfj_BTagMax,v_eventWeight,mvaValue
             #print 'input variables ',mvaValue
@@ -1800,36 +1803,37 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 if (fCut_bbar_decays and v_sqrtS_parton[0]>fCut_SqrtS_high and mvaValue<=bdt_value):
                     #survive reco cuts, and sqrtS parton cuts, but NOT BDT< check also for signal parton bbar decays
                     #thus we are in miss territory again
-                    h_parton_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_parton_costheta2_H_ep_approx_HZ_COM_miss_HbbSelection.Fill(cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
-                    h_parton_phi_plane_Z_qpos_vs_plane_H_ep_miss_HbbSelection.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                    h_parton_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_parton_costheta2_H_ep_approx_HZ_COM_miss_HbbSelection.Fill(cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight_new)
+                    h_parton_phi_plane_Z_qpos_vs_plane_H_ep_miss_HbbSelection.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                     if(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))))>0:
-                        h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                        h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                     else:
-                        h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),-v_eventWeight[0])
+                        h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom_miss_HbbSelection.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),-v_eventWeight_new)
 
             #we only get here, if we pass reco style cuts
-            h_BDT_output.Fill(mvaValue,v_eventWeight[0])
+            h_BDT_output.Fill(mvaValue,v_eventWeight_new)
             if(mvaValue>bdt_value):
+                total_weight+=v_eventWeight_new
                 #print 'parton stuff',v_sqrtS_parton[0]
-                h_BDT_output_Eff.Fill(mvaValue,v_eventWeight[0])
-                h_signal_background_1D_hist_list[1].Fill(v_jet1_mass[0],v_eventWeight[0])
-                h_signal_background_1D_hist_list[2].Fill(v_jet2_mass[0],v_eventWeight[0])
-                h_jet1_theta.Fill(v_jet1_theta[0],v_eventWeight[0])
-                h_jet2_theta.Fill(v_jet2_theta[0],v_eventWeight[0])
-                h_jet1_min_jet2_theta.Fill(v_jet1_theta[0]-v_jet2_theta[0],v_eventWeight[0])
-                h_jet1_BTag.Fill(v_jet1_BTag_rfj_BTagMax[0],v_eventWeight[0])
-                h_jet1_CTag.Fill(v_jet1_CTag_rfj_CTagMax[0],v_eventWeight[0])
-                h_jet1_D2.Fill(v_jet1_D2_beta1[0],v_eventWeight[0])
-                h_jet2_D2.Fill(v_jet2_D2_beta1[0],v_eventWeight[0])
-                h_jet1_C2.Fill(v_jet1_C2_beta1[0],v_eventWeight[0])
-                h_jet2_C2.Fill(v_jet2_C2_beta1[0],v_eventWeight[0])
-                h_jet1_C3.Fill(v_jet1_C3_beta1[0],v_eventWeight[0])
-                h_jet2_C3.Fill(v_jet2_C3_beta1[0],v_eventWeight[0])
-                h_jet1_tau21.Fill(v_jet1_tau21[0],v_eventWeight[0])
-                h_jet2_tau21.Fill(v_jet2_tau21[0],v_eventWeight[0])
+                h_BDT_output_Eff.Fill(mvaValue,v_eventWeight_new)
+                h_signal_background_1D_hist_list[1].Fill(v_jet1_mass[0],v_eventWeight_new)
+                h_signal_background_1D_hist_list[2].Fill(v_jet2_mass[0],v_eventWeight_new)
+                h_jet1_theta.Fill(v_jet1_theta[0],v_eventWeight_new)
+                h_jet2_theta.Fill(v_jet2_theta[0],v_eventWeight_new)
+                h_jet1_min_jet2_theta.Fill(v_jet1_theta[0]-v_jet2_theta[0],v_eventWeight_new)
+                h_jet1_BTag.Fill(v_jet1_BTag_rfj_BTagMax[0],v_eventWeight_new)
+                h_jet1_CTag.Fill(v_jet1_CTag_rfj_CTagMax[0],v_eventWeight_new)
+                h_jet1_D2.Fill(v_jet1_D2_beta1[0],v_eventWeight_new)
+                h_jet2_D2.Fill(v_jet2_D2_beta1[0],v_eventWeight_new)
+                h_jet1_C2.Fill(v_jet1_C2_beta1[0],v_eventWeight_new)
+                h_jet2_C2.Fill(v_jet2_C2_beta1[0],v_eventWeight_new)
+                h_jet1_C3.Fill(v_jet1_C3_beta1[0],v_eventWeight_new)
+                h_jet2_C3.Fill(v_jet2_C3_beta1[0],v_eventWeight_new)
+                h_jet1_tau21.Fill(v_jet1_tau21[0],v_eventWeight_new)
+                h_jet2_tau21.Fill(v_jet2_tau21[0],v_eventWeight_new)
                 if len(h_signal_jetChargeHistos_1D_hist_list)>0:
-                    h_parton_sqrtS__recocorr_2500.Fill(v_sqrtS_parton[0],v_eventWeight[0])
+                    h_parton_sqrtS__recocorr_2500.Fill(v_sqrtS_parton[0],v_eventWeight_new)
                  
                 obj_jet1= RecoJet(0,0,0,0,v_jet1_tau21[0],v_jet1_C2_beta1[0],v_jet1_D2_beta1[0],v_jet1_BTag_rfj_BTagMax[0],0,0)
 
@@ -1839,10 +1843,10 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 jet_p=sqrt(v_jet2_E[0]*v_jet2_E[0]-v_jet2_mass[0]*v_jet2_mass[0])
                 obj_jet2.SetPtEtaPhiM(v_jet2_Pt[0],-log(tan(radians(v_jet2_theta[0]/2.))),radians(v_jet2_phi[0]),v_jet2_mass[0])
 
-                h_reco_sqrtS_j1_j2_EMiss.Fill(v_sqrtS_j1_j2_EMiss[0],v_eventWeight[0])
-                h_reco_sqrtS_j1_j2_orig__recocorr_2500.Fill(v_sqrtS_j1_j2_orig[0],v_eventWeight[0])
-                h_gen_sqrtS_j1_j2_EMiss__recocorr_2500.Fill(v_sqrtS_j1_j2_EMiss_gen[0],v_eventWeight[0])
-                h_gen_sqrtS_j1_j2_orig__recocorr_2500.Fill(v_sqrtS_j1_j2_orig_gen[0],v_eventWeight[0])
+                h_reco_sqrtS_j1_j2_EMiss.Fill(v_sqrtS_j1_j2_EMiss[0],v_eventWeight_new)
+                h_reco_sqrtS_j1_j2_orig__recocorr_2500.Fill(v_sqrtS_j1_j2_orig[0],v_eventWeight_new)
+                h_gen_sqrtS_j1_j2_EMiss__recocorr_2500.Fill(v_sqrtS_j1_j2_EMiss_gen[0],v_eventWeight_new)
+                h_gen_sqrtS_j1_j2_orig__recocorr_2500.Fill(v_sqrtS_j1_j2_orig_gen[0],v_eventWeight_new)
 
                 if(abs(degrees(obj_jet1.Phi())-v_jet1_phi[0])>0.001 or abs(v_jet1_theta[0]-degrees(obj_jet1.Theta()))>0.001 or (abs(v_jet1_E[0]-obj_jet1.E())/obj_jet1.E())>0.001 or (abs(v_jet1_mass[0]-obj_jet1.M())/obj_jet1.M())>0.001):
                     print 'rather large differences',abs(degrees(obj_jet1.Phi())-v_jet1_phi[0]),abs(v_jet1_theta[0]-degrees(obj_jet1.Theta())),(abs(v_jet1_E[0]-obj_jet1.E())/obj_jet1.E()),(abs(v_jet1_mass[0]-obj_jet1.M())/obj_jet1.M())
@@ -1866,8 +1870,8 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 temp_rj1_orig=TLorentzVector(0,0,0,0)
                 temp_rj1_orig.SetPxPyPzE(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0],v_jet1_sj1_Py[0]+v_jet1_sj2_Py[0],v_jet1_sj1_Pz[0]+v_jet1_sj2_Pz[0],v_jet1_sj1_E[0]+v_jet1_sj2_E[0])
                 if(i_isSignalData):    
-                   h_parton_H_PDG_Daughter0.Fill(v_parton_H_PDG_Daughter0[0] ,v_eventWeight[0])                    
-                   h_parton_Z_PDG_q_pos.Fill(v_parton_Z_qpos_PDGID[0] ,v_eventWeight[0])
+                   h_parton_H_PDG_Daughter0.Fill(v_parton_H_PDG_Daughter0[0] ,v_eventWeight_new)                    
+                   h_parton_Z_PDG_q_pos.Fill(v_parton_Z_qpos_PDGID[0] ,v_eventWeight_new)
                    tempVecH=TLorentzVector(0,0,0,0)
                    tempVecH.SetPxPyPzE(v_parton_H_Px[0],v_parton_H_Py[0],v_parton_H_Pz[0],v_parton_H_E[0])
                    tempVecZ_qneg=TLorentzVector(0,0,0,0)
@@ -1881,23 +1885,23 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                    if (temp_rj2.Angle(tempVecZ.Vect())-temp_rj2_orig.Angle(tempVecZ.Vect())>1.e-5):
                        print 'angle should be so similar rj2',temp_rj2.Angle(tempVecZ.Vect()),temp_rj2_orig.Angle(tempVecZ.Vect())
                    if temp_rj1.Angle(tempVecZ.Vect())<temp_rj1.Angle(tempVecH.Vect()):
-                       h_jetE_reco_over_parton_Z_matched_orig.Fill(temp_rj1_orig.E()/tempVecZ.E(),v_eventWeight[0])
-                       h_jetE_reco_over_parton_Z_matched_corr.Fill(temp_rj1.E()/tempVecZ.E(),v_eventWeight[0])
-                       h_jetE_reco_over_parton_H_matched_orig.Fill(temp_rj2_orig.E()/tempVecH.E(),v_eventWeight[0])
-                       h_jetE_reco_over_parton_H_matched_corr.Fill(temp_rj2.E()/tempVecH.E(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_Z_matched_orig.Fill(temp_rj1_orig.P()/tempVecZ.P(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_Z_matched_corr.Fill(temp_rj1.P()/tempVecZ.P(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_H_matched_orig.Fill(temp_rj2_orig.P()/tempVecH.P(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_H_matched_corr.Fill(temp_rj2.P()/tempVecH.P(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_Z_matched_orig.Fill(temp_rj1_orig.E()/tempVecZ.E(),v_eventWeight_new)
+                       h_jetE_reco_over_parton_Z_matched_corr.Fill(temp_rj1.E()/tempVecZ.E(),v_eventWeight_new)
+                       h_jetE_reco_over_parton_H_matched_orig.Fill(temp_rj2_orig.E()/tempVecH.E(),v_eventWeight_new)
+                       h_jetE_reco_over_parton_H_matched_corr.Fill(temp_rj2.E()/tempVecH.E(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_Z_matched_orig.Fill(temp_rj1_orig.P()/tempVecZ.P(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_Z_matched_corr.Fill(temp_rj1.P()/tempVecZ.P(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_H_matched_orig.Fill(temp_rj2_orig.P()/tempVecH.P(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_H_matched_corr.Fill(temp_rj2.P()/tempVecH.P(),v_eventWeight_new)
                    else:
-                       h_jetE_reco_over_parton_Z_matched_orig.Fill(temp_rj2_orig.E()/tempVecZ.E(),v_eventWeight[0])
-                       h_jetE_reco_over_parton_Z_matched_corr.Fill(temp_rj2.E()/tempVecZ.E(),v_eventWeight[0])
-                       h_jetE_reco_over_parton_H_matched_orig.Fill(temp_rj1_orig.E()/tempVecH.E(),v_eventWeight[0])
-                       h_jetE_reco_over_parton_H_matched_corr.Fill(temp_rj1.E()/tempVecH.E(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_Z_matched_orig.Fill(temp_rj2_orig.P()/tempVecZ.P(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_Z_matched_corr.Fill(temp_rj2.P()/tempVecZ.P(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_H_matched_orig.Fill(temp_rj1_orig.P()/tempVecH.P(),v_eventWeight[0])
-                       h_jetP_reco_over_parton_H_matched_corr.Fill(temp_rj1.P()/tempVecH.P(),v_eventWeight[0])
+                       h_jetE_reco_over_parton_Z_matched_orig.Fill(temp_rj2_orig.E()/tempVecZ.E(),v_eventWeight_new)
+                       h_jetE_reco_over_parton_Z_matched_corr.Fill(temp_rj2.E()/tempVecZ.E(),v_eventWeight_new)
+                       h_jetE_reco_over_parton_H_matched_orig.Fill(temp_rj1_orig.E()/tempVecH.E(),v_eventWeight_new)
+                       h_jetE_reco_over_parton_H_matched_corr.Fill(temp_rj1.E()/tempVecH.E(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_Z_matched_orig.Fill(temp_rj2_orig.P()/tempVecZ.P(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_Z_matched_corr.Fill(temp_rj2.P()/tempVecZ.P(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_H_matched_orig.Fill(temp_rj1_orig.P()/tempVecH.P(),v_eventWeight_new)
+                       h_jetP_reco_over_parton_H_matched_corr.Fill(temp_rj1.P()/tempVecH.P(),v_eventWeight_new)
                 #reco level
                 temp_tot_Event_rj_orig=TLorentzVector(0,0,0,0)
                 temp_tot_Event_rj_orig.SetPxPyPzE(v_jet1_sj1_Px[0]+v_jet1_sj2_Px[0]+v_jet2_sj1_Px[0]+v_jet2_sj2_Px[0],v_jet1_sj1_Py[0]+v_jet1_sj2_Py[0]+v_jet2_sj1_Py[0]+v_jet2_sj2_Py[0],v_jet1_sj1_Pz[0]+v_jet1_sj2_Pz[0]+v_jet2_sj1_Pz[0]+v_jet2_sj2_Pz[0],v_jet1_sj1_E[0]+v_jet1_sj2_E[0]+v_jet2_sj1_E[0]+v_jet2_sj2_E[0])
@@ -1986,10 +1990,10 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 temp_rj2_sj1.Boost(boostrj2_COM)
                 temp_rj2_sj2.Boost(boostrj2_COM)
 
-                h_recojet_theta_rj1_rj2_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                h_recojet_theta_sj1_sj2_rj2__rj2COM.Fill(degrees(temp_rj2_sj1.Angle(temp_rj2_sj2.Vect())),v_eventWeight[0])
-                h_recojet_theta2_rj1_ep_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
-                h_recojet_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
+                h_recojet_theta_rj1_rj2_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                h_recojet_theta_sj1_sj2_rj2__rj2COM.Fill(degrees(temp_rj2_sj1.Angle(temp_rj2_sj2.Vect())),v_eventWeight_new)
+                h_recojet_theta2_rj1_ep_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
+                h_recojet_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
                 
                 #print 'ep approx part',temp_ep_approx.Px(),temp_ep_approx.Py(),temp_ep_approx.Pz(),temp_ep_approx.E()
                 #print 'ep approx rj',temp_ep_approx_rj.Px(),temp_ep_approx_rj.Py(),temp_ep_approx_rj.Pz(),temp_ep_approx_rj.E()
@@ -2183,132 +2187,132 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                 plane_rj2_rj2_sj_jcE_pos_boost=TVector3(0,0,0)
                 plane_rj2_rj2_sj_jcE_pos=temp_rj2.Vect().Cross(temp_rj2_sj_jcE_pos.Vect()).Unit()
 
-                h_recojet_theta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                h_recojet_theta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
                 phi_plane_rj1_ep_rj2_sj_jcE_pos=degrees(acos(plane_rj1_ep_approx_rj_boost.Dot(plane_rj2_rj2_sj_jcE_pos)))
                 #plane is already a TVector3
                 if(degrees(temp_rj2_sj_jcE_pos.Angle(plane_rj1_ep_approx_rj_boost))>90.):
                     phi_plane_rj1_ep_rj2_sj_jcE_pos=degrees(acos(plane_rj1_ep_approx_rj_boost.Dot(plane_rj2_rj2_sj_jcE_pos)))+180.
-                h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                 if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                    h_recojet_theta1_rj2_pos_sj_jetChargeE_0_30_dm_0_20_rj2com.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                    h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_dm_0_20_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                    h_recojet_theta1_rj2_pos_sj_jetChargeE_0_30_dm_0_20_rj2com.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                    h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_dm_0_20_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.30:
-                        h_recojet_theta1_rj2_pos_sj_jetChargeE_0_30_dm_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                        h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_dm_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                        h_recojet_theta1_rj2_pos_sj_jetChargeE_0_30_dm_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                        h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_dm_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
 
 
-                h_recojet_theta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                h_recojet_theta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
 
                 phi_plane_rj1_ep_rj2_sj_jcPt_pos=degrees(acos(plane_rj1_ep_approx_rj_boost.Dot(plane_rj2_rj2_sj_jcPt_pos)))
                 #plane is already a TVector3
                 if(degrees(temp_rj2_sj_jcPt_pos.Angle(plane_rj1_ep_approx_rj_boost))>90.):
                     phi_plane_rj1_ep_rj2_sj_jcPt_pos=degrees(acos(plane_rj1_ep_approx_rj_boost.Dot(plane_rj2_rj2_sj_jcPt_pos)))+180.
-                h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                 if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.20:
-                    h_recojet_theta1_rj2_pos_sj_jetChargePt_0_30_dm_0_20_rj2com.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                    h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_dm_0_20_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                    h_recojet_theta1_rj2_pos_sj_jetChargePt_0_30_dm_0_20_rj2com.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                    h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_dm_0_20_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.30:
-                        h_recojet_theta1_rj2_pos_sj_jetChargePt_0_30_dm_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                        h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_dm_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                        h_recojet_theta1_rj2_pos_sj_jetChargePt_0_30_dm_0_30_rj2com.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                        h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_dm_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
 
-                h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                h_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                h_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
 
                 #check now if parton cuts are not matched with reco region, check only for bbdecays
                 if len(h_signal_jetChargeHistos_1D_hist_list)>0:
                     if (fCut_bbar_decays and v_sqrtS_parton[0]<fCut_SqrtS_high):
-                        h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_fake.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                        h_recojet_costheta2_rj1_ep_E_totCOM_fake.Fill(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
-                        h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep_fake.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                        h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_fake.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                        h_recojet_costheta2_rj1_ep_E_totCOM_fake.Fill(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
+                        h_recojet_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep_fake.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                         if(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))))>0:
-                            h_recojet_pos_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_fake.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                            h_recojet_pos_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_fake.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
                         else:
-                            h_recojet_neg_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_fake.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),-v_eventWeight[0])
+                            h_recojet_neg_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_fake.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),-v_eventWeight_new)
                     if (fCut_bbar_decays and v_sqrtS_parton[0]>fCut_SqrtS_high):
-                        h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
-                        h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_H.Angle(temp_ep.Vect())), cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
-                        h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos, phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                        h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
+                        h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_H.Angle(temp_ep.Vect())), cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
+                        h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos, phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                 if cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))!=0:
-                    h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                    h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
                     if(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))))>0:
-                        h_recojet_pos_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                        h_recojet_pos_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
                     else:
-                        h_recojet_neg_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),-v_eventWeight[0])
+                        h_recojet_neg_sgncos2theta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),-v_eventWeight_new)
                 if cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))!=0:
-                    h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                    h_recojet_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
                     if(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(2.*temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))))>0:
-                        h_recojet_pos_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight[0])
+                        h_recojet_pos_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),v_eventWeight_new)
                     else:
-                        h_recojet_neg_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),-v_eventWeight[0])
+                        h_recojet_neg_sgncos2theta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),-v_eventWeight_new)
 
-                h_2D_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
-                h_2D_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
+                h_2D_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
+                h_2D_recojet_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
                 if cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))!=0 and cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))!=0:
-                    h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())))*cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
+                    h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())))*cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
                     if (cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())))*cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))))>0:
-                        h_2D_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
+                        h_2D_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
                     else:
-                        h_2D_recojet_neg_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),-v_eventWeight[0])
+                        h_2D_recojet_neg_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),-v_eventWeight_new)
                 if cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))!=0 and cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))!=0:
-                    h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())))*cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
+                    h_2D_recojet_sgncostheta1_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_sgncostheta2_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())))*cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())))*cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
                     if (cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))/abs(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())))*cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))/abs(cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))))>0:
-                        h_2D_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight[0])
+                        h_2D_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),v_eventWeight_new)
                     else:
-                        h_2D_recojet_neg_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),-v_eventWeight[0])
+                        h_2D_recojet_neg_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargePt_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect())),cos(temp_rj1.Angle(temp_ep_real_rj_boost.Vect())),-v_eventWeight_new)
 
                 #print 'degrees phi plane ',degrees(phi_plane_rj1_ep_rj2_sj_jcE_pos)
                 phi_plane_rj1_ep_rj2_sj_jcE_pos_rad = radians(phi_plane_rj1_ep_rj2_sj_jcE_pos)
                 if sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)!=0:
-                    h_recojet_sgnsinphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                    h_recojet_sgnsinphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     if(sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(sin(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)))>0:
-                        h_recojet_pos_sgnsinphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                        h_recojet_pos_sgnsinphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     else:
-                       h_recojet_neg_sgnsinphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight[0])
+                       h_recojet_neg_sgnsinphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight_new)
                 if sin(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)!=0:
-                    h_recojet_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(sin(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(sin(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                    h_recojet_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(sin(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(sin(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     if (sin(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(sin(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)))>0:
-                        h_recojet_pos_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                        h_recojet_pos_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     else:
-                        h_recojet_neg_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight[0])
+                        h_recojet_neg_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight_new)
                 if cos(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)!=0:
-                    h_recojet_sgncosphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(cos(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(cos(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                    h_recojet_sgncosphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(cos(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(cos(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     if(cos(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(cos(phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)))>0:
-                        h_recojet_pos_sgncosphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                        h_recojet_pos_sgncosphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     else:
-                       h_recojet_neg_sgncosphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight[0])
+                       h_recojet_neg_sgncosphi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight_new)
                 if cos(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)!=0:
-                    h_recojet_sgncos2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(cos(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(cos(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                    h_recojet_sgncos2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(cos(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(cos(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     if (cos(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)/abs(cos(2.*phi_plane_rj1_ep_rj2_sj_jcE_pos_rad)))>0:
-                        h_recojet_pos_sgncos2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight[0])
+                        h_recojet_pos_sgncos2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,v_eventWeight_new)
                     else:
-                        h_recojet_neg_sgncos2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight[0])
+                        h_recojet_neg_sgncos2phi_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcE_pos,-v_eventWeight_new)
                 #print 'degrees phi plane ',degrees(phi_plane_rj1_ep_rj2_sj_jcPt_pos)
 
                 phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad = radians(phi_plane_rj1_ep_rj2_sj_jcPt_pos)
                 if sin(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)!=0:
-                    h_recojet_sgnsinphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(sin(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(sin(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                    h_recojet_sgnsinphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(sin(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(sin(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     if(sin(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(sin(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)))>0:
-                        h_recojet_pos_sgnsinphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                        h_recojet_pos_sgnsinphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     else:
-                       h_recojet_neg_sgnsinphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight[0])
+                       h_recojet_neg_sgnsinphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight_new)
                 if sin(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)!=0:
-                    h_recojet_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(sin(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(sin(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                    h_recojet_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(sin(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(sin(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     if (sin(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(sin(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)))>0:
-                        h_recojet_pos_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                        h_recojet_pos_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     else:
-                        h_recojet_neg_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight[0])
+                        h_recojet_neg_sgnsin2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight_new)
                 if cos(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)!=0:
-                    h_recojet_sgncosphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(cos(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(cos(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                    h_recojet_sgncosphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(cos(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(cos(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     if(cos(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(cos(phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)))>0:
-                        h_recojet_pos_sgncosphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                        h_recojet_pos_sgncosphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     else:
-                        h_recojet_neg_sgncosphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight[0])
+                        h_recojet_neg_sgncosphi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight_new)
                 if cos(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)!=0:
-                    h_recojet_sgncos2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(cos(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(cos(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                    h_recojet_sgncos2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(cos(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(cos(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad))*phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     if (cos(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)/abs(cos(2.*phi_plane_rj1_ep_rj2_sj_jcPt_pos_rad)))>0:
-                        h_recojet_pos_sgncos2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight[0])
+                        h_recojet_pos_sgncos2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,v_eventWeight_new)
                     else:
-                        h_recojet_neg_sgncos2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight[0])
+                        h_recojet_neg_sgncos2phi_phi_plane_rj2_pos_sj_jetChargePt_0_30_vs_plane_rj1_ep.Fill(phi_plane_rj1_ep_rj2_sj_jcPt_pos,-v_eventWeight_new)
  
                 #jet charge histos for matching etc only relevant for signal if len(h_signal_jetChargeHistos_1D_hist_list)>0:
                 if len(h_signal_jetChargeHistos_1D_hist_list)>0:
@@ -2353,32 +2357,32 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                     temp_Z_qneg_boostZ_COM_orig.Boost(boostZ_COM_orig)
                     temp_Z_qneg_boostZ_COM.Boost(boostE_tot_COM_part)
                     temp_Z_qneg_boostZ_COM.Boost(boostZ_COM)
-                    h_parton_theta2_H_ep_HZ_COM.Fill(degrees(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
-                    h_parton_costheta2_H_ep_HZ_COM.Fill(cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
-                    h_parton_theta_Z_qneg_Zcom.Fill(degrees(temp_Z_qneg_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_parton_theta1_Z_qpos_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_parton_costheta1_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))*degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                    h_parton_theta2_H_ep_HZ_COM.Fill(degrees(temp_H.Angle(temp_ep.Vect())),v_eventWeight_new)
+                    h_parton_costheta2_H_ep_HZ_COM.Fill(cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight_new)
+                    h_parton_theta_Z_qneg_Zcom.Fill(degrees(temp_Z_qneg_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_parton_theta1_Z_qpos_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_parton_costheta1_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))*degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                     if cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0 :
-                        h_parton_sgncos2theta1_costheta1_Z_qpos_Zcom.Fill(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                        h_parton_sgncos2theta1_costheta1_Z_qpos_Zcom.Fill(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                         if(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(2.*temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))))>0:
-                            h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                            h_parton_pos_sgncos2theta1_costheta1_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                         else:
-                            h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),-v_eventWeight[0])
-                    h_2D_parton_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
+                            h_parton_neg_sgncos2theta1_costheta1_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),-v_eventWeight_new)
+                    h_2D_parton_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight_new)
                     if cos(temp_H.Angle(temp_ep.Vect()))!=0 and cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                        h_2D_parton_sgncostheta1_costheta1_costheta1_Z_qpos_Zcom_vs_sgncostheta2_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect()))/abs(cos(temp_H.Angle(temp_ep.Vect())))*cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
+                        h_2D_parton_sgncostheta1_costheta1_costheta1_Z_qpos_Zcom_vs_sgncostheta2_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect()))/abs(cos(temp_H.Angle(temp_ep.Vect())))*cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight_new)
                         if(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())))*cos(temp_H.Angle(temp_ep.Vect()))/abs(cos(temp_H.Angle(temp_ep.Vect()))))>0:
-                            h_2D_parton_pos_sgncostheta1_times_sgncostheta2_costheta1_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight[0])
+                            h_2D_parton_pos_sgncostheta1_times_sgncostheta2_costheta1_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect())),v_eventWeight_new)
                         else:
-                            h_2D_parton_neg_sgncostheta1_times_sgncostheta2_costheta1_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect())),-v_eventWeight[0])
+                            h_2D_parton_neg_sgncostheta1_times_sgncostheta2_costheta1_costheta1_Z_qpos_Zcom_vs_costheta2_H_ep_HZ_COM.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),cos(temp_H.Angle(temp_ep.Vect())),-v_eventWeight_new)
 
-                    h_parton_theta_Z_qpos_Z_qneg_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z_qneg_boostZ_COM.Vect())),v_eventWeight[0])
-                    h_parton_cosTheta_Z_qneg_Zcom.Fill(cos(temp_Z_qneg_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_parton_cosTheta_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_parton_polarAngle_Z_qneg_Zcom.Fill(degrees(temp_Z_qneg_boostZ_COM.Theta()),v_eventWeight[0])
-                    h_parton_polarAngle_Z_qpos_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Theta()),v_eventWeight[0])
-                    h_parton_cosPolarAngle_Z_qneg_Zcom.Fill(cos(temp_Z_qneg_boostZ_COM.Theta()),v_eventWeight[0])
-                    h_parton_cosPolarAngle_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Theta()),v_eventWeight[0])
+                    h_parton_theta_Z_qpos_Z_qneg_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z_qneg_boostZ_COM.Vect())),v_eventWeight_new)
+                    h_parton_cosTheta_Z_qneg_Zcom.Fill(cos(temp_Z_qneg_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_parton_cosTheta_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_parton_polarAngle_Z_qneg_Zcom.Fill(degrees(temp_Z_qneg_boostZ_COM.Theta()),v_eventWeight_new)
+                    h_parton_polarAngle_Z_qpos_Zcom.Fill(degrees(temp_Z_qpos_boostZ_COM.Theta()),v_eventWeight_new)
+                    h_parton_cosPolarAngle_Z_qneg_Zcom.Fill(cos(temp_Z_qneg_boostZ_COM.Theta()),v_eventWeight_new)
+                    h_parton_cosPolarAngle_Z_qpos_Zcom.Fill(cos(temp_Z_qpos_boostZ_COM.Theta()),v_eventWeight_new)
                     plane_Z_Z_qpos_boost=TVector3(0,0,0)
                     plane_Z_Z_qpos_boost=temp_Z.Vect().Cross(temp_Z_qpos_boostZ_COM.Vect()).Unit()
                     #print 'plane vector Z, pos q ',plane_Z_Z_qpos_boost.Px(),plane_Z_Z_qpos_boost.Py(),plane_Z_Z_qpos_boost.Pz()
@@ -2412,35 +2416,35 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                     #plane is already a TVector3
                     if degrees(temp_Z_qpos_boostZ_COM.Angle(plane_H_ep_boost))>90.:
                         phi_plane_parton_H_ep_Z_Z_qpos=degrees(acos(plane_H_ep_boost.Dot(plane_Z_Z_qpos_boost)))+180.
-                    h_parton_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                    h_parton_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
 
 
                     phi_plane_parton_H_ep_Z_Z_qpos_rad = radians(phi_plane_parton_H_ep_Z_Z_qpos)
                     if sin(phi_plane_parton_H_ep_Z_Z_qpos_rad)!=0:
-                        h_parton_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(sin(phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(sin(phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                        h_parton_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(sin(phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(sin(phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         if(sin(phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(sin(phi_plane_parton_H_ep_Z_Z_qpos_rad)))>0:
-                            h_parton_pos_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                            h_parton_pos_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         else:
-                            h_parton_neg_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight[0])
+                            h_parton_neg_sgnsinphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight_new)
                     if sin(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad)!=0:
-                        h_parton_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(sin(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(sin(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                        h_parton_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(sin(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(sin(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         if(sin(2*phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(sin(2*phi_plane_parton_H_ep_Z_Z_qpos_rad)))>0:
-                            h_parton_pos_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                            h_parton_pos_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         else:
-                            h_parton_neg_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight[0])
+                            h_parton_neg_sgnsin2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight_new)
                     if cos(phi_plane_parton_H_ep_Z_Z_qpos_rad)!=0:
-                        h_parton_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(cos(phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(cos(phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                        h_parton_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(cos(phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(cos(phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         if(cos(phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(cos(phi_plane_parton_H_ep_Z_Z_qpos_rad)))>0:
-                            h_parton_pos_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                            h_parton_pos_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         else:
-                            h_parton_neg_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight[0])
+                            h_parton_neg_sgncosphi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight_new)
                     if cos(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad)!=0:
-                        h_parton_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(cos(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(cos(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                        h_parton_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(cos(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(cos(2.*phi_plane_parton_H_ep_Z_Z_qpos_rad))*phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         if(cos(2*phi_plane_parton_H_ep_Z_Z_qpos_rad)/abs(cos(2*phi_plane_parton_H_ep_Z_Z_qpos_rad)))>0:
-                            h_parton_pos_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight[0])
+                            h_parton_pos_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,v_eventWeight_new)
                         else:
-                            h_parton_neg_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight[0])
-                    h_parton_theta_H_Z_E_totCOM.Fill(degrees(temp_H.Angle(temp_Z.Vect())),v_eventWeight[0])
+                            h_parton_neg_sgncos2phi_phi_plane_Z_qpos_vs_plane_H_ep.Fill(phi_plane_parton_H_ep_Z_Z_qpos,-v_eventWeight_new)
+                    h_parton_theta_H_Z_E_totCOM.Fill(degrees(temp_H.Angle(temp_Z.Vect())),v_eventWeight_new)
 
                     temp_ep_approx=TLorentzVector(0,0,0,0)
                     #below is the actual calculation, but that won't work on reconstructed events, due to large smearing and clustering effects
@@ -2451,7 +2455,7 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
 
                     #temp_ep_approx.Boost(boostE_tot_COM)
  
-                    h_parton_theta2_H_ep_approx_HZ_COM.Fill(degrees(temp_H.Angle(temp_ep_approx.Vect())),v_eventWeight[0])
+                    h_parton_theta2_H_ep_approx_HZ_COM.Fill(degrees(temp_H.Angle(temp_ep_approx.Vect())),v_eventWeight_new)
                     temp_ep_approx.Boost(boostE_tot_COM_part)
                     #tiny change for approx after/before
                     #print 'ep approx after',temp_ep_approx.Px(),temp_ep_approx.Py(),temp_ep_approx.Pz(),temp_ep_approx.E(),degrees(temp_H.Angle(temp_ep_approx.Vect())),root.TDatabasePDG.Instance().GetParticle(11).Mass()
@@ -2501,10 +2505,10 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                         temp_gj2_sj1.Boost(boostgj2_COM)
                         temp_gj2_sj2.Boost(boostgj2_COM)
                         
-                        h_genjet_theta_gj1_gj2_E_totCOM.Fill(degrees(temp_gj1.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_genjet_theta_sj1_sj2_gj2__gj2COM.Fill(degrees(temp_gj2_sj1.Angle(temp_gj2_sj2.Vect())),v_eventWeight[0])
-                        h_genjet_theta2_gj1_ep_E_totCOM.Fill(degrees(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
-                        h_deltaAngle_part_gj_theta2_H_ep_E_totCOM.Fill(degrees(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))-degrees(temp_H.Angle(temp_ep_approx.Vect())),v_eventWeight[0])
+                        h_genjet_theta_gj1_gj2_E_totCOM.Fill(degrees(temp_gj1.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_genjet_theta_sj1_sj2_gj2__gj2COM.Fill(degrees(temp_gj2_sj1.Angle(temp_gj2_sj2.Vect())),v_eventWeight_new)
+                        h_genjet_theta2_gj1_ep_E_totCOM.Fill(degrees(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
+                        h_deltaAngle_part_gj_theta2_H_ep_E_totCOM.Fill(degrees(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))-degrees(temp_H.Angle(temp_ep_approx.Vect())),v_eventWeight_new)
                         #print 'ep approx part',temp_ep_approx.Px(),temp_ep_approx.Py(),temp_ep_approx.Pz(),temp_ep_approx.E()
                         #print 'ep approx gj',temp_ep_approx_gj.Px(),temp_ep_approx_gj.Py(),temp_ep_approx_gj.Pz(),temp_ep_approx_gj.E()
                         ind_gj2_sj_pos_jcE=-1
@@ -2534,8 +2538,8 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                         plane_gj2_gj2_sj_jcE_pos_boost=TVector3(0,0,0)
                         plane_gj2_gj2_sj_jcE_pos=temp_gj2.Vect().Cross(temp_gj2_sj_jcE_pos.Vect()).Unit()
                         
-                        h_genjet_theta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_part_gj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                        h_genjet_theta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_part_gj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
 
 
 
@@ -2562,101 +2566,101 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                             temp_gj2_sj_jcPt_pos=temp_gj2_sj2
                         plane_gj2_gj2_sj_jcPt_pos_boost=TVector3(0,0,0)
                         plane_gj2_gj2_sj_jcPt_pos=temp_gj2.Vect().Cross(temp_gj2_sj_jcPt_pos.Vect()).Unit()
-                        h_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
+                        h_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
 
                         if cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))!=0:
-                            h_genjet_sgncos2theta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
+                            h_genjet_sgncos2theta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
                             if(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))))>0:
-                                h_genjet_pos_sgncos2theta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
+                                h_genjet_pos_sgncos2theta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
                             else:
-                                h_genjet_neg_sgncos2theta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),-v_eventWeight[0])
+                                h_genjet_neg_sgncos2theta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),-v_eventWeight_new)
                         if cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))!=0:
-                            h_genjet_sgncos2theta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
+                            h_genjet_sgncos2theta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
                             if(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(2.*temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))))>0:
-                                h_genjet_pos_sgncos2theta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
+                                h_genjet_pos_sgncos2theta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
                             else:
-                                h_genjet_neg_sgncos2theta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),-v_eventWeight[0])
+                                h_genjet_neg_sgncos2theta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),-v_eventWeight_new)
 
 
-                        h_2D_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
-                        h_2D_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
+                        h_2D_genjet_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
+                        h_2D_genjet_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
                         if cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))!=0 and cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))!=0:
-                            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())))*cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
+                            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())))*cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
                             if (cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())))*cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))))>0:
-                                h_2D_genjet_pos_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
+                                h_2D_genjet_pos_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
                             else:
-                                h_2D_genjet_neg_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),-v_eventWeight[0])
+                                h_2D_genjet_neg_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargeE_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),-v_eventWeight_new)
                         if cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))!=0 and cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))!=0:
-                            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())))*cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
+                            h_2D_genjet_sgncostheta1_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_sgncostheta2_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())))*cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())))*cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
                             if (cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))/abs(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())))*cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))/abs(cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect()))))>0:
-                                h_2D_genjet_pos_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
+                                h_2D_genjet_pos_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
                             else:
-                                h_2D_genjet_neg_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),-v_eventWeight[0])
+                                h_2D_genjet_neg_sgncostheta1_times_sgncostheta2_costheta1_gj2_pos_sj_jetChargePt_0_30_gj2com_vs_costheta2_gj1_ep_E_totCOM.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),cos(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),-v_eventWeight_new)
 
 
-                        h_genjet_theta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_part_gj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                        h_genjet_theta1_gj2_pos_sj_jetChargePt_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_part_gj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
 
 
                         phi_plane_gj1_ep_gj2_sj_jcE_pos=degrees(acos(plane_gj1_ep_approx_gj_boost.Dot(plane_gj2_gj2_sj_jcE_pos)))
                         #plane is already a TVector3
                         if(degrees(temp_gj2_sj_jcE_pos.Angle(plane_gj1_ep_approx_gj_boost))>90.):
                             phi_plane_gj1_ep_gj2_sj_jcE_pos=degrees(acos(plane_gj1_ep_approx_gj_boost.Dot(plane_gj2_gj2_sj_jcE_pos)))+180.
-                        h_genjet_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
-                        h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                        h_genjet_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
+                        h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                         if (v_genjet2_sj1_jetChargeE_kappa_0_30[0]*v_genjet2_sj2_jetChargeE_kappa_0_30[0])<0 :
-                            h_deltaAngle_part_gj_jcE_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                            h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                            h_deltaAngle_part_gj_jcE_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                            h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                         if abs(v_genjet2_sj1_jetChargeE_kappa_0_30[0]-v_genjet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                            h_genjet_theta1_gj2_pos_sj_jetChargeE_0_30_dm_0_20_gj2com.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                            h_deltaAngle_part_gj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                            h_genjet_phi_plane_gj2_pos_sj_jetChargeE_0_30_dm_0_20_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
-                            h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                            h_genjet_theta1_gj2_pos_sj_jetChargeE_0_30_dm_0_20_gj2com.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                            h_deltaAngle_part_gj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                            h_genjet_phi_plane_gj2_pos_sj_jetChargeE_0_30_dm_0_20_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
+                            h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                             if abs(v_genjet2_sj1_jetChargeE_kappa_0_30[0]-v_genjet2_sj2_jetChargeE_kappa_0_30[0])>0.30:
-                                h_genjet_theta1_gj2_pos_sj_jetChargeE_0_30_dm_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                                h_deltaAngle_part_gj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                                h_genjet_phi_plane_gj2_pos_sj_jetChargeE_0_30_dm_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
-                                h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
-                        h_cosAngle_Product_gj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                                h_genjet_theta1_gj2_pos_sj_jetChargeE_0_30_dm_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                                h_deltaAngle_part_gj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                                h_genjet_phi_plane_gj2_pos_sj_jetChargeE_0_30_dm_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
+                                h_deltaAngle_part_gj_phi_plane_Z_qpos_jcE_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
+                        h_cosAngle_Product_gj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                         if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                            h_cosAngle_normCosPart_gj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                            h_cosAngle_normCosPart_gj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                            h_cosAngle_Product_gj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                            h_cosAngle_Product_gj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                             if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                                h_cosAngle_normCosPart_gj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                                h_cosAngle_normCosPart_gj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
                                 if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.30:
-                                    h_cosAngle_Product_gj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                                    h_cosAngle_Product_gj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                                     if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                                        h_cosAngle_normCosPart_gj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                                        h_cosAngle_normCosPart_gj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
 
                         #print 'degrees phi plane ',degrees(phi_plane_gj1_ep_gj2_sj_jcE_pos)
                         if(temp_tot_Event_gj.E()>1000.):
                             phi_plane_gj1_ep_gj2_sj_jcE_pos_rad = radians(phi_plane_gj1_ep_gj2_sj_jcE_pos)
                             if sin(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)!=0:
-                                h_genjet_sgnsinphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(sin(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(sin(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                h_genjet_sgnsinphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(sin(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(sin(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 if(sin(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(sin(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)))>0:
-                                    h_genjet_pos_sgnsinphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgnsinphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgnsinphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgnsinphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight_new)
                             if sin(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)!=0:
-                                h_genjet_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(sin(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(sin(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                h_genjet_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(sin(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(sin(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 if (sin(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(sin(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)))>0:
-                                    h_genjet_pos_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight_new)
                             if cos(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)!=0:
-                                h_genjet_sgncosphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(cos(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(cos(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                h_genjet_sgncosphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(cos(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(cos(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 if(cos(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(cos(phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)))>0:
-                                    h_genjet_pos_sgncosphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgncosphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgncosphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgncosphi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight_new)
                             if cos(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)!=0:
-                                h_genjet_sgncos2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(cos(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(cos(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                h_genjet_sgncos2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(cos(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(cos(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 if (cos(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)/abs(cos(2.*phi_plane_gj1_ep_gj2_sj_jcE_pos_rad)))>0:
-                                    h_genjet_pos_sgncos2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgncos2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgncos2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgncos2phi_phi_plane_gj2_pos_sj_jetChargeE_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcE_pos,-v_eventWeight_new)
                             #print 'degrees phi plane ',degrees(phi_plane_gj1_ep_gj2_sj_jcPt_pos)
 
                             phi_plane_gj1_ep_gj2_sj_jcPt_pos=degrees(acos(plane_gj1_ep_approx_gj_boost.Dot(plane_gj2_gj2_sj_jcPt_pos)))
@@ -2665,336 +2669,336 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
                                 phi_plane_gj1_ep_gj2_sj_jcPt_pos=degrees(acos(plane_gj1_ep_approx_gj_boost.Dot(plane_gj2_gj2_sj_jcPt_pos)))+180.
                             phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad = radians(phi_plane_gj1_ep_gj2_sj_jcPt_pos)
                             if sin(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)!=0:
-                                h_genjet_sgnsinphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(sin(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(sin(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                h_genjet_sgnsinphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(sin(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(sin(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 if(sin(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(sin(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)))>0:
-                                    h_genjet_pos_sgnsinphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgnsinphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgnsinphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgnsinphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight_new)
                             if sin(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)!=0:
-                                h_genjet_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(sin(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(sin(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                h_genjet_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(sin(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(sin(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 if (sin(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(sin(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)))>0:
-                                    h_genjet_pos_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgnsin2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight_new)
                             if cos(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)!=0:
-                                h_genjet_sgncosphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(cos(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(cos(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                h_genjet_sgncosphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(cos(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(cos(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 if(cos(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(cos(phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)))>0:
-                                    h_genjet_pos_sgncosphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgncosphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgncosphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgncosphi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight_new)
                             if cos(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)!=0:
-                                h_genjet_sgncos2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(cos(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(cos(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                h_genjet_sgncos2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(cos(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(cos(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad))*phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 if (cos(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)/abs(cos(2.*phi_plane_gj1_ep_gj2_sj_jcPt_pos_rad)))>0:
-                                    h_genjet_pos_sgncos2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
+                                    h_genjet_pos_sgncos2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
                                 else:
-                                    h_genjet_neg_sgncos2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight[0])
+                                    h_genjet_neg_sgncos2phi_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,-v_eventWeight_new)
  
-                            h_genjet_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
-                            h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                            h_genjet_phi_plane_gj2_pos_sj_jetChargePt_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
+                            h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                             if (v_genjet2_sj1_jetChargePt_kappa_0_30[0]*v_genjet2_sj2_jetChargePt_kappa_0_30[0])<0 :
-                                h_deltaAngle_part_gj_jcPt_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                                h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                                h_deltaAngle_part_gj_jcPt_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                                h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                                 if abs(v_genjet2_sj1_jetChargePt_kappa_0_30[0]-v_genjet2_sj2_jetChargePt_kappa_0_30[0])>0.20:
-                                    h_genjet_theta1_gj2_pos_sj_jetChargePt_0_30_dm_0_20_gj2com.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                                    h_deltaAngle_part_gj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                                    h_genjet_phi_plane_gj2_pos_sj_jetChargePt_0_30_dm_0_20_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
-                                    h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                                    h_genjet_theta1_gj2_pos_sj_jetChargePt_0_30_dm_0_20_gj2com.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                                    h_deltaAngle_part_gj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                                    h_genjet_phi_plane_gj2_pos_sj_jetChargePt_0_30_dm_0_20_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
+                                    h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                                 if abs(v_genjet2_sj1_jetChargePt_kappa_0_30[0]-v_genjet2_sj2_jetChargePt_kappa_0_30[0])>0.30:
-                                    h_genjet_theta1_gj2_pos_sj_jetChargePt_0_30_dm_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                                    h_deltaAngle_part_gj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                                    h_genjet_phi_plane_gj2_pos_sj_jetChargePt_0_30_dm_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight[0])
-                                    h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
-                            h_cosAngle_Product_gj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                                    h_genjet_theta1_gj2_pos_sj_jetChargePt_0_30_dm_0_30_gj2com.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                                    h_deltaAngle_part_gj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                                    h_genjet_phi_plane_gj2_pos_sj_jetChargePt_0_30_dm_0_30_vs_plane_gj1_ep.Fill(phi_plane_gj1_ep_gj2_sj_jcPt_pos,v_eventWeight_new)
+                                    h_deltaAngle_part_gj_phi_plane_Z_qpos_jcPt_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_gj1_ep_gj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
+                            h_cosAngle_Product_gj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                             if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                                h_cosAngle_normCosPart_gj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                                h_cosAngle_normCosPart_gj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
                                 if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                                    h_cosAngle_Product_gj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                                    h_cosAngle_Product_gj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                                     if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                                        h_cosAngle_normCosPart_gj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                                        h_cosAngle_normCosPart_gj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
                                         if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.30:
-                                            h_cosAngle_Product_gj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                                            h_cosAngle_Product_gj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                                             if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                                                h_cosAngle_normCosPart_gj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                                                h_cosAngle_normCosPart_gj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
                     #parton stuff here
                     #difference between parton and reco quantities
-                    h_parton_dalpha_j1_Z.Fill(degrees(temp_rj1.Angle(tempZ.Vect())),v_eventWeight[0])
-                    h_parton_dalpha_j1_H.Fill(degrees(temp_rj1.Angle(tempH.Vect())),v_eventWeight[0])
-                    h_parton_dalpha_j2_Z.Fill(degrees(temp_rj2.Angle(tempZ.Vect())),v_eventWeight[0])
-                    h_parton_dalpha_j2_H.Fill(degrees(temp_rj2.Angle(tempH.Vect())),v_eventWeight[0])
-                    h_deltaAngle_part_rj_theta2_H_ep_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))-degrees(temp_H.Angle(temp_ep_approx.Vect())),v_eventWeight[0])
-                    h_deltaAngle_part_rj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_E1_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_nTrack_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_chFrac_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_chEnergy_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_E1_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_nTrack_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_chFrac_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_cosAngle_Product_rj_chEnergy_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                    h_parton_dalpha_j1_Z.Fill(degrees(temp_rj1.Angle(tempZ.Vect())),v_eventWeight_new)
+                    h_parton_dalpha_j1_H.Fill(degrees(temp_rj1.Angle(tempH.Vect())),v_eventWeight_new)
+                    h_parton_dalpha_j2_Z.Fill(degrees(temp_rj2.Angle(tempZ.Vect())),v_eventWeight_new)
+                    h_parton_dalpha_j2_H.Fill(degrees(temp_rj2.Angle(tempH.Vect())),v_eventWeight_new)
+                    h_deltaAngle_part_rj_theta2_H_ep_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))-degrees(temp_H.Angle(temp_ep_approx.Vect())),v_eventWeight_new)
+                    h_deltaAngle_part_rj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_E1_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_nTrack_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_chFrac_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_chEnergy_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_E1_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_nTrack_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_chFrac_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_cosAngle_Product_rj_chEnergy_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                     if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                        h_cosAngle_normCosPart_rj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_E1_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_nTrack_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_chFrac_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_chEnergy_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_E1_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_nTrack_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_chFrac_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                        h_cosAngle_normCosPart_rj_chEnergy_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                        h_cosAngle_normCosPart_rj_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_E1_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_nTrack_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_chFrac_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_chEnergy_jcE_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_E1_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_nTrack_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_nTracksMax.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_chFrac_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chFrac.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                        h_cosAngle_normCosPart_rj_chEnergy_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_chEnergy.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                        h_cosAngle_Product_rj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_cosAngle_Product_rj_E1_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_cosAngle_Product_rj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_cosAngle_Product_rj_E1_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                        h_cosAngle_Product_rj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_cosAngle_Product_rj_E1_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_cosAngle_Product_rj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_cosAngle_Product_rj_E1_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                         if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                            h_cosAngle_normCosPart_rj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                            h_cosAngle_normCosPart_rj_E1_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                            h_cosAngle_normCosPart_rj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                            h_cosAngle_normCosPart_rj_E1_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
+                            h_cosAngle_normCosPart_rj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                            h_cosAngle_normCosPart_rj_E1_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                            h_cosAngle_normCosPart_rj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                            h_cosAngle_normCosPart_rj_E1_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.30:
-                            h_cosAngle_Product_rj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                            h_cosAngle_Product_rj_E1_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                            h_cosAngle_Product_rj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                            h_cosAngle_Product_rj_E1_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
+                            h_cosAngle_Product_rj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                            h_cosAngle_Product_rj_E1_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                            h_cosAngle_Product_rj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                            h_cosAngle_Product_rj_E1_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
                             if cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))!=0:
-                                h_cosAngle_normCosPart_rj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                                h_cosAngle_normCosPart_rj_E1_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                                h_cosAngle_normCosPart_rj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                                h_cosAngle_normCosPart_rj_E1_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight[0])
-                    h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                                h_cosAngle_normCosPart_rj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                                h_cosAngle_normCosPart_rj_E1_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcE_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                                h_cosAngle_normCosPart_rj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                                h_cosAngle_normCosPart_rj_E1_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(cos(temp_rj2_sj_jcPt_pos_sj_E1.Angle(temp_rj2.Vect()))*cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))/abs(cos(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect()))),v_eventWeight_new)
+                    h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                     if (abs(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos)))>180.:
                         print 'deltaphi of angles (dir in angles) bigger than 180',abs(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos))
 
                     if (v_jet2_sj1_jetChargeE_kappa_0_30[0]*v_jet2_sj2_jetChargeE_kappa_0_30[0])<0 :
-                        h_deltaAngle_part_rj_jcE_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                        h_deltaAngle_part_rj_jcE_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                        h_deltaAngle_part_rj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                        h_deltaAngle_part_rj_jcE_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.30:
-                            h_deltaAngle_part_rj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                            h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                            h_deltaAngle_part_rj_jcE_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                            h_deltaAngle_part_rj_phi_plane_Z_qpos_jcE_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
 
-                    h_deltaAngle_part_rj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                    h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                    h_deltaAngle_part_rj_jcPt_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                    h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                     if (v_jet2_sj1_jetChargePt_kappa_0_30[0]*v_jet2_sj2_jetChargePt_kappa_0_30[0])<0 :
-                        h_deltaAngle_part_rj_jcPt_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                        h_deltaAngle_part_rj_jcPt_0_30_theta1_Z_q_pos_Zcom_oppJC.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_vs_plane_H_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.20:
-                        h_deltaAngle_part_rj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                        h_deltaAngle_part_rj_jcPt_0_30_dm_0_20_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                        h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_dm_0_20_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.30:
-                            h_deltaAngle_part_rj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight[0])
-                            h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight[0])
+                            h_deltaAngle_part_rj_jcPt_0_30_dm_0_30_theta1_Z_q_pos_Zcom.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_Z_qpos_boostZ_COM.Angle(temp_Z.Vect())),v_eventWeight_new)
+                            h_deltaAngle_part_rj_phi_plane_Z_qpos_jcPt_0_30_dm_0_30_vs_plane_H_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_parton_H_ep_Z_Z_qpos),v_eventWeight_new)
 
                     #genjet stuff here
-                    h_deltaAngle_gj_rj_phi_gj1_ep_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))-degrees(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight[0])
-                    h_deltaAngle_gj_rj_jcE_0_30_theta_gj_jcE_0_30.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                    h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight[0])
+                    h_deltaAngle_gj_rj_phi_gj1_ep_E_totCOM.Fill(degrees(temp_rj1.Angle(temp_ep_real_rj_boost.Vect()))-degrees(temp_gj1.Angle(temp_ep_real_gj_boost.Vect())),v_eventWeight_new)
+                    h_deltaAngle_gj_rj_jcE_0_30_theta_gj_jcE_0_30.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                    h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight_new)
                     if (v_jet2_sj1_jetChargeE_kappa_0_30[0]*v_jet2_sj2_jetChargeE_kappa_0_30[0])<0 :
-                        h_deltaAngle_gj_rj_jcE_0_30_theta_gj_jcE_0_30_oppJC.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_vs_plane_gj1_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight[0])
+                        h_deltaAngle_gj_rj_jcE_0_30_theta_gj_jcE_0_30_oppJC.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_vs_plane_gj1_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                        h_deltaAngle_gj_rj_jcE_0_30_dm_0_20_theta_gj_jcE_0_30.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_dm_0_20_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight[0])
+                        h_deltaAngle_gj_rj_jcE_0_30_dm_0_20_theta_gj_jcE_0_30.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_dm_0_20_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.30:
-                            h_deltaAngle_gj_rj_jcE_0_30_dm_0_30_theta_gj_jcE_0_30.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                            h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_dm_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight[0])
+                            h_deltaAngle_gj_rj_jcE_0_30_dm_0_30_theta_gj_jcE_0_30.Fill(degrees(temp_rj2_sj_jcE_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcE_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                            h_deltaAngle_gj_rj_phi_plane_gj2_jcE_0_30_dm_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcE_pos,phi_plane_gj1_ep_gj2_sj_jcE_pos),v_eventWeight_new)
 
-                    h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                    h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                    h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                    h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
                     if (v_jet2_sj1_jetChargePt_kappa_0_30[0]*v_jet2_sj2_jetChargePt_kappa_0_30[0])<0 :
-                        h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30_oppJC.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                        h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30_oppJC.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.20:
-                        h_deltaAngle_gj_rj_jcPt_0_30_dm_0_20_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_20_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                        h_deltaAngle_gj_rj_jcPt_0_30_dm_0_20_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_20_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.30:
-                            h_deltaAngle_gj_rj_jcPt_0_30_dm_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                            h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                            h_deltaAngle_gj_rj_jcPt_0_30_dm_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                            h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
 
-                    h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                    h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                    h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                    h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
                     if (v_jet2_sj1_jetChargePt_kappa_0_30[0]*v_jet2_sj2_jetChargePt_kappa_0_30[0])<0 :
-                        h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30_oppJC.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                        h_deltaAngle_gj_rj_jcPt_0_30_theta_gj_jcPt_0_30_oppJC.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_vs_plane_gj1_ep_oppJC.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
                     if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.20:
-                        h_deltaAngle_gj_rj_jcPt_0_30_dm_0_20_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_20_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                        h_deltaAngle_gj_rj_jcPt_0_30_dm_0_20_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                        h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_20_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargePt_kappa_0_30[0]-v_jet2_sj2_jetChargePt_kappa_0_30[0])>0.30:
-                            h_deltaAngle_gj_rj_jcPt_0_30_dm_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight[0])
-                            h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight[0])
+                            h_deltaAngle_gj_rj_jcPt_0_30_dm_0_30_theta_gj_jcPt_0_30.Fill(degrees(temp_rj2_sj_jcPt_pos.Angle(temp_rj2.Vect()))-degrees(temp_gj2_sj_jcPt_pos.Angle(temp_gj2.Vect())),v_eventWeight_new)
+                            h_deltaAngle_gj_rj_phi_plane_gj2_jcPt_0_30_dm_0_30_vs_plane_gj1_ep.Fill(DeltaPhiDirAngles(phi_plane_rj1_ep_rj2_sj_jcPt_pos,phi_plane_gj1_ep_gj2_sj_jcPt_pos),v_eventWeight_new)
 
 
                     #parton matches
                     if v_jet2_sj1_closestMatch[0]<2:
-                        h_jet2_mass_H_matched.Fill(v_jet2_mass[0],v_eventWeight[0])
+                        h_jet2_mass_H_matched.Fill(v_jet2_mass[0],v_eventWeight_new)
                     elif v_jet2_sj1_closestMatch[0]!=-1 :
-                        h_jet2_mass_Z_matched.Fill(v_jet2_mass[0],v_eventWeight[0])
+                        h_jet2_mass_Z_matched.Fill(v_jet2_mass[0],v_eventWeight_new)
                     if v_jet2_sj1_closestMatch[0]==0:
-                        h_jet2_sj_b_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_b_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj1_closestMatch[0]==1:
-                        h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     if v_jet2_sj2_closestMatch[0]==0:
-                        h_jet2_sj_b_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_b_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj2_closestMatch[0]==1:
-                        h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
 
                     if v_jet2_sj1_decMatch[0]==0:
-                        h_jet2_sj_b_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_b_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj1_decMatch[0]==1:
-                        h_jet2_sj_bbar_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_bbar_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     if v_jet2_sj2_decMatch[0]==0:
-                        h_jet2_sj_b_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_b_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj2_decMatch[0]==1:
-                        h_jet2_sj_bbar_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_bbar_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     if v_jet2_sj1_closestMatch[0]==2 and v_jet2_sj2_closestMatch[0]==3 :
-                        h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if (v_jet2_sj1_jetChargeE_kappa_0_30[0]*v_jet2_sj2_jetChargeE_kappa_0_30[0])<0:
-                            h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj1_closestMatch[0]==3 and v_jet2_sj2_closestMatch[0]==2 :
-                        h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if (v_jet2_sj1_jetChargeE_kappa_0_30[0]*v_jet2_sj2_jetChargeE_kappa_0_30[0])<0:
-                            h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qneg_dM_vs_qpos_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
 
                     if v_jet2_sj1_closestMatch[0]==2:
-                        h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj1_closestMatch[0]==3:
-                        h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     if v_jet2_sj2_closestMatch[0]==2:
-                        h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj2_closestMatch[0]==3:
-                        h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
 
 
                     if (v_jet2_sj1_jetChargeE_kappa_0_30[0]*v_jet2_sj2_jetChargeE_kappa_0_30[0])<0:
                         if v_jet2_sj1_closestMatch[0]==2:
-                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         elif v_jet2_sj1_closestMatch[0]==3:
-                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if v_jet2_sj2_closestMatch[0]==2:
-                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         elif v_jet2_sj2_closestMatch[0]==3:
-                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_oppCharge.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
 
 
                     if v_jet2_sj1_decMatch[0]==2:
-                        h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
                             if(abs(v_jet2_sj1_jetChargeE_kappa_0_30[0])>abs(v_jet2_sj2_jetChargeE_kappa_0_30[0])):
                                 if v_jet2_sj1_jetChargeE_kappa_0_30[0]>0 :
-                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                                 else: 
-                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             else:
                                 if v_jet2_sj2_jetChargeE_kappa_0_30[0]>0 :
-                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                                 else: 
-                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                            h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                            h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                            h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_dM_ChargeHemisphere_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                            h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                            h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                            h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.25:
-                                h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_25.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_25.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj1_decMatch[0]==3:
-                        h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.20:
-                            h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                            h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                            h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                            h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                            h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_20.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             if abs(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0])>0.25:
-                                h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_25.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qneg_dM_jetChargeE_vs_qpos_dM_jetChargeE_kappa_0_30_dm_jetCharge_0_25.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     if v_jet2_sj2_decMatch[0]==2:
-                        h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qneg_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     elif v_jet2_sj2_decMatch[0]==3:
-                        h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                        h_jet2_sj_qpos_dM_jetChargeE_kappa_0_30.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
 
                     if v_jet2_sj1_closestMatch[0]==v_jet2_sj1_decMatch[0] and v_jet2_sj2_closestMatch[0]==v_jet2_sj2_decMatch[0]:
-                        h_jet2_E_sj2_over_E_sum_dec_also_close.Fill(v_jet2_sj2_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0]),v_eventWeight[0])
-                        h_jet2_dAlpha_sj1sj2_dec_also_close.Fill(v_jet2_dAlpha_sj1sj2[0],v_eventWeight[0])
+                        h_jet2_E_sj2_over_E_sum_dec_also_close.Fill(v_jet2_sj2_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0]),v_eventWeight_new)
+                        h_jet2_dAlpha_sj1sj2_dec_also_close.Fill(v_jet2_dAlpha_sj1sj2[0],v_eventWeight_new)
                         if(  ((v_jet2_sj1_closestMatch[0]==2 and v_jet2_sj1_jetChargeE_kappa_0_30[0]<0) and (v_jet2_sj2_closestMatch[0]==3 and v_jet2_sj2_jetChargeE_kappa_0_30[0]>0)) or  ((v_jet2_sj1_closestMatch[0]==3 and v_jet2_sj1_jetChargeE_kappa_0_30[0]>0) and (v_jet2_sj2_closestMatch[0]==2 and v_jet2_sj2_jetChargeE_kappa_0_30[0]<0))):
-                            h_jet2_E_sj2_over_E_sum_jetChargeE_kappa_0_30_dec_also_close_rightCharges.Fill(v_jet2_sj2_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0]),v_eventWeight[0])
-                            h_jet2_dAlpha_sj1sj2_jetChargeE_kappa_0_30_dec_also_close_rightCharges.Fill(v_jet2_dAlpha_sj1sj2[0],v_eventWeight[0])
+                            h_jet2_E_sj2_over_E_sum_jetChargeE_kappa_0_30_dec_also_close_rightCharges.Fill(v_jet2_sj2_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0]),v_eventWeight_new)
+                            h_jet2_dAlpha_sj1sj2_jetChargeE_kappa_0_30_dec_also_close_rightCharges.Fill(v_jet2_dAlpha_sj1sj2[0],v_eventWeight_new)
                         elif( (v_jet2_sj1_closestMatch[0]==2 and v_jet2_sj1_jetChargeE_kappa_0_30[0]>0) or (v_jet2_sj1_closestMatch[0]==3 and v_jet2_sj1_jetChargeE_kappa_0_30[0]<0) or (v_jet2_sj1_closestMatch[0]==3 and v_jet2_sj1_jetChargeE_kappa_0_30[0]<0) or (v_jet2_sj1_closestMatch[0]==2 and v_jet2_sj1_jetChargeE_kappa_0_30[0]>0)):
-                            h_jet2_E_sj2_over_E_sum_jetChargeE_kappa_0_30_dec_also_close_wrongCharges.Fill(v_jet2_sj2_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0]),v_eventWeight[0])      
-                            h_jet2_dAlpha_sj1sj2_jetChargeE_kappa_0_30_dec_also_close_wrongCharges.Fill(v_jet2_dAlpha_sj1sj2[0],v_eventWeight[0])
+                            h_jet2_E_sj2_over_E_sum_jetChargeE_kappa_0_30_dec_also_close_wrongCharges.Fill(v_jet2_sj2_E[0]/(v_jet2_sj1_E[0]+v_jet2_sj2_E[0]),v_eventWeight_new)      
+                            h_jet2_dAlpha_sj1sj2_jetChargeE_kappa_0_30_dec_also_close_wrongCharges.Fill(v_jet2_dAlpha_sj1sj2[0],v_eventWeight_new)
                         if v_jet2_sj1_closestMatch[0]==0:
-                            h_jet2_sj_b_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_b_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         elif v_jet2_sj1_closestMatch[0]==1:
-                            h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if v_jet2_sj2_closestMatch[0]==0:
-                            h_jet2_sj_b_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_b_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         elif v_jet2_sj2_closestMatch[0]==1:
-                            h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_bbar_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if v_jet2_sj1_closestMatch[0]==2:
-                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             if v_jet2_sj1_jetChargeE_kappa_0_30[0]<0:
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             else:
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                                 if v_jet2_sj2_jetChargeE_kappa_0_30[0]<0:
-                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         elif v_jet2_sj1_closestMatch[0]==3:
-                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             if v_jet2_sj1_jetChargeE_kappa_0_30[0]>0:
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             else:
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj1_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj1_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                                 if v_jet2_sj2_jetChargeE_kappa_0_30[0]>0:
-                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         if v_jet2_sj2_closestMatch[0]==2:
-                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             if v_jet2_sj2_jetChargeE_kappa_0_30[0]<0:
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             else:
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                                 if v_jet2_sj1_jetChargeE_kappa_0_30[0]<0:
-                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                         elif v_jet2_sj2_closestMatch[0]==3:
-                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                            h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             if v_jet2_sj2_jetChargeE_kappa_0_30[0]>0:
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_rightCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                             else:
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight[0])
-                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_chFrac.Fill(v_jet2_sj2_chFrac[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_nTrack.Fill(v_jet2_sj2_nTracks[0],v_eventWeight_new)
+                                h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                                 if v_jet2_sj1_jetChargeE_kappa_0_30[0]>0:
-                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight[0])
-                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight[0])
+                                    h_jet2_sj_qneg_cM_min_qpos_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj1_jetChargeE_kappa_0_30[0]-v_jet2_sj2_jetChargeE_kappa_0_30[0],v_eventWeight_new)
+                                    h_jet2_sj_qpos_cM_min_qneg_cM_jetChargeE_kappa_0_30_dec_also_close_wrongCharge_qneg_and_qpos.Fill(v_jet2_sj2_jetChargeE_kappa_0_30[0]-v_jet2_sj1_jetChargeE_kappa_0_30[0],v_eventWeight_new)
                     #print 'in signal histos'
 
 
 
 
-        print 'at end of file processing of ',i_final_histo_name_,bdt_value,h_jet1_mass.Integral(),BTagUncValue,norm
+        print 'at end of file processing of ',i_final_histo_name_,bdt_value,h_jet1_mass.Integral(),total_weight,BTagUncValue,norm
         #write histograms per BDT scan value                
         fileout.Write()
 
@@ -3005,7 +3009,7 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_weight_file,i_isSigna
 
 def process_files():
 
-    BTagUncertaintyEstimate=0.02
+    BTagUncertaintyEstimate=0.01
  
 
     norm_BTagUp_polm80=1.0
@@ -3023,7 +3027,7 @@ def process_files():
     norm_BTagUp_polm80,norm_BTagDown_polm80=BTagNormalisation(file_list_noMassCut_polm80,BTagUncertaintyEstimate)
     print 'output later',norm_BTagUp_polm80,norm_BTagDown_polm80
 
-    final_histo_name_BTagValidation_polm80_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/hist_BTagValidation_hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_Unc0_02.root"  
+    final_histo_name_BTagValidation_polm80_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/hist_BTagValidation_hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_Unc0_01.root"  
     process_BTagValidation(final_histo_name_BTagValidation_polm80_,file_list_noMassCut_polm80,BTagUncertaintyEstimate,norm_BTagUp_polm80,norm_BTagDown_polm80)
 
     file_list_noMassCut_polp80=[]
@@ -3035,7 +3039,7 @@ def process_files():
 
     norm_BTagUp_polp80,norm_BTagDown_polp80=BTagNormalisation(file_list_noMassCut_polp80,BTagUncertaintyEstimate)
 
-    final_histo_name_BTagValidation_polp80_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/hist_BTagValidation_hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_Unc0_02.root"  
+    final_histo_name_BTagValidation_polp80_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/hist_BTagValidation_hzqq__ee_qq_mqq_1TeV__ee_qqqq_mqqqq_2TeV__ee_qqqqqq_Unc0_01.root"  
     process_BTagValidation(final_histo_name_BTagValidation_polp80_,file_list_noMassCut_polp80,BTagUncertaintyEstimate,norm_BTagUp_polp80,norm_BTagDown_polp80)
 
     #jet1_and_jet2_C2_D2_only
@@ -3044,41 +3048,41 @@ def process_files():
     #in all events weight files, actually run with -1 in NCuts
     isSignalData_=True
     allowNonBBarSignal_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99_withPartonHistos.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root"  
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polm80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polm80)
 
 
     isSignalData_=True
     allowNonBBarSignal_=True
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99_withPartonHistos_AllEvents.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT_AllEvents.root"  
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT_AllEvents.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polm80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT_AllEvents.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT_AllEvents.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polm80)
 
     isSignalData_=False
     allowNonBBarSignal_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polm80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polm80)
  
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polm80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polm80)
 
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polm80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polm80)
 
 
@@ -3090,41 +3094,41 @@ def process_files():
     #in all events weight files, actually run with -1 in NCuts
     isSignalData_=True
     allowNonBBarSignal_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99_withPartonHistos.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root"  
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polp80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polp80)
 
 
     isSignalData_=True
     allowNonBBarSignal_=True
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99_withPartonHistos_AllEvents.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT_AllEvents.root"  
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT_AllEvents.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polp80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT_AllEvents.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT_AllEvents.root"  
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polp80)
 
     isSignalData_=False
     allowNonBBarSignal_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qq_mqq_1TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polp80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polp80)
  
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqq_mqqqq_2TeV_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polp80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polp80)
 
     isSignalData_=False
-    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_JESUnc0_99.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_02_origBDT.root" 
+    input_file_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_ee_qqqqqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagDown0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,BTagUncertaintyEstimate,norm_BTagDown_polp80)
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_02_origBDT.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root" 
     process_event(final_histo_name_,input_file_,files_weights_,isSignalData_,allowNonBBarSignal_,-BTagUncertaintyEstimate,norm_BTagUp_polp80)
 
 
