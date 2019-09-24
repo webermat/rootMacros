@@ -95,8 +95,7 @@ def CLICdpStyle():
     
     gROOT.ForceStyle()
 
-
-def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCuts,performThetaCuts,fillGenLevel,performJESUnc,JESUncValue):
+def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCuts,performThetaCuts,fillGenLevel,performJESUnc,JESUncValue,BTagUncValue,norm_up,norm_down):
     print "do something"
 
     use_EMissNeutrinoProjection=True
