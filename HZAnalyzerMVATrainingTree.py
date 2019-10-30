@@ -2327,6 +2327,7 @@ def fill_background_histograms(file,mytree,xsec,usePartonInfo,lumi,performMassCu
         if(pass_reco_selection or pass_parton_selection) :
             weight_total2+=weight;
             mytree.Fill()
+            print "fill in entry ",num_entry
 
     print 'total events after all running ', weight_total," tree filling weight ", weight_total2,"weight times tree entries ",weight*(float(mytree.GetEntries())),"masscuts/thetacuts?",performMassCuts,performThetaCuts
     h_parton_theta1_Z_qpos_vs_Z.Write()
@@ -2465,13 +2466,10 @@ def process_files():
     fillGenInfo_=True
 
     cross_section_= 3.83
-    #final_histo_name="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/HZqq_Analyzer_noMassCuts_190709_hzqq_13391_polm80_sqrtS_j1_j2_EMissProj_H_bb_Zquark_VLC7VtxRFJVLC7.root"
-    input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190709_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
-    #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190709_gcc62_CT/VtxVLC7RFJVLC7/hzqq_13391_RunEventStatisticsHistogram.root"
-    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_m_j1_80_160_theta1_20_160_m_j2_50_135.root"  
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root"  
+    input_file_name_="HZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14_DR7_localSubmission_1.root"
+    #input_file_name_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190709_gcc62_CT/VtxVLC7RFJVLC7/HZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/testforeventdisplay.root"  
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_noMass_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos.root"  
-    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_noMassCut_noThetaCut_MVATrainingTree_Test_OnlyPartonSelection.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_,fillGenInfo_)
     print 'finished file', final_histo_name_
 
@@ -2669,7 +2667,7 @@ def process_files():
     #input_file_name2_="/eos/user/w/weberma2/data/HZAnalyzerFiles/190709_gcc62_CT/VtxVLC7RFJVLC7/hzqq_13392_RunEventStatisticsHistogram.root"
     #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/test_hzqq_noMassCut_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_OnlyPartonSelection.root"  
     final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/test_hzqq_ellipse_m1_126_dm_35_m2_92_5_dm_35_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,use_partonInfo_,performMassCuts_,performThetaCuts_, fillGenInfo_)
     print 'finished file', final_histo_name_
 
     use_partonInfo_=False

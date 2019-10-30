@@ -2,6 +2,7 @@ from ROOT import gROOT, TCanvas,THStack, TF1, TH1F, TH1, TH2,  TH2F, TGraph, TCa
 import ROOT as root
 from math import cos, sin, pi, degrees, radians, pow, sqrt,acos
 from array import array
+#import numpy as np
 
 #h_Zuds100_JER_wO_DR07->SetLineColor(kCyan+1);
 #h_Zuds200_JER_wO_DR07->SetLineColor(kYellow+1);
@@ -36,6 +37,23 @@ def setUpperCanvas(canvas_name) :
   #c1.SetGridx();
   #c1.SetGridy();
   #c1.SetRightMargin(0.0172);
+  c1.SetTopMargin(0.085);
+  #c1.SetBottomMargin(0.138);
+  c1.SetFrameBorderMode(0);
+  c1.SetFrameBorderMode(0);
+  return c1
+
+def setUpperCanvasWColz(canvas_name) :
+  c1= TCanvas(canvas_name,canvas_name,0,0,800,700);
+  c1.cd();
+  gStyle.SetOptStat(0);
+  #c1.Range(-186.894,-0.873515,1682.046,6.114605);
+  c1.SetFillColor(0);
+  c1.SetBorderMode(0);
+  c1.SetBorderSize(2);
+  #c1.SetGridx();
+  #c1.SetGridy();
+  c1.SetRightMargin(0.160);
   c1.SetTopMargin(0.085);
   #c1.SetBottomMargin(0.138);
   c1.SetFrameBorderMode(0);
@@ -210,6 +228,7 @@ def process_files():
     label2_noLumi="e^{-} pol -80%"
     label3_noLumi="e^{-} pol +80%"
     x2_noLumi=0.75
+    x2_noLumi_normed=0.67
     y2_noLumi=0.93
 
     directory=[];
@@ -258,27 +277,24 @@ def process_files():
 
     #AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root
 
-    file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
-    file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT_AllEvents.root") 
+    
+    file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_AllEvents.root") 
     file_polm80_HZ_SignalHistos_AllEventsParton_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_noMass_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root") 
-    #file_polm80_HZ_SignalHistos_AllEvents_noCorr_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AllEvents_origBDT.root") 
-    file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
-    file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
-    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
-                                                  
-    #file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21.root") 
-    #file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21_AllEvents.root") 
-    #file_polm80_HZ_SignalHistos_AllEvents_noCorr_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21_AllEvents.root")
-    #file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21.root") 
-    #file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21.root") 
-    #file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_with_y_ij_jet1_d21.root") 
+    #file_polm80_HZ_SignalHistos_AllEvents_noCorr_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AllEvents.root") 
+    file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
 
-    #file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta.root") 
-    #file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta_AllEvents.root") 
-    #file_polm80_HZ_SignalHistos_AllEvents_noCorr_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta_AllEvents.root")
-    #file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta.root") 
-    #file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta.root") 
-    #file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_all_jet1_and_jet2_subStruc_Vars_E_theta.root") 
+
+    #file_polm80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
+    #file_polm80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT_AllEvents.root") 
+    #file_polm80_HZ_SignalHistos_AllEventsParton_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/test_hzqq_noMass_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root") 
+    #file_polm80_HZ_SignalHistos_AllEvents_noCorr_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AllEvents_origBDT.root") 
+    #file_polm80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
+    #file_polm80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
+    #file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
+
 
 
     h_2D_polm80_HZ_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM=file_polm80_HZ_SignalHistos_.Get("0.375/h_2D_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM")
@@ -1177,12 +1193,12 @@ def process_files():
 
     #AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_JESUnc0_99.root
 
-    file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root")  
-    file_polp80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT_AllEvents.root")  
+    file_polp80_HZ_SignalHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root")  
+    file_polp80_HZ_SignalHistos_AllEvents_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_AllEvents.root")  
     file_polp80_HZ_SignalHistos_AllEventsParton_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/test_hzqq_noMass_noThetaCut_MVATrainingTree_RecoSelectionOnly_JetSub_with_E_theta_withPartonHistos_AllEvents.root") 
-    file_polp80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
-    file_polp80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
-    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_BTagUp0_01_origBDT.root") 
+    file_polp80_ee_qq_mqq_1TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qq_mqq_1TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polp80_ee_qqqq_mqqqq_2TeV_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqq_mqqqq_2TeV_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
+    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_ee_qqqqqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21.root") 
     #process_event(final_histo_name_,input_file_,files_weights_)
 
     h_2D_polp80_HZ_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM=file_polp80_HZ_SignalHistos_.Get("0.3/h_2D_recojet_pos_sgncostheta1_times_sgncostheta2_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_vs_costheta2_rj1_ep_E_totCOM")
@@ -2660,29 +2676,30 @@ def process_files():
     file_polm80_ee_qqqq_noCuts_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_noMassCut_Aug7/test_ee_qqqq_AnalysisBaselineHistos_noCuts_EThetaVar.root")
     file_polm80_ee_qqqqqq_noCuts_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_noMassCut_Aug7/test_ee_qqqqqq_AnalysisBaselineHistos_noCuts_EThetaVar.root")
 
-    h_mass_H_matched_orig_HZ_polm80_=file_polm80_HZ_AllEvents_noCuts_.Get("h_HZqq_signal_o_mass_H_matched")
+    h_mass_H_matched_orig_HZ_polm80_=file_polm80_HZ_noCuts_.Get("h_HZqq_signal_o_mass_H_matched")
     h_mass_H_matched_orig_HZ_polm80_.GetXaxis().SetTitle("m_{jet} [GeV]");
     h_mass_H_matched_orig_HZ_polm80_.SetLineWidth(3)
     h_mass_H_matched_orig_HZ_polm80_.SetLineColor(kRed)
     h_mass_H_matched_orig_HZ_polm80_.SetLineStyle(2)
 
-    h_mass_H_matched_HZ_polm80_=file_polm80_HZ_AllEvents_noCuts_.Get("h_HZqq_signal_mass_H_matched")
+    h_mass_H_matched_HZ_polm80_=file_polm80_HZ_noCuts_.Get("h_HZqq_signal_mass_H_matched")
     h_mass_H_matched_HZ_polm80_.GetXaxis().SetTitle("m_{jet} [GeV]");
     h_mass_H_matched_HZ_polm80_.SetLineWidth(3)
     h_mass_H_matched_HZ_polm80_.SetLineColor(kRed)
 
-    h_mass_Z_matched_orig_HZ_polm80_=file_polm80_HZ_AllEvents_noCuts_.Get("h_HZqq_signal_o_mass_Z_matched")
+    h_mass_Z_matched_orig_HZ_polm80_=file_polm80_HZ_noCuts_.Get("h_HZqq_signal_o_mass_Z_matched")
     h_mass_Z_matched_orig_HZ_polm80_.GetXaxis().SetTitle("m_{jet} [GeV]");
     h_mass_Z_matched_orig_HZ_polm80_.SetLineWidth(3)
     h_mass_Z_matched_orig_HZ_polm80_.SetLineColor(kBlue)
     h_mass_Z_matched_orig_HZ_polm80_.SetLineStyle(2)
 
-    h_mass_Z_matched_HZ_polm80_=file_polm80_HZ_AllEvents_noCuts_.Get("h_HZqq_signal_mass_Z_matched")
+    h_mass_Z_matched_HZ_polm80_=file_polm80_HZ_noCuts_.Get("h_HZqq_signal_mass_Z_matched")
     h_mass_Z_matched_HZ_polm80_.GetXaxis().SetTitle("m_{jet} [GeV]");
     h_mass_Z_matched_HZ_polm80_.SetLineWidth(3)
     h_mass_Z_matched_HZ_polm80_.SetLineColor(kBlue)
 
-    h_mass_H_matched_HZ_polm80_.SetMaximum(180)
+    h_mass_H_matched_HZ_polm80_.SetMaximum(140)
+    #h_mass_H_matched_HZ_polm80_.SetMaximum(180)
 
     canvas_HZqq_H_Z_mass_comp_polm80 = setUpperCanvas("canvas_HZqq_H_Z_mass_comp_polm80")
     canvas_HZqq_H_Z_mass_comp_polm80.cd()
@@ -2699,7 +2716,7 @@ def process_files():
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetFillColor(0);
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetFillStyle(0);
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetHeader("#sqrt{s}_{reco}>2500 GeV");
-    leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_H_matched_HZ_polm80_.DrawCopy("hist"),"H jet,corr");
+    leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_H_matched_HZ_polm80_.DrawCopy("hist"),"H jet, corr");
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_H_matched_orig_HZ_polm80_.DrawCopy("hist,same"),"H jet, orig");
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_Z_matched_HZ_polm80_.DrawCopy("hist,same"),"Z jet, corr");
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_Z_matched_orig_HZ_polm80_.DrawCopy("hist,same"),"Z jet, orig");
@@ -2708,7 +2725,7 @@ def process_files():
 
     l.DrawLatex(x,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_HZqq_H_Z_mass_comp_polm80.Print("h_HZqq_all_H_Z_mass_comp_polm80.eps")
+    canvas_HZqq_H_Z_mass_comp_polm80.Print("h_HZqq_H_Z_mass_comp_polm80.eps")
 
 
 
@@ -5144,7 +5161,7 @@ def process_files():
     l.DrawLatex(x2,y2,label3);
 
     canvas_h_SIG_BG_jet1_tau21_polp80_massCuts_thstack.Print("h_jet1_tau21_polp80_ee_qqqqqq_qqqq_qq_and_hzqq.eps")
-
+    
     file_polm80_HZ_BDT_Unfolding_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_Unfolding.root")
     h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_=file_polm80_HZ_BDT_Unfolding_.Get("0.375/h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM");
     h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetXaxis().SetTitle("cos #theta_{2}^{parton}")
@@ -5159,6 +5176,43 @@ def process_files():
     l.DrawLatex(x2_noLumi,y2_noLumi,label2_noLumi);
     canvas_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80.Print("h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80.eps")
 
+    #normed transpose matrix
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_=file_polm80_HZ_BDT_Unfolding_.Get("0.375/h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM");
+
+    norm_polm80_costheta2_H_epgen=[]
+    norm_polm80_costheta2_H_eptest=[]
+    for i in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetNbinsX()+1):
+        norm_polm80_costheta2_H_epgen.append(0.)
+        norm_polm80_costheta2_H_eptest.append(0)
+        for j in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetNbinsX()+1):
+            norm_polm80_costheta2_H_epgen[i]+=h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetBinContent(i,j)
+            h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.SetBinContent(j,i,h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetBinContent(i,j))
+        print("norm costheta2",i,norm_polm80_costheta2_H_epgen[i])
+
+
+    for i in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetNbinsX()+1):  
+        for j in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetNbinsX()+1):
+            if norm_polm80_costheta2_H_epgen[j]!=0:
+                h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.SetBinContent(i,j,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetBinContent(i,j)/norm_polm80_costheta2_H_epgen[j])
+            norm_polm80_costheta2_H_eptest[j]+=h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetBinContent(i,j)
+
+    print("norm test costheta2",norm_polm80_costheta2_H_eptest)
+
+    #h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_
+
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetXaxis().SetTitle("cos #theta_{2}^{reco}")
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.GetYaxis().SetTitle("cos #theta_{2}^{parton}")
+
+    canvas_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80 = setUpperCanvasWColz("normed_parton_recojet_costheta2_rj1_ep_E_totCOM_vs_costheta2_H_ep_approx_HZ_COM__polm80");
+    canvas_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80.cd();
+    #gPad.SetRightMargin(0.18)
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80_.Draw("colz")
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2_noLumi_normed,y2_noLumi,label2_noLumi);
+    canvas_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polm80.Print("h_recojet_costheta2_rj1_ep_E_totCOM_vs_parton_costheta2_H_ep_approx_HZ_COM__polm80_normed.eps")
+
+
+
     h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_=file_polm80_HZ_BDT_Unfolding_.Get("0.375/h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com");
     h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetXaxis().SetTitle("cos #theta_{1}^{parton}")
     h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetYaxis().SetTitle("cos #theta_{1}^{reco}")
@@ -5170,6 +5224,46 @@ def process_files():
     l.DrawLatex(x2_noLumi,y2_noLumi,label2_noLumi);
     canvas_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80.Print("h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80.eps")
 
+    #now the normed transposed transfer matrix
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_=file_polm80_HZ_BDT_Unfolding_.Get("0.375/h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com");
+
+
+    norm_polm80_costheta1_Z_qpos_Zcomgen=[]
+    norm_polm80_costheta1_Z_qpos_Zcomtest=[]
+    for i in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetNbinsX()+1):
+        norm_polm80_costheta1_Z_qpos_Zcomgen.append(0.)
+        norm_polm80_costheta1_Z_qpos_Zcomtest.append(0)
+        for j in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetNbinsX()+1):
+            norm_polm80_costheta1_Z_qpos_Zcomgen[i]+=h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetBinContent(i,j)
+            h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.SetBinContent(j,i,h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetBinContent(i,j))
+        print("norm costheta2",i,norm_polm80_costheta1_Z_qpos_Zcomgen[i])
+
+
+    for i in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetNbinsX()+1):  
+        for j in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetNbinsX()+1):
+            if norm_polm80_costheta1_Z_qpos_Zcomgen[j]!=0:
+                h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.SetBinContent(i,j,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetBinContent(i,j)/norm_polm80_costheta1_Z_qpos_Zcomgen[j])
+            norm_polm80_costheta1_Z_qpos_Zcomtest[j]+=h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetBinContent(i,j)
+
+    print("norm test costheta2",norm_polm80_costheta1_Z_qpos_Zcomtest)
+
+    #h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_
+
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetXaxis().SetTitle("cos #theta_{1}^{reco}")
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.GetYaxis().SetTitle("cos #theta_{1}^{parton}")
+
+    canvas_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80 = setUpperCanvasWColz("normed_parton_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2comvs_costheta1_Z_qpos_Zcom__polm80");
+    canvas_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80.cd();
+    #gPad.SetRightMargin(0.18)
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.SetMaximum(0.40);
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80_.Draw("colz")
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2_noLumi_normed,y2_noLumi,label2_noLumi);
+    canvas_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polm80.Print("h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2comvs_parton_costheta1_Z_qpos_Zcom__polm80_normed.eps")
+
+
+
+
     h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_=file_polm80_HZ_BDT_Unfolding_.Get("0.375/h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep");
     h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetXaxis().SetTitle("#phi^{parton} [#circ]")
     h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetYaxis().SetTitle("#phi^{reco} [#circ]")
@@ -5180,6 +5274,46 @@ def process_files():
     l.DrawLatex(x,y,label);
     l.DrawLatex(x2_noLumi,y2_noLumi,label2_noLumi);
     canvas_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80.Print("h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80.eps")
+
+
+    #now the normed transposed transfer matrix
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_=file_polm80_HZ_BDT_Unfolding_.Get("0.375/h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep");
+
+
+    norm_polm80_costheta1_Z_qpos_Zcomgen=[]
+    norm_polm80_costheta1_Z_qpos_Zcomtest=[]
+    for i in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetNbinsX()+1):
+        norm_polm80_costheta1_Z_qpos_Zcomgen.append(0.)
+        norm_polm80_costheta1_Z_qpos_Zcomtest.append(0)
+        for j in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetNbinsX()+1):
+            norm_polm80_costheta1_Z_qpos_Zcomgen[i]+=h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetBinContent(i,j)
+            h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.SetBinContent(j,i,h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetBinContent(i,j))
+        print("norm phi",i,norm_polm80_costheta1_Z_qpos_Zcomgen[i])
+
+
+    for i in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetNbinsX()+1):  
+        for j in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetNbinsX()+1):
+            if norm_polm80_costheta1_Z_qpos_Zcomgen[j]!=0:
+                h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.SetBinContent(i,j,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetBinContent(i,j)/norm_polm80_costheta1_Z_qpos_Zcomgen[j])
+            norm_polm80_costheta1_Z_qpos_Zcomtest[j]+=h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetBinContent(i,j)
+
+    print("norm test phi",norm_polm80_costheta1_Z_qpos_Zcomtest)
+
+    #h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_
+
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetXaxis().SetTitle("#phi^{reco} [#circ]")
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.GetYaxis().SetTitle("#phi^{parton} [#circ]")
+
+    canvas_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80 = setUpperCanvasWColz("normed_parton_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_epvs_costheta1_Z_qpos_Zcom__polm80");
+    canvas_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80.cd();
+    #gPad.SetRightMargin(0.18)
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80_.Draw("colz")
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2_noLumi_normed,y2_noLumi,label2_noLumi);
+    canvas_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polm80.Print("h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_vs_parton_phi_plane_Z_qpos_vs_plane_H_ep__polm80_normed.eps")
+
+
+
 
 
     file_polp80_HZ_BDT_Unfolding_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_Aug7/MVATrainingReader_hzqq_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees250NCuts_m1_AnglesMETProj_eprealcalc_METOverSqrtSOrig_1_00_sqrtSOrig_0_BDT_y32_jet1_D2_C2_C3_tau21_jet2_D2_C2_C3_tau21_Unfolding.root")
@@ -5196,6 +5330,46 @@ def process_files():
     l.DrawLatex(x2_noLumi,y2_noLumi,label3_noLumi);
     canvas_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80.Print("h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80.eps")
 
+    #normed transpose matrix
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_=file_polp80_HZ_BDT_Unfolding_.Get("0.375/h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM");
+
+
+    norm_polp80_costheta2_H_epgen=[]
+    norm_polp80_costheta2_H_eptest=[]
+    for i in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetNbinsX()+1):
+        norm_polp80_costheta2_H_epgen.append(0.)
+        norm_polp80_costheta2_H_eptest.append(0)
+        for j in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetNbinsX()+1):
+            norm_polp80_costheta2_H_epgen[i]+=h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetBinContent(i,j)
+            h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.SetBinContent(j,i,h_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetBinContent(i,j))
+        print("norm costheta2",i,norm_polp80_costheta2_H_epgen[i])
+
+
+    for i in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetNbinsX()+1):  
+        for j in range(0,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetNbinsX()+1):
+            if norm_polp80_costheta2_H_epgen[j]!=0:
+                h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.SetBinContent(i,j,h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetBinContent(i,j)/norm_polp80_costheta2_H_epgen[j])
+            norm_polp80_costheta2_H_eptest[j]+=h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetBinContent(i,j)
+
+    print("norm test costheta2",norm_polp80_costheta2_H_eptest)
+
+    #h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_
+
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetXaxis().SetTitle("cos #theta_{2}^{reco}")
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.GetYaxis().SetTitle("cos #theta_{2}^{parton}")
+
+    canvas_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80 = setUpperCanvasWColz("normed_parton_recojet_costheta2_rj1_ep_E_totCOM_vs_costheta2_H_ep_approx_HZ_COM__polp80");
+    canvas_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80.cd();
+    #gPad.SetRightMargin(0.18)
+    h_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80_.Draw("colz")
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2_noLumi_normed,y2_noLumi,label3_noLumi);
+    canvas_normed_parton_costheta2_H_ep_approx_HZ_COM_vs_recojet_costheta2_rj1_ep_E_totCOM_polp80.Print("h_recojet_costheta2_rj1_ep_E_totCOM_vs_parton_costheta2_H_ep_approx_HZ_COM__polp80_normed.eps")
+
+
+
+
+
 
     h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_=file_polp80_HZ_BDT_Unfolding_.Get("0.3/h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com");
     h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetXaxis().SetTitle("cos #theta_{1}^{parton}");
@@ -5209,6 +5383,44 @@ def process_files():
     canvas_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80.Print("h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80.eps")
 
 
+    #now the normed transposed transfer matrix
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_=file_polp80_HZ_BDT_Unfolding_.Get("0.375/h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com");
+
+
+    norm_polp80_costheta1_Z_qpos_Zcomgen=[]
+    norm_polp80_costheta1_Z_qpos_Zcomtest=[]
+    for i in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetNbinsX()+1):
+        norm_polp80_costheta1_Z_qpos_Zcomgen.append(0.)
+        norm_polp80_costheta1_Z_qpos_Zcomtest.append(0)
+        for j in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetNbinsX()+1):
+            norm_polp80_costheta1_Z_qpos_Zcomgen[i]+=h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetBinContent(i,j)
+            h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.SetBinContent(j,i,h_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetBinContent(i,j))
+        print("norm costheta2",i,norm_polp80_costheta1_Z_qpos_Zcomgen[i])
+
+
+    for i in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetNbinsX()+1):  
+        for j in range(0,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetNbinsX()+1):
+            if norm_polp80_costheta1_Z_qpos_Zcomgen[j]!=0:
+                h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.SetBinContent(i,j,h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetBinContent(i,j)/norm_polp80_costheta1_Z_qpos_Zcomgen[j])
+            norm_polp80_costheta1_Z_qpos_Zcomtest[j]+=h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetBinContent(i,j)
+
+    print("norm test costheta2",norm_polp80_costheta1_Z_qpos_Zcomtest)
+
+    #h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_
+
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetXaxis().SetTitle("cos #theta_{1}^{reco}")
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.GetYaxis().SetTitle("cos #theta_{1}^{parton}")
+
+    canvas_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80 = setUpperCanvasWColz("normed_parton_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2comvs_costheta1_Z_qpos_Zcom__polp80");
+    canvas_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80.cd();
+    #gPad.SetRightMargin(0.18)
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.SetMaximum(0.40);
+    h_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80_.Draw("colz")
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2_noLumi_normed,y2_noLumi,label3_noLumi);
+    canvas_normed_parton_costheta1_Z_qpos_Zcom_vs_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2com_polp80.Print("h_recojet_costheta1_rj2_pos_sj_jetChargeE_0_30_rj2comvs_parton_costheta1_Z_qpos_Zcom__polp80_normed.eps")
+
+
     h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_=file_polp80_HZ_BDT_Unfolding_.Get("0.3/h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep");
     h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetXaxis().SetTitle("#phi^{parton} [#circ]");
     h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetYaxis().SetTitle("#phi^{reco} [#circ]");
@@ -5220,7 +5432,48 @@ def process_files():
     l.DrawLatex(x2_noLumi,y2_noLumi,label3_noLumi);
     canvas_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80.Print("h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80.eps")
 
-    file_polm80_HZ_full_withParton_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_AnalysisBaselineHistos_noCuts_EThetaVar_withSignalHistos_AllEvents.root")
+
+
+    #now the normed transposed transfer matrix
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_=file_polp80_HZ_BDT_Unfolding_.Get("0.375/h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep");
+
+
+    norm_polp80_costheta1_Z_qpos_Zcomgen=[]
+    norm_polp80_costheta1_Z_qpos_Zcomtest=[]
+    for i in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetNbinsX()+1):
+        norm_polp80_costheta1_Z_qpos_Zcomgen.append(0.)
+        norm_polp80_costheta1_Z_qpos_Zcomtest.append(0)
+        for j in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetNbinsX()+1):
+            norm_polp80_costheta1_Z_qpos_Zcomgen[i]+=h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetBinContent(i,j)
+            h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.SetBinContent(j,i,h_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetBinContent(i,j))
+        print("norm phi",i,norm_polp80_costheta1_Z_qpos_Zcomgen[i])
+
+
+    for i in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetNbinsX()+1):  
+        for j in range(0,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetNbinsX()+1):
+            if norm_polp80_costheta1_Z_qpos_Zcomgen[j]!=0:
+                h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.SetBinContent(i,j,h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetBinContent(i,j)/norm_polp80_costheta1_Z_qpos_Zcomgen[j])
+            norm_polp80_costheta1_Z_qpos_Zcomtest[j]+=h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetBinContent(i,j)
+
+    print("norm test phi",norm_polp80_costheta1_Z_qpos_Zcomtest)
+
+    #h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_
+
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetXaxis().SetTitle("#phi^{reco} [#circ]")
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.GetYaxis().SetTitle("#phi^{parton} [#circ]")
+
+    canvas_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80 = setUpperCanvasWColz("normed_parton_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_epvs_costheta1_Z_qpos_Zcom__polp80");
+    canvas_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80.cd();
+    #gPad.SetRightMargin(0.18)
+    h_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80_.Draw("colz")
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2_noLumi_normed,y2_noLumi,label3_noLumi);
+    canvas_normed_parton_phi_plane_Z_qpos_vs_plane_H_ep_vs_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_polp80.Print("h_recojet_phi_plane_rj2_pos_sj_jetChargeE_0_30_vs_plane_rj1_ep_vs_parton_phi_plane_Z_qpos_vs_plane_H_ep__polp80_normed.eps")
+
+
+
+
+    file_polm80_HZ_full_withParton_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190709Prod/VLC7VtxRFJVLC7/polm80/test_hzqq_AnalysisBaselineHistos_noCuts_EThetaVar_withSignalHistos.root")
     h_HZqq_parton_sqrtS_polm80_=file_polm80_HZ_full_withParton_.Get("h_HZqq_signal_1D_sqrtS_part");
     h_HZqq_parton_sqrtS_polm80_.GetXaxis().SetTitle("#sqrt{s}_{parton} [GeV]");
     h_HZqq_parton_sqrtS_polm80_.GetYaxis().SetTitle("Events");
@@ -5255,6 +5508,7 @@ def process_files():
 
     h_HZqq_recoTot_isoPh_high_sqrtS_polm80_=file_polm80_HZ_full_withParton_.Get("h_HZqq_signal_1D_sqrtS_recoTot_isoPh_high_sqrtS");
     h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.GetXaxis().SetTitle("#sqrt{s}_{reco} [GeV]");
+    h_HZqq_recoTot_isoPh_high_sqrtS_polm80_ .GetYaxis().SetTitle("Events");
     h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.SetLineColor(kBlue)
     h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.SetLineWidth(3)
     h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.SetLineStyle(2)
@@ -5265,10 +5519,12 @@ def process_files():
     h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.Rebin(2)
     h_HZqq_recoTot_isoPh_EMiss_high_sqrtS_polm80_.Rebin(2)
     #175 for bbar only
-    h_HZqq_reco_j1_j2_EMiss_high_sqrtS_polm80_.SetMaximum(250)
+    #h_HZqq_reco_j1_j2_EMiss_high_sqrtS_polm80_.SetMaximum(250)
 
     canvas_HZqq_reco_sqrtS_polm80 = setUpperCanvas("canvas_HZqq_reco_sqrtS_polm80")
     canvas_HZqq_reco_sqrtS_polm80.cd()
+
+    h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.SetMaximum(175)
 
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_=TLegend(0.60,0.63,0.90,0.88);
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetBorderSize(0);
@@ -5282,16 +5538,16 @@ def process_files():
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetFillColor(0);
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetFillStyle(0);
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetHeader("#sqrt{s}_{reco}>2500 GeV");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_reco_j1_j2_EMiss_high_sqrtS_polm80_.DrawCopy("hist"),"jets,corr");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_reco_j1_j2_high_sqrtS_polm80_.DrawCopy("hist,same"),"jets, orig");
+    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.DrawCopy("hist"),"all PFOs, orig");
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_recoTot_isoPh_EMiss_high_sqrtS_polm80_.DrawCopy("hist,same"),"all PFOs, corr");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.DrawCopy("hist,same"),"all PFOs, orig");
+    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_reco_j1_j2_high_sqrtS_polm80_.DrawCopy("hist,same"),"jets, orig");
+    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_reco_j1_j2_EMiss_high_sqrtS_polm80_.DrawCopy("hist,same"),"jets, corr");
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.Draw();
 
 
     l.DrawLatex(x,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_HZqq_reco_sqrtS_polm80.Print("h_HZqq_AllEvents_reco_sqrtS_polm80.eps")
+    canvas_HZqq_reco_sqrtS_polm80.Print("h_HZqq_reco_sqrtS_polm80.eps")
 
 
     h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_EMiss_part2500_polm80_=file_polm80_HZ_full_withParton_.Get("h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_EMiss_part2500");
@@ -5312,6 +5568,7 @@ def process_files():
 
     h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_=file_polm80_HZ_full_withParton_.Get("h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_part2500");
     h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.GetXaxis().SetTitle("(#sqrt{s}_{part}-#sqrt{s}_{reco})/#sqrt{s}_{part}");
+    h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.GetYaxis().SetTitle("Events");
     h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.SetLineColor(kBlue)
     h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.SetLineWidth(3)
     h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.SetLineStyle(2)
@@ -5325,28 +5582,31 @@ def process_files():
     canvas_HZqq_delta_rel_sqrtS_polm80 = setUpperCanvas("canvas_HZqq_delta_rel_sqrtS_polm80")
     canvas_HZqq_delta_rel_sqrtS_polm80.cd()
 
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_=TLegend(0.60,0.63,0.90,0.88);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetBorderSize(0);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetTextAlign(12);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetTextSize(0.050);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetTextFont(42);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetMargin(0.15);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetLineColor(1);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetLineStyle(1);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetLineWidth(1);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetFillColor(0);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetFillStyle(0);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetHeader("#sqrt{s}_{reco}>2500 GeV");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_EMiss_part2500_polm80_.DrawCopy("hist"),"jets,corr");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_part2500_polm80_.DrawCopy("hist,same"),"jets, orig");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_EMiss_high_sqrtS_polm80_.DrawCopy("hist,same"),"all PFOs, corr");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.DrawCopy("hist,same"),"all PFOs, orig");
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.Draw();
+    h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.SetMaximum(200)
+    #h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.SetMaximum(h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_EMiss_part2500_polm80_.GetMaximum())
+
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_=TLegend(0.60,0.63,0.90,0.88);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetBorderSize(0);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetTextAlign(12);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetTextSize(0.050);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetTextFont(42);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetMargin(0.15);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetLineColor(1);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetLineStyle(1);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetLineWidth(1);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetFillColor(0);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetFillStyle(0);
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetHeader("#sqrt{s}_{reco}>2500 GeV");
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.DrawCopy("hist"),"all PFOs, orig");
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_EMiss_high_sqrtS_polm80_.DrawCopy("hist,same"),"all PFOs, corr");
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_part2500_polm80_.DrawCopy("hist,same"),"jets, orig");
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_EMiss_part2500_polm80_.DrawCopy("hist,same"),"jets, corr");
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.Draw();
 
 
     l.DrawLatex(x,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_HZqq_delta_rel_sqrtS_polm80.Print("h_HZqq_AllEvents_delta_rel_sqrtS_polm80.eps")
+    canvas_HZqq_delta_rel_sqrtS_polm80.Print("h_HZqq_delta_rel_sqrtS_polm80.eps")
 
     """   canvas_h_SIG_BG_jet1_tau21_polp80_massCuts_thstack.Print("h_jet1_tau21_polp80_ee_qqqqqq_qqqq_qq_and_hzqq.eps")    file_polp80_ee_qqqqqqqqqqqq_SignalHistos_partonInfo_=root.TFile.Open("/eos/user/w/weberma2/HistoFiles/ee_qqqqqqqqqqqqAnalyzer/190709Prod/VLC7VtxRFJVLC7/polp80/MVATrainingTrees_dm35_June24/MVATrainingReader_hzqqqqqqqqqqqq_AllEvents_histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_AnglesMETProj_AllEvents.root")
     h_hzqqqqqqqqqqqq_AllEvents_BDT_polp80_recojet_BTag1_rj2_pos_sj_jetChargeE_0_30_rj2com_fake=file_polp80_ee_qqqqqqqqqqqq_SignalHistos_AllEvents_.Get("0.25/h_parton_cosBTag1_Z_qpos_Zcom_miss_HbbSelection");
