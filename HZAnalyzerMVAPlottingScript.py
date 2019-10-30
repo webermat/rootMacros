@@ -3415,10 +3415,10 @@ def process_files():
 
 
     h_reco_y32_HZ_polm80_AllEvents_massCuts_=file_polm80_HZ_AllEvents_massCuts_.Get("h_reco_y32");
-    h_reco_y32_HZ_polm80_AllEvents_massCuts_.GetXaxis().SetTitle("y_{32}");
+    h_reco_y32_HZ_polm80_AllEvents_massCuts_.GetXaxis().SetTitle("y_{23}");
     h_reco_y32_HZ_polm80_AllEvents_massCuts_.SetLineWidth(3);
     h_reco_y32_HZ_polm80_massCuts_=file_polm80_HZ_massCuts_.Get("h_reco_y32");
-    h_reco_y32_HZ_polm80_massCuts_.GetXaxis().SetTitle("y_{32}");
+    h_reco_y32_HZ_polm80_massCuts_.GetXaxis().SetTitle("y_{23}");
     h_reco_y32_HZ_polm80_massCuts_.SetLineWidth(3);
     h_reco_y32_HZ_polm80_massCuts_.SetFillColor(kWhite)
     h_reco_y32_HZ_polm80_massCuts_.SetLineColor(kBlack)
@@ -3458,7 +3458,7 @@ def process_files():
     #h_tot_norm_reco_y32_BG.Draw("hist,e")
     #h_tot_norm_reco_y32_BG.GetXaxis().SetRangeUser(0,0.0045)
     hzqq_BG_reco_y32_polm80_massCuts_.Draw("hist");
-    hzqq_BG_reco_y32_polm80_massCuts_.GetXaxis().SetTitle("y_{32}")
+    hzqq_BG_reco_y32_polm80_massCuts_.GetXaxis().SetTitle("y_{23}")
     hzqq_BG_reco_y32_polm80_massCuts_.GetXaxis().SetRangeUser(0,0.0045)
     hzqq_BG_reco_y32_polm80_massCuts_.GetYaxis().SetTitle("A.U.");
     hzqq_BG_reco_y32_polm80_massCuts_.SetMaximum(200)
@@ -4486,10 +4486,10 @@ def process_files():
 
 
     h_reco_y32_HZ_polp80_AllEvents_massCuts_=file_polp80_HZ_AllEvents_massCuts_.Get("h_reco_y32");
-    h_reco_y32_HZ_polp80_AllEvents_massCuts_.GetXaxis().SetTitle("y_{32}");
+    h_reco_y32_HZ_polp80_AllEvents_massCuts_.GetXaxis().SetTitle("y_{23}");
     h_reco_y32_HZ_polp80_AllEvents_massCuts_.SetLineWidth(3);
     h_reco_y32_HZ_polp80_massCuts_=file_polp80_HZ_massCuts_.Get("h_reco_y32");
-    h_reco_y32_HZ_polp80_massCuts_.GetXaxis().SetTitle("y_{32}");
+    h_reco_y32_HZ_polp80_massCuts_.GetXaxis().SetTitle("y_{23}");
     h_reco_y32_HZ_polp80_massCuts_.SetLineWidth(3);
     h_reco_y32_HZ_polp80_massCuts_.SetFillColor(kWhite)
     h_reco_y32_HZ_polp80_massCuts_.SetLineColor(kBlack)
@@ -4529,7 +4529,7 @@ def process_files():
     #h_tot_norm_reco_y32_BG.Draw("hist,e")
     #h_tot_norm_reco_y32_BG.GetXaxis().SetRangeUser(0,0.0045)
     hzqq_BG_reco_y32_polp80_massCuts_.Draw("hist");
-    hzqq_BG_reco_y32_polp80_massCuts_.GetXaxis().SetTitle("y_{32}")
+    hzqq_BG_reco_y32_polp80_massCuts_.GetXaxis().SetTitle("y_{23}")
     hzqq_BG_reco_y32_polp80_massCuts_.GetXaxis().SetRangeUser(0,0.0045)
     hzqq_BG_reco_y32_polp80_massCuts_.GetYaxis().SetTitle("A.U.");
     hzqq_BG_reco_y32_polp80_massCuts_.SetMaximum(60)
