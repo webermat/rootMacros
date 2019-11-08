@@ -2715,7 +2715,7 @@ def process_files():
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetLineWidth(1);
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetFillColor(0);
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetFillStyle(0);
-    leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetHeader("#sqrt{s}_{reco}>2500 GeV");
+    leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.SetHeader("#sqrt{s}>2500 GeV");
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_H_matched_HZ_polm80_.DrawCopy("hist"),"H jet, corr");
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_H_matched_orig_HZ_polm80_.DrawCopy("hist,same"),"H jet, orig");
     leg_hzqq_SIG_H_Z_mass_comp_polm80_noMassCuts_.AddEntry(h_mass_Z_matched_HZ_polm80_.DrawCopy("hist,same"),"Z jet, corr");
@@ -5537,7 +5537,7 @@ def process_files():
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetLineWidth(1);
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetFillColor(0);
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetFillStyle(0);
-    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetHeader("#sqrt{s}_{reco}>2500 GeV");
+    leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.SetHeader("#sqrt{s}_{part}>2500 GeV");
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_recoTot_isoPh_high_sqrtS_polm80_.DrawCopy("hist"),"all PFOs, orig");
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_recoTot_isoPh_EMiss_high_sqrtS_polm80_.DrawCopy("hist,same"),"all PFOs, corr");
     leg_hzqq_SIG_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_reco_j1_j2_high_sqrtS_polm80_.DrawCopy("hist,same"),"jets, orig");
@@ -5596,7 +5596,7 @@ def process_files():
     leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetLineWidth(1);
     leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetFillColor(0);
     leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetFillStyle(0);
-    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetHeader("#sqrt{s}_{reco}>2500 GeV");
+    leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.SetHeader("#sqrt{s}_{part}>2500 GeV");
     leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_high_sqrtS_polm80_.DrawCopy("hist"),"all PFOs, orig");
     leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_recoTot_isoPh_EMiss_high_sqrtS_polm80_.DrawCopy("hist,same"),"all PFOs, corr");
     leg_hzqq_SIG_rel_sqrtS_reco_polm80_noMassCuts_.AddEntry(h_HZqq_signal_1D_delta_sqrtS_rel_reco_j1_j2_part2500_polm80_.DrawCopy("hist,same"),"jets, orig");
