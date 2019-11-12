@@ -33,7 +33,7 @@ fc = FileCatalogClient()
 
 
 meta = {} 
-meta['ProdID']='14343' 
+meta['ProdID']='14344' 
 meta['Datatype']='DST'
  
 res = fc.findFilesByMetadata(meta)
@@ -49,7 +49,7 @@ for lfn in lfns:
 #filelist2=filelist[0]
 
 #check if big radius in fastjetanalyzer indeed 0.7 or 1.0
-jobGroup = "HHZAnalyzer_19-09-04_hhz_14343_VLC7PFOs_NJet3_polm80"
+jobGroup = "HHZAnalyzer_19-09-04_hhz_14344_VLC10PFOs_NJet3_polp80"
 dirac = DiracILC(True,jobGroup+".rep")
 job = UserJob()
 #job.setExecutionEnv({'ROOT_INCLUDE_PATH':'./'})
@@ -57,6 +57,7 @@ job.setJobGroup(jobGroup)
 job.setOutputSandbox ( [ "*.log","*.out","*.py"] )
 job.setBannedSites(['LCG.IN2P3-CC.fr','OSG.UConn.us','LCG.Cracow.pl','OSG.MIT.us','LCG.Glasgow.uk','OSG.CIT.us','OSG.BNL.us','LCG.Brunel.uk','LCG.QMUL.uk'])
 #pay attention that the Zuds200 here is NOT changed
+#job.setInputSandbox( ["LFN:/ilc/user/w/webermat/190904/libClicPerformanceNJet2.tar.gz", "LFN:/ilc/user/w/webermat/190412/vtxprob.tar.gz","LFN:/ilc/user/w/webermat/190412/flavourTagging04-01_ct_90deg/lcfiweights.tar.gz"] ) 
 job.setInputSandbox( ["LFN:/ilc/user/w/webermat/190904/libClicPerformance.tar.gz", "LFN:/ilc/user/w/webermat/190412/vtxprob.tar.gz","LFN:/ilc/user/w/webermat/190412/flavourTagging04-01_ct_90deg/lcfiweights.tar.gz"] ) 
 job.setBannedSites(['LCG.INP3-CC.fr','OSG.UConn.us','LCG.Cracow.pl','OSG.MIT.us','LCG.Glasgow.uk','OSG.CIT.us','OSG.BNL.us','LCG.Brunel.uk','LCG.QMUL.uk','LCG.Oxford.uk'])
 job.setSplitInputData(filelist, numberOfFilesPerJob=50)
@@ -65,16 +66,16 @@ ma.setVersion('ILCSoft-2019-09-04_gcc62')
 #ma.setInputFile("LFN:/ilc/user/w/webermat/ddsimstdheptautau/ILC18-10-11_gcc62_CLIC_o3_v14/tautau200/ddsim_ILC181011_gcc62_tautau_200_CLIC_o3_v14_0%s.slcio"%(str(input_ind)))
 ma.setSteeringFile("/eos/user/w/weberma2/steeringFiles/testHHZAnalyzer.xml")
 ma.setDetectorModel("CLIC_o3_v14")
-HHZrootfilename2="HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"
-#RunStatRootfilename2="hhz _14343_RunEventStatisticsHistogram.root"
+HHZrootfilename2="HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"
+#RunStatRootfilename2="hhz _14344_RunEventStatisticsHistogram.root"
 #TrackPtMin default -1, saveMEInfo=true and Rmax=0.7
 ma.setExtraCLIArguments("--MyHHZAnalyzer.saveMEInfo=true --MyHHZAnalyzer.OutputRootFileName={HHZrootfilename}".format(HHZrootfilename=HHZrootfilename2))
 res=job.append(ma)
 if not res['OK']:
    print res['Message']
    exit()
-job.setOutputData([HHZrootfilename2],"HHZAnalyzer/ILC19-09-04_gcc62_CT/CLIC_o3_v14/VtxRFJVLC7_NJet3/polm80/hhz/14343","CERN-DST-EOS")
-print jobGroup,meta['ProdID'],"polm80","hhz"
+job.setOutputData([HHZrootfilename2],"HHZAnalyzer/ILC19-09-04_gcc62_CT/CLIC_o3_v14/VtxRFJVLC10_NJet3/polp80/hhz/14344","CERN-DST-EOS")
+print jobGroup,meta['ProdID'],"polp80","hhz"
 job.setName(jobGroup)
 job.dontPromptMe()
 job.submit(dirac)

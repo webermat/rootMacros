@@ -95,7 +95,7 @@ for file in file_processor_list:
    #filelist2=filelist[0]
    #print file[1],file[0],file[2]
    #check if big radius in fastjetanalyzer indeed 0.7 or 1.0
-   jobGroup = "HHZAnalyzer_19-09-04_%s_%s_VLC15PFOs_NJet2_%s"%(file[1],file[0],file[2])
+   jobGroup = "HHZAnalyzer_19-09-04_%s_%s_VLC10PFOs_NJet3_%s"%(file[1],file[0],file[2])
    dirac = DiracILC(True,jobGroup+".rep")
    job = UserJob()
    #job.setExecutionEnv({'ROOT_INCLUDE_PATH':'./'})
@@ -103,7 +103,8 @@ for file in file_processor_list:
    job.setOutputSandbox ( [ "*.log","*.out","*.py"] )
    job.setBannedSites(['LCG.IN2P3-CC.fr','OSG.UConn.us','LCG.Cracow.pl','OSG.MIT.us','LCG.Glasgow.uk','OSG.CIT.us','OSG.BNL.us','LCG.Brunel.uk','LCG.QMUL.uk'])
    #pay attention that the Zuds200 here is NOT changed
-   job.setInputSandbox( ["LFN:/ilc/user/w/webermat/190904/libClicPerformanceNJet2.tar.gz", "LFN:/ilc/user/w/webermat/190412/vtxprob.tar.gz","LFN:/ilc/user/w/webermat/190412/flavourTagging04-01_ct_90deg/lcfiweights.tar.gz"] ) 
+   #job.setInputSandbox( ["LFN:/ilc/user/w/webermat/190904/libClicPerformanceNJet2.tar.gz", "LFN:/ilc/user/w/webermat/190412/vtxprob.tar.gz","LFN:/ilc/user/w/webermat/190412/flavourTagging04-01_ct_90deg/lcfiweights.tar.gz"] ) 
+   job.setInputSandbox( ["LFN:/ilc/user/w/webermat/190904/libClicPerformance.tar.gz", "LFN:/ilc/user/w/webermat/190412/vtxprob.tar.gz","LFN:/ilc/user/w/webermat/190412/flavourTagging04-01_ct_90deg/lcfiweights.tar.gz"] ) 
    job.setBannedSites(['LCG.INP3-CC.fr','OSG.UConn.us','LCG.Cracow.pl','OSG.MIT.us','LCG.Glasgow.uk','OSG.CIT.us','OSG.BNL.us','LCG.Brunel.uk','LCG.QMUL.uk','LCG.Oxford.uk'])
    job.setSplitInputData(filelist, numberOfFilesPerJob=50)
    ma = Marlin()
@@ -111,7 +112,7 @@ for file in file_processor_list:
    #ma.setInputFile("LFN:/ilc/user/w/webermat/ddsimstdheptautau/ILC18-10-11_gcc62_CLIC_o3_v14/tautau200/ddsim_ILC181011_gcc62_tautau_200_CLIC_o3_v14_0%s.slcio"%(str(input_ind)))
    ma.setSteeringFile("/eos/user/w/weberma2/steeringFiles/testHHZAnalyzer.xml")
    ma.setDetectorModel("CLIC_o3_v14")
-   HHZrootfilename2="HHZStudy_%s_13395_%s_3TeV_wO_CLIC_o3_v14_DR7.root"%(file[1],file[2])
+   HHZrootfilename2="HHZStudy_%s_%s_%s_3TeV_wO_CLIC_o3_v14.root"%(file[1],file[0],file[2])
    #print HHZrootfilename2
    #TrackPtMin default -1, saveMEInfo=true and Rmax=0.7
    ma.setExtraCLIArguments("--MyHHZAnalyzer.saveMEInfo=false --MyHHZAnalyzer.OutputRootFileName={HHZrootfilename}".format(HHZrootfilename=HHZrootfilename2))
@@ -119,7 +120,7 @@ for file in file_processor_list:
    if not res['OK']:
       print res['Message']
       exit()
-   outputdirectory="HHZAnalyzer/ILC19-09-04_gcc62_CT/CLIC_o3_v14/VtxRFJVLC15_NJet2/%s/%s/%s"%(file[2],file[1],file[0])
+   outputdirectory="HHZAnalyzer/ILC19-09-04_gcc62_CT/CLIC_o3_v14/VtxRFJVLC10_NJet3/%s/%s/%s"%(file[2],file[1],file[0])
    #print outputdirectory
    job.setOutputData([HHZrootfilename2],outputdirectory,"CERN-DST-EOS")
    print jobGroup,meta['ProdID'],file[2],file[1]

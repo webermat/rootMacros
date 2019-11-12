@@ -49,7 +49,7 @@
    <!-- minimum energy for isolation checks on particle-->
    <parameter name="Emin" type="float">10.0</parameter>
    <!--jet parameters for filling vertexing and flavour tagging input, first radius -->
-   <parameter name="R" type="float">0.70</parameter>
+   <parameter name="R" type="float">1.00</parameter>
    <!--beta parameter-->
    <parameter name="beta" type="float">1.</parameter>
    <!--gamma parameter-->
@@ -130,15 +130,15 @@
 
 
   <!-- ========== Jet clustering for gg->hadrons removal ================================== -->
-  <processor name="MyFastJetProcessor" type="FastJetProcessor">
-    <parameter name="algorithm" type="StringVec"> ValenciaPlugin 0.7 1.0 1.0 </parameter>
-    <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 3</parameter>
+ <!-- <processor name="MyFastJetProcessor" type="FastJetProcessor">
+    <parameter name="algorithm" type="StringVec"> ValenciaPlugin 1.0 1.0 1.0 </parameter>
+    <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 2</parameter>
     <parameter name="recombinationScheme" type="string">E_scheme </parameter>
     <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> TightSelectedPandoraPFOs </parameter>
     <parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle">JetsAfterGamGamRemoval </parameter>
     <parameter name="storeParticlesInJets" type="boolean" > true </parameter>
     <parameter name="recParticleOut" type="string" lcioOutType="ReconstructedParticle"> PFOsFromJets </parameter>
-  </processor>
+  </processor>-->
 
   <!-- ========== Vertexing for flavour tagging (constrained) and vertex resolutions (unconstrained) ================================== -->
   <group name="Vertexing">
@@ -237,7 +237,7 @@
     <parameter name="JetClustering.AlphaParameter" type="double" value="1.0" />
     <parameter name="JetClustering.BetaParameter" type="double" value="1.0" />
     <parameter name="JetClustering.GammaParameter" type="double" value="1.0" />
-    <parameter name="JetClustering.RParameter" type="double" value="0.70" />
+    <parameter name="JetClustering.RParameter" type="double" value="1.00" />
     <parameter name="JetClustering.OutputJetStoresVertex" type="int" value="0" />
     <parameter name="JetClustering.YAddedForJetVertexLepton" type="int" value="0" />
     <parameter name="JetClustering.MuonIDExternal" type="int" value="0" />
@@ -328,6 +328,7 @@
 
 <global>
   <parameter name="LCIOInputFiles">  
+/eos/experiment/clicdp/grid/ilc/prod/clic/3tev/hhz/CLIC_o3_v14/DST/00014343/000/hhz_dst_14343_100.slcio  /eos/experiment/clicdp/grid/ilc/prod/clic/3tev/hhz/CLIC_o3_v14/DST/00014343/000/hhz_dst_14343_283.slcio /eos/experiment/clicdp/grid/ilc/prod/clic/3tev/hhz/CLIC_o3_v14/DST/00014343/000/hhz_dst_14343_101.slcio 
   </parameter>
   <!-- limit the number of processed records (run+evt): -->  
   <!--<parameter name="MaxRecordNumber" value="8" />  
@@ -369,7 +370,7 @@
     <!--true energy to save true boson leptons or ISR photons-->
     <parameter name="genTrueLepPhEMin" type="float">8.0</parameter>
     <!--bigger radius-->
-    <parameter name="R" type="float">0.70</parameter>
+    <parameter name="R" type="float">1.00</parameter>
     <!--beta parameter-->
     <parameter name="beta" type="float">1.</parameter>
     <!--gamma parameter-->
