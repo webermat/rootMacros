@@ -176,6 +176,14 @@ def fill_HHZ_histograms(file,xsec,hist_vec_reco_1D,lumi):
         tempH2_V2_q1=TLorentzVector(0,0,0,0)
         tempH2_V2_q2=TLorentzVector(0,0,0,0)
 
+        temp_true_inv=TLorentzVector(0,0,0,0)
+
+        true_inv_E=ientry.true_inv_E
+        true_inv_Px=ientry.true_inv_Px
+        true_inv_Py=ientry.true_inv_Py
+        true_inv_Pz=ientry.true_inv_Pz
+
+        temp_true_inv.SetPxPyPzE(true_inv_Px,true_inv_Py,true_inv_Pz,true_inv_E)
 
         H1H2_decays_bbar = True
         H1H2_decays_qqbar = True
@@ -294,13 +302,24 @@ def fill_HHZ_histograms(file,xsec,hist_vec_reco_1D,lumi):
         hist_vec_reco_1D[0].Fill(tempTotEventP4.M(),weight)
         hist_vec_reco_1D[42].Fill(tempTotEventP4HHZ.M(),weight)
         hist_vec_reco_1D[1].Fill(tempH1P4.E()+tempH2P4.E(),weight)
+
         if(tempH1P4.E()>tempH2P4.E()):
             hist_vec_reco_1D[2].Fill(tempH1P4.E(),weight)
             hist_vec_reco_1D[3].Fill(tempH2P4.E(),weight)
+            hist_vec_reco_1D[118].Fill(tempH1P4.P(),weight)
+            hist_vec_reco_1D[119].Fill(tempH2P4.P(),weight)
+            hist_vec_reco_1D[62].Fill(degrees(tempH1P4.Theta()),weight)
+            hist_vec_reco_1D[63].Fill(degrees(tempH2P4.Theta()),weight)
         else:
             hist_vec_reco_1D[2].Fill(tempH2P4.E(),weight)
             hist_vec_reco_1D[3].Fill(tempH1P4.E(),weight)
+            hist_vec_reco_1D[118].Fill(tempH2P4.P(),weight)
+            hist_vec_reco_1D[119].Fill(tempH1P4.P(),weight)
+            hist_vec_reco_1D[62].Fill(degrees(tempH2P4.Theta()),weight)
+            hist_vec_reco_1D[63].Fill(degrees(tempH1P4.Theta()),weight)
         hist_vec_reco_1D[4].Fill(tempZ_first.E(),weight)
+        hist_vec_reco_1D[120].Fill(tempZ_first.P(),weight)
+
 
         hist_vec_reco_1D[5].Fill((tempH1P4+tempH2P4).M(),weight)
         hist_vec_reco_1D[6].Fill(degrees((tempH1P4+tempH2P4).Angle(tempZ_first.Vect())),weight)
@@ -310,7 +329,8 @@ def fill_HHZ_histograms(file,xsec,hist_vec_reco_1D,lumi):
         hist_vec_reco_1D[10].Fill(degrees(DeltaPhi(tempH1P4.Phi(),tempH2P4.Phi())),weight)
         hist_vec_reco_1D[11].Fill(degrees(abs(tempH1P4.Theta()-tempH2P4.Theta())),weight)
         hist_vec_reco_1D[39].Fill(1.-cos(tempH1P4.Angle(tempH2P4.Vect())),weight)
- 
+        hist_vec_reco_1D[64].Fill(degrees(tempZP4.Theta()),weight)
+
         #for histogram filling: H1 energy> H2 energy
         if H1H2_decays_bbar:
             if(tempH1P4.E()>tempH2P4.E()):
@@ -364,69 +384,39 @@ def fill_HHZ_histograms(file,xsec,hist_vec_reco_1D,lumi):
                 hist_vec_reco_1D[59].Fill(1.-cos(tempZ_q_neg.Angle(tempZ_q_pos.Vect())),weight)
 
 
-    #59 done up to now
-    #hist_vec_HHZ_parton_list.append(h_d_ij_H1_bbbar)
-    #hist_vec_HHZ_parton_list.append(h_d_ij_H2_bbbar)
-
-
-
-    # 26 done up to here
-    #hist_vec_HHZ_parton_list.append(h_dalpha_max_allH_qqbar)
-    #hist_vec_HHZ_parton_list.append(h_dphi_max_allH_qqbar)
-    #hist_vec_HHZ_parton_list.append(h_dtheta_max_allH_qqbar)
-    #29 done here
-    #hist_vec_HHZ_parton_list.append(h_dalpha_max_allH_bbbar)
-    #hist_vec_HHZ_parton_list.append(h_dphi_max_allH_bbbar)
-    #hist_vec_HHZ_parton_list.append(h_dtheta_max_allH_bbbar)
-    #hist_vec_HHZ_parton_list.append(h_dalpha_allH_diboson_qqbar)
-    #hist_vec_HHZ_parton_list.append(h_dphi_allH_diboson_qqbar)
-    #34 done here
-    #hist_vec_HHZ_parton_list.append(h_dtheta_allH_diboson_qqbar)
-    #hist_vec_HHZ_parton_list.append(h_E_H1_over_E_allH)
-    #hist_vec_HHZ_parton_list.append(h_E_H1_over_E_allH_bbbar)
-    #hist_vec_HHZ_parton_list.append(h_E_H1_over_E_allH_qqbar)
-    #hist_vec_HHZ_parton_list.append(h_d_ij_H1_H2)
-    #39 done up to here
-    #hist_vec_HHZ_parton_list.append(h_d_ij_H1_qqbar)
-    #hist_vec_HHZ_parton_list.append(h_d_ij_H2_qqbar)
-    #hist_vec_HHZ_parton_list.append(h_dalpha_H_Z_min)
-    #hist_vec_HHZ_parton_list.append(h_dphi_H_Z_min)
-    #44 done up to here
-    #hist_vec_HHZ_parton_list.append(h_dtheta_H_Z_min)
-    #hist_vec_HHZ_parton_list.append(h_dalpha_H_Z_max)
-    #hist_vec_HHZ_parton_list.append(h_dphi_H_Z_max)
-    #hist_vec_HHZ_parton_list.append(h_dtheta_H_Z_max)
-    #hist_vec_HHZ_parton_list.append(h_Esum_Z_H_minAngle)
-    #49 done up to here --> dphi and dtheta for maximally angularly separated, but still check if it is more on phi or theta
-    #hist_vec_HHZ_parton_list.append(h_delta_Esum_Z_H_minAngle_min_E_H_Z_maxAngle)
-
-
-
-
         tempHClosest=TLorentzVector(0,0,0,0)
         tempHClosest=tempH1P4
         tempHFar=TLorentzVector(0,0,0,0)
         tempHFar=tempH2P4
         if tempH2P4.Angle(tempZ_first.Vect())<tempH1P4.Angle(tempZ_first.Vect()):
+            hist_vec_reco_1D[43].Fill(degrees(tempZ_first.Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[44].Fill(degrees(DeltaPhi(tempZ_first.Phi(),tempH2P4.Phi())),weight)
+            hist_vec_reco_1D[45].Fill(degrees(abs(tempZ_first.Theta()-tempH2P4.Theta())),weight)
+            hist_vec_reco_1D[46].Fill(degrees(tempZ_first.Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[47].Fill(degrees(DeltaPhi(tempZ_first.Phi(),tempH1P4.Phi())),weight)
+            hist_vec_reco_1D[48].Fill(degrees(abs(tempZ_first.Theta()-tempH1P4.Theta())),weight)
+            hist_vec_reco_1D[49].Fill((tempZ_first+tempH2P4).E(),weight)
+            hist_vec_reco_1D[50].Fill((tempZ_first+tempH2P4).E()-tempH1P4.E(),weight)
+
             tempHClosest=tempH2P4
             tempHFar=tempH1P4
             #checked that H2 closer to Z than H1 to Z
             if tempH2P4.Angle(tempH1P4.Vect())< tempH2P4.Angle(tempZ_first.Vect()):
                 #H1 closer to H2 than H2 to Z
-                hist_vec_reco_1D[51].Fill(degrees(tempH1P4.Angle(tempH2P4.Vect())))
+                hist_vec_reco_1D[51].Fill(degrees(tempH1P4.Angle(tempH2P4.Vect())),weight)
                 hist_vec_reco_1D[52].Fill(degrees(DeltaPhi(tempH1P4.Phi(),tempH2P4.Phi())),weight)
                 hist_vec_reco_1D[53].Fill(degrees(abs(tempH1P4.Theta()-tempH2P4.Theta())),weight)
                 hist_vec_reco_1D[57].Fill(1-cos(tempH1P4.Angle(tempH2P4.Vect())),weight)
             else:
                 #H2 to Z closest angle
-                hist_vec_reco_1D[51].Fill(degrees(tempH2P4.Angle(tempZ_first.Vect())))
+                hist_vec_reco_1D[51].Fill(degrees(tempH2P4.Angle(tempZ_first.Vect())),weight)
                 hist_vec_reco_1D[52].Fill(degrees(DeltaPhi(tempH2P4.Phi(),tempZ_first.Phi())),weight)
                 hist_vec_reco_1D[53].Fill(degrees(abs(tempH2P4.Theta()-tempZ_first.Theta())),weight)
                 hist_vec_reco_1D[57].Fill(1-cos(tempZ_first.Angle(tempH2P4.Vect())),weight)
                 #H1 and H2 further appart than H1 to Z
                 if tempH2P4.Angle(tempH1P4.Vect())> tempH1P4.Angle(tempZ_first.Vect()):
                     #H1 and H2 further appart than H1 to Z
-                    hist_vec_reco_1D[54].Fill(degrees(tempH1P4.Angle(tempH2P4.Vect())))
+                    hist_vec_reco_1D[54].Fill(degrees(tempH1P4.Angle(tempH2P4.Vect())),weight)
                     hist_vec_reco_1D[55].Fill(degrees(DeltaPhi(tempH1P4.Phi(),tempH2P4.Phi())),weight)
                     hist_vec_reco_1D[56].Fill(degrees(abs(tempH1P4.Theta()-tempH2P4.Theta())),weight)
                     hist_vec_reco_1D[58].Fill(1-cos(tempH1P4.Angle(tempH2P4.Vect())),weight)
@@ -438,6 +428,14 @@ def fill_HHZ_histograms(file,xsec,hist_vec_reco_1D,lumi):
                     hist_vec_reco_1D[58].Fill(1-cos(tempH1P4.Angle(tempZ_first.Vect())),weight)
         else:
             #clear H1 closer to Z than H2 to Z
+            hist_vec_reco_1D[43].Fill(degrees(tempZ_first.Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[44].Fill(degrees(DeltaPhi(tempZ_first.Phi(),tempH1P4.Phi())),weight)
+            hist_vec_reco_1D[45].Fill(degrees(abs(tempZ_first.Theta()-tempH1P4.Theta())),weight)
+            hist_vec_reco_1D[46].Fill(degrees(tempZ_first.Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[47].Fill(degrees(DeltaPhi(tempZ_first.Phi(),tempH2P4.Phi())),weight)
+            hist_vec_reco_1D[48].Fill(degrees(abs(tempZ_first.Theta()-tempH2P4.Theta())),weight)
+            hist_vec_reco_1D[49].Fill((tempZ_first+tempH1P4).E(),weight)
+            hist_vec_reco_1D[50].Fill((tempZ_first+tempH1P4).E()-tempH2P4.E(),weight)
             if tempH2P4.Angle(tempH1P4.Vect())< tempH1P4.Angle(tempZ_first.Vect()):
                 #H1 closer to H2 than H1 to Z
                 hist_vec_reco_1D[51].Fill(degrees(tempH1P4.Angle(tempH2P4.Vect())))
@@ -464,17 +462,192 @@ def fill_HHZ_histograms(file,xsec,hist_vec_reco_1D,lumi):
                     hist_vec_reco_1D[56].Fill(degrees(abs(tempH2P4.Theta()-tempZ_first.Theta())),weight)
                     hist_vec_reco_1D[58].Fill(1-cos(tempH2P4.Angle(tempZ_first.Vect())),weight)
 
+        genjet_E=ientry.genjet_E
+        genjet_Px=ientry.genjet_Px
+        genjet_Py=ientry.genjet_Py
+        genjet_Pz=ientry.genjet_Pz
+
+        temp_gj_sum=TLorentzVector(0,0,0,0)
+
+        for ind in range(len(genjet_E)):
+            temp_gj=TLorentzVector(0,0,0,0)
+            temp_gj.SetPxPyPzE(genjet_Px[ind],genjet_Py[ind],genjet_Pz[ind],genjet_E[ind])
+            temp_gj_sum+=temp_gj
+            #print' inex/E/sumE ',ind,temp_gj.E(),temp_gj_sum.E()
+        
+
+        hist_vec_reco_1D[113].Fill(temp_gj_sum.M(),weight)
+        hist_vec_reco_1D[115].Fill((temp_true_inv+temp_gj_sum).M(),weight)
+
         #fill now bbar only histos
         if(H1H2_decays_bbar==False):
             continue;
+        if(Z_decays_qqbar==False):
+            continue;
         num_count+=1
 
+        hist_vec_reco_1D[117].Fill(tempTotEventP4.M(),weight)
+
+        recojet_E=ientry.recojet_E
+        recojet_Px=ientry.recojet_Px
+        recojet_Py=ientry.recojet_Py
+        recojet_Pz=ientry.recojet_Pz
+
+        if len(recojet_E)<3:
+            print 'too small recojet length',len(recojetE)<3
+
+        recojet_vector=[]
+        temp_rj0=TLorentzVector(0,0,0,0)
+        temp_rj0.SetPxPyPzE(recojet_Px[0],recojet_Py[0],recojet_Pz[0],recojet_E[0])
+        recojet_vector.append(temp_rj0)
+        temp_rj1=TLorentzVector(0,0,0,0)
+        temp_rj1.SetPxPyPzE(recojet_Px[1],recojet_Py[1],recojet_Pz[1],recojet_E[1])
+        recojet_vector.append(temp_rj1)
+        temp_rj2=TLorentzVector(0,0,0,0)
+        temp_rj2.SetPxPyPzE(recojet_Px[2],recojet_Py[2],recojet_Pz[2],recojet_E[2])
+        recojet_vector.append(temp_rj2)
+        ind_rj_mass1=-1
+        ind_rj_mass2=-1
+        ind_rj_mass3=-1
+        if recojet_vector[0].M()>recojet_vector[1].M():
+            if recojet_vector[1].M()>recojet_vector[2].M():
+                ind_rj_mass1=0
+                ind_rj_mass2=1
+                ind_rj_mass3=2
+            else:
+                if recojet_vector[0].M()>recojet_vector[2].M():
+                    ind_rj_mass1=0
+                    ind_rj_mass2=2
+                    ind_rj_mass3=1
+                else:
+                    ind_rj_mass1=2
+                    ind_rj_mass2=0
+                    ind_rj_mass3=1
+        else: 
+            if recojet_vector[0].M()>recojet_vector[2].M():
+                ind_rj_mass1=1
+                ind_rj_mass2=0
+                ind_rj_mass3=2
+            else:
+                if recojet_vector[2].M()>recojet_vector[1].M():
+                    ind_rj_mass1=2
+                    ind_rj_mass2=1
+                    ind_rj_mass3=0
+                else:
+                    ind_rj_mass1=1
+                    ind_rj_mass2=2
+                    ind_rj_mass3=0
 
 
+        if recojet_vector[ind_rj_mass1].M()<recojet_vector[ind_rj_mass2].M() or recojet_vector[ind_rj_mass1].M()<recojet_vector[ind_rj_mass3].M() or recojet_vector[ind_rj_mass2].M()<recojet_vector[ind_rj_mass3].M():
+            print 'something is wrong in the mass ordering',recojet_vector[ind_rj_mass1].M(),recojet_vector[ind_rj_mass2].M(),recojet_vector[ind_rj_mass3].M()
 
+        if(tempH1P4.E()>tempH2P4.E()):
+            hist_vec_reco_1D[77].Fill(degrees(recojet_vector[ind_rj_mass1].Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[78].Fill(degrees(recojet_vector[ind_rj_mass1].Angle(tempH2P4.Vect())),weight)
 
+            hist_vec_reco_1D[80].Fill(degrees(recojet_vector[ind_rj_mass2].Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[81].Fill(degrees(recojet_vector[ind_rj_mass2].Angle(tempH2P4.Vect())),weight)
 
-    print 'total events after all running signal histos', hist_vec_reco_1D[0].Integral(0,hist_vec_reco_1D[0].GetNbinsX()+1)," ",num_entry,hist_vec_reco_1D[0].GetEntries(),num_count, num_total_exception
+            hist_vec_reco_1D[83].Fill(degrees(recojet_vector[ind_rj_mass3].Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[84].Fill(degrees(recojet_vector[ind_rj_mass3].Angle(tempH2P4.Vect())),weight)
+        else:
+            hist_vec_reco_1D[77].Fill(degrees(recojet_vector[ind_rj_mass1].Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[78].Fill(degrees(recojet_vector[ind_rj_mass1].Angle(tempH1P4.Vect())),weight)
+
+            hist_vec_reco_1D[80].Fill(degrees(recojet_vector[ind_rj_mass2].Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[81].Fill(degrees(recojet_vector[ind_rj_mass2].Angle(tempH1P4.Vect())),weight)
+
+            hist_vec_reco_1D[83].Fill(degrees(recojet_vector[ind_rj_mass3].Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[84].Fill(degrees(recojet_vector[ind_rj_mass3].Angle(tempH1P4.Vect())),weight)
+
+        hist_vec_reco_1D[79].Fill(degrees(recojet_vector[ind_rj_mass2].Angle(tempZP4.Vect())),weight)
+        hist_vec_reco_1D[82].Fill(degrees(recojet_vector[ind_rj_mass2].Angle(tempZP4.Vect())),weight)
+        hist_vec_reco_1D[85].Fill(degrees(recojet_vector[ind_rj_mass3].Angle(tempZP4.Vect())),weight)
+
+        hist_vec_reco_1D[86].Fill(recojet_vector[ind_rj_mass1].M(),weight)
+        hist_vec_reco_1D[87].Fill(recojet_vector[ind_rj_mass2].M(),weight)
+        hist_vec_reco_1D[88].Fill(recojet_vector[ind_rj_mass3].M(),weight)
+
+        hist_vec_reco_1D[114].Fill(temp_gj_sum.M(),weight)
+        hist_vec_reco_1D[116].Fill((temp_true_inv+temp_gj_sum).M(),weight)
+
+        if len(genjet_E)<3:
+            print 'too small genjet length',len(genjetE)<3
+
+        genjet_vector=[]
+        temp_gj0=TLorentzVector(0,0,0,0)
+        temp_gj0.SetPxPyPzE(genjet_Px[0],genjet_Py[0],genjet_Pz[0],genjet_E[0])
+        genjet_vector.append(temp_gj0)
+        temp_gj1=TLorentzVector(0,0,0,0)
+        temp_gj1.SetPxPyPzE(genjet_Px[1],genjet_Py[1],genjet_Pz[1],genjet_E[1])
+        genjet_vector.append(temp_gj1)
+        temp_gj2=TLorentzVector(0,0,0,0)
+        temp_gj2.SetPxPyPzE(genjet_Px[2],genjet_Py[2],genjet_Pz[2],genjet_E[2])
+        genjet_vector.append(temp_gj2)
+        ind_gj_mass1=-1
+        ind_gj_mass2=-1
+        ind_gj_mass3=-1
+        if genjet_vector[0].M()>genjet_vector[1].M():
+            if genjet_vector[1].M()>genjet_vector[2].M():
+                ind_gj_mass1=0
+                ind_gj_mass2=1
+                ind_gj_mass3=2
+            else:
+                if genjet_vector[0].M()>genjet_vector[2].M():
+                    ind_gj_mass1=0
+                    ind_gj_mass2=2
+                    ind_gj_mass3=1
+                else:
+                    ind_gj_mass1=2
+                    ind_gj_mass2=0
+                    ind_gj_mass3=1
+        else: 
+            if genjet_vector[0].M()>genjet_vector[2].M():
+                ind_gj_mass1=1
+                ind_gj_mass2=0
+                ind_gj_mass3=2
+            else:
+                if genjet_vector[2].M()>genjet_vector[1].M():
+                    ind_gj_mass1=2
+                    ind_gj_mass2=1
+                    ind_gj_mass3=0
+                else:
+                    ind_gj_mass1=1
+                    ind_gj_mass2=2
+                    ind_gj_mass3=0
+
+        if genjet_vector[ind_gj_mass1].M()<genjet_vector[ind_gj_mass2].M() or genjet_vector[ind_gj_mass1].M()<genjet_vector[ind_gj_mass3].M() or genjet_vector[ind_gj_mass2].M()<genjet_vector[ind_gj_mass3].M():
+            print 'something is wrong in the mass ordering',genjet_vector[ind_gj_mass1].M(),genjet_vector[ind_gj_mass2].M(),genjet_vector[ind_gj_mass3].M()
+
+        if(tempH1P4.E()>tempH2P4.E()):
+            hist_vec_reco_1D[101].Fill(degrees(genjet_vector[ind_gj_mass1].Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[102].Fill(degrees(genjet_vector[ind_gj_mass1].Angle(tempH2P4.Vect())),weight)
+
+            hist_vec_reco_1D[107].Fill(degrees(genjet_vector[ind_gj_mass2].Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[108].Fill(degrees(genjet_vector[ind_gj_mass2].Angle(tempH2P4.Vect())),weight)
+
+            hist_vec_reco_1D[83].Fill(degrees(genjet_vector[ind_gj_mass3].Angle(tempH1P4.Vect())),weight)
+            hist_vec_reco_1D[84].Fill(degrees(genjet_vector[ind_gj_mass3].Angle(tempH2P4.Vect())),weight)
+        else:
+            hist_vec_reco_1D[101].Fill(degrees(genjet_vector[ind_gj_mass1].Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[102].Fill(degrees(genjet_vector[ind_gj_mass1].Angle(tempH1P4.Vect())),weight)
+
+            hist_vec_reco_1D[104].Fill(degrees(genjet_vector[ind_gj_mass2].Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[105].Fill(degrees(genjet_vector[ind_gj_mass2].Angle(tempH1P4.Vect())),weight)
+
+            hist_vec_reco_1D[107].Fill(degrees(genjet_vector[ind_gj_mass3].Angle(tempH2P4.Vect())),weight)
+            hist_vec_reco_1D[108].Fill(degrees(genjet_vector[ind_gj_mass3].Angle(tempH1P4.Vect())),weight)
+
+        hist_vec_reco_1D[103].Fill(degrees(genjet_vector[ind_gj_mass2].Angle(tempZP4.Vect())),weight)
+        hist_vec_reco_1D[106].Fill(degrees(genjet_vector[ind_gj_mass2].Angle(tempZP4.Vect())),weight)
+        hist_vec_reco_1D[109].Fill(degrees(genjet_vector[ind_gj_mass3].Angle(tempZP4.Vect())),weight)
+
+        hist_vec_reco_1D[110].Fill(genjet_vector[ind_gj_mass1].M(),weight)
+        hist_vec_reco_1D[111].Fill(genjet_vector[ind_gj_mass2].M(),weight)
+        hist_vec_reco_1D[112].Fill(genjet_vector[ind_gj_mass3].M(),weight)
+
+    print 'total events after all running signal histos', hist_vec_reco_1D[0].Integral(0,hist_vec_reco_1D[0].GetNbinsX()+1)," ",hist_vec_reco_1D[110].Integral(0,hist_vec_reco_1D[110].GetNbinsX()+1),num_entry,hist_vec_reco_1D[0].GetEntries(),num_count, num_total_exception
     return None
 
 
@@ -497,12 +670,22 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_xsec_,i_lumi_):
     lim_energy_high=3050.;
     
     h_sqrtS_e1_e2_effective = TH1F("h_sqrtS_e1_e2_effective","", n_bins_high, lim_energy_low,lim_energy_high);
+    h_sqrtS_e1_e2_effective_HHZ_bbbbqq = TH1F("h_sqrtS_e1_e2_effective_HHZ_bbbbqq","", n_bins_high, lim_energy_low,lim_energy_high);
     h_sqrtS_HHZ = TH1F("h_sqrtS_HHZ","", n_bins_high, lim_energy_low,lim_energy_high);
     h_H1_H2_E_sum = TH1F("h_H1_H2_E_sum","", n_bins_high, lim_energy_low,lim_energy_high);
     h_H1_E = TH1F("h_H1_E","", n_bins_high, lim_energy_low,0.5*lim_energy_high);
     h_H2_E = TH1F("h_H2_E","", n_bins_high, lim_energy_low,0.5*lim_energy_high);
-    h_Z_E = TH1F("h_Z_E","", n_bins_high, lim_energy_low,lim_energy_high);
-    
+    h_Z_E = TH1F("h_Z_E","", n_bins_high, lim_energy_low,0.5*lim_energy_high);
+
+    h_H1_P = TH1F("h_H1_P","", n_bins_high, lim_energy_low,0.5*lim_energy_high);
+    h_H2_P = TH1F("h_H2_P","", n_bins_high, lim_energy_low,0.5*lim_energy_high);
+    h_Z_P = TH1F("h_Z_P","", n_bins_high, lim_energy_low,0.5*lim_energy_high);
+
+    h_sqrtS_gj_sum_all = TH1F("h_sqrtS_gj_sum_all","", n_bins_high, lim_energy_low,lim_energy_high);
+    h_sqrtS_gj_sum_HHZ_bbbbqq = TH1F("h_sqrtS_gj_sum_HHZ_bbbbqq ","", n_bins_high, lim_energy_low,lim_energy_high);
+    h_sqrtS_gj_sum_plus_InvVec_all = TH1F("h_sqrtS_gj_sum_plus_InvVec_all","", n_bins_high, lim_energy_low,lim_energy_high);
+    h_sqrtS_gj_sum_plus_InvVec_HHZ_bbbbqq = TH1F("h_sqrtS_gj_sum_plus_InvVec_HHZ_bbbbqq ","", n_bins_high, lim_energy_low,lim_energy_high);
+
     lim_mass_low=0;
     lim_mass_high=500;
     
@@ -510,6 +693,10 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_xsec_,i_lumi_):
     
     lim_dalpha_low=0.;
     lim_dalpha_high=180.;
+
+    h_theta_H1 = TH1F("h_theta_H1","", n_bins_high, lim_dalpha_low,lim_dalpha_high);
+    h_theta_H2 = TH1F("h_theta_H2","", n_bins_high, lim_dalpha_low,lim_dalpha_high);
+    h_theta_Z = TH1F("h_theta_Z","", n_bins_high, lim_dalpha_low,lim_dalpha_high);
     
     h_dalpha_H1_H2_comb_vs_Z = TH1F("h_dalpha_H1_H2_comb_vs_Z","", n_bins_high, lim_dalpha_low,lim_dalpha_high);
     h_dphi_H1_H2_comb_vs_Z = TH1F("h_dphi_H1_H2_comb_vs_Z","", n_bins_high, lim_dalpha_low,lim_dalpha_high);
@@ -581,6 +768,8 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_xsec_,i_lumi_):
     h_d_ij_H2_bbbar = TH1F("h_d_ij_H2_bbbar","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
 
     h_d_ij_H1_H2 = TH1F("h_d_ij_H1_H2","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
+    h_d_ij_H1_Z = TH1F("h_d_ij_H1_Z","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
+    h_d_ij_H2_Z = TH1F("h_d_ij_H2_Z","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
     h_d_ij_H1_qqbar = TH1F("h_d_ij_H1_qqbar","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
     h_d_ij_H2_qqbar = TH1F("h_d_ij_H2_qqbar","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
     h_d_ij_Z_qqbar = TH1F("h_d_ij_Z_qqbar","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
@@ -595,6 +784,75 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_xsec_,i_lumi_):
 
     h_d_ij_min_V1_V2 = TH1F("h_d_ij_min_V1_V2","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
     h_d_ij_max_V1_V2 = TH1F("h_d_ij_max_V1_V2","", n_bins_high, lim_d_ij_qqbar_low,lim_d_ij_qqbar_high);
+
+    lim_angle_low=0
+    lim_angle_high=180
+
+    h_dalpha_H1_rj_HHZ_bbbbqq = TH1F("h_dalpha_H1_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dphi_H1_rj_HHZ_bbbbqq = TH1F("h_dphi_H1_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dtheta_H1_rj_HHZ_bbbbqq = TH1F("h_dtheta_H1_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_H2_rj_HHZ_bbbbqq = TH1F("h_dalpha_H2_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dphi_H2_rj_HHZ_bbbbqq = TH1F("h_dphi_H2_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dtheta_H2_rj_HHZ_bbbbqq = TH1F("h_dtheta_H2_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_Z_rj_HHZ_bbbbqq = TH1F("h_dalpha_Z_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dphi_Z_rj_HHZ_bbbbqq = TH1F("h_dphi_Z_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dtheta_Z_rj_HHZ_bbbbqq = TH1F("h_dtheta_Z_rj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_H1_gj_HHZ_bbbbqq = TH1F("h_dalpha_H1_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dphi_H1_gj_HHZ_bbbbqq = TH1F("h_dphi_H1_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dtheta_H1_gj_HHZ_bbbbqq = TH1F("h_dtheta_H1_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_H2_gj_HHZ_bbbbqq = TH1F("h_dalpha_H2_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dphi_H2_gj_HHZ_bbbbqq = TH1F("h_dphi_H2_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dtheta_H2_gj_HHZ_bbbbqq = TH1F("h_dtheta_H2_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_Z_gj_HHZ_bbbbqq = TH1F("h_dalpha_Z_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dphi_Z_gj_HHZ_bbbbqq = TH1F("h_dphi_Z_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dtheta_Z_gj_HHZ_bbbbqq = TH1F("h_dtheta_Z_gj_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    lim_mass_low=0
+    lim_mass_high=250
+    h_mass_Z_rj_HHZ_bbbbqq = TH1F("h_mass_Z_rj_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_H1_rj_HHZ_bbbbqq = TH1F("h_mass_H1_rj_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_H2_rj_HHZ_bbbbqq = TH1F("h_mass_H2_rj_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+
+    h_dalpha_rj1_H1_HHZ_bbbbqq = TH1F("h_dalpha_rj1_H1_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_rj1_H2_HHZ_bbbbqq = TH1F("h_dalpha_rj1_H2_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_rj1_Z_HHZ_bbbbqq = TH1F("h_dalpha_rj1_Z_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_rj2_H1_HHZ_bbbbqq = TH1F("h_dalpha_rj2_H1_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_rj2_H2_HHZ_bbbbqq = TH1F("h_dalpha_rj2_H2_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_rj2_Z_HHZ_bbbbqq = TH1F("h_dalpha_rj2_Z_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_rj3_H1_HHZ_bbbbqq = TH1F("h_dalpha_rj3_H1_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_rj3_H2_HHZ_bbbbqq = TH1F("h_dalpha_rj3_H2_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_rj3_Z_HHZ_bbbbqq = TH1F("h_dalpha_rj3_Z_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_mass_rj1_HHZ_bbbbqq = TH1F("h_mass_rj1_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_rj2_HHZ_bbbbqq = TH1F("h_mass_rj2_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_rj3_HHZ_bbbbqq = TH1F("h_mass_rj3_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+
+    h_mass_Z_gj_HHZ_bbbbqq = TH1F("h_mass_Z_gj_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_H1_gj_HHZ_bbbbqq = TH1F("h_mass_H1_gj_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_H2_gj_HHZ_bbbbqq = TH1F("h_mass_H2_gj_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+
+    h_dalpha_gj1_H1_HHZ_bbbbqq = TH1F("h_dalpha_gj1_H1_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_gj1_H2_HHZ_bbbbqq = TH1F("h_dalpha_gj1_H2_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_gj1_Z_HHZ_bbbbqq = TH1F("h_dalpha_gj1_Z_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_gj2_H1_HHZ_bbbbqq = TH1F("h_dalpha_gj2_H1_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_gj2_H2_HHZ_bbbbqq = TH1F("h_dalpha_gj2_H2_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_gj2_Z_HHZ_bbbbqq = TH1F("h_dalpha_gj2_Z_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_dalpha_gj3_H1_HHZ_bbbbqq = TH1F("h_dalpha_gj3_H1_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_gj3_H2_HHZ_bbbbqq = TH1F("h_dalpha_gj3_H2_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+    h_dalpha_gj3_Z_HHZ_bbbbqq = TH1F("h_dalpha_gj3_Z_HHZ_bbbbqq","", n_bins_high, lim_angle_low,lim_angle_high);
+
+    h_mass_gj1_HHZ_bbbbqq = TH1F("h_mass_gj1_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_gj2_HHZ_bbbbqq = TH1F("h_mass_gj2_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
+    h_mass_gj3_HHZ_bbbbqq = TH1F("h_mass_gj3_HHZ_bbbbqq","", n_bins_high, lim_mass_low,lim_mass_high);
 
     hist_vec_HHZ_parton_list=[]
     
@@ -672,6 +930,81 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_xsec_,i_lumi_):
     #59 done up to now
     hist_vec_HHZ_parton_list.append(h_d_ij_H1_bbbar)
     hist_vec_HHZ_parton_list.append(h_d_ij_H2_bbbar)
+    hist_vec_HHZ_parton_list.append(h_theta_H1)
+    hist_vec_HHZ_parton_list.append(h_theta_H2)
+    hist_vec_HHZ_parton_list.append(h_theta_Z)
+    #64 done up to now
+
+    hist_vec_HHZ_parton_list.append(h_dalpha_H1_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dphi_H1_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dtheta_H1_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_H2_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dphi_H2_rj_HHZ_bbbbqq)
+    #69 done up to now
+    hist_vec_HHZ_parton_list.append(h_dtheta_H2_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_Z_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dphi_Z_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dtheta_Z_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_Z_rj_HHZ_bbbbqq)
+    #74 done up to now
+    hist_vec_HHZ_parton_list.append(h_mass_H1_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_H2_rj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj1_H1_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj1_H2_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj1_Z_HHZ_bbbbqq) 
+    #79 done up to now
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj2_H1_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj2_H2_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj2_Z_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj3_H1_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj3_H2_HHZ_bbbbqq)
+    #84 done up to now
+    hist_vec_HHZ_parton_list.append(h_dalpha_rj3_Z_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_rj1_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_rj2_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_rj3_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_H1_gj_HHZ_bbbbqq)
+    #89 up to here
+    hist_vec_HHZ_parton_list.append(h_dphi_H1_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dtheta_H1_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_H2_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dphi_H2_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dtheta_H2_gj_HHZ_bbbbqq)
+    #94 done up to now    
+    hist_vec_HHZ_parton_list.append(h_dalpha_Z_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dphi_Z_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dtheta_Z_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_Z_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_H1_gj_HHZ_bbbbqq)
+    #99 done up to now   
+    hist_vec_HHZ_parton_list.append(h_mass_H2_gj_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj1_H1_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj1_H2_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj1_Z_HHZ_bbbbqq) 
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj2_H1_HHZ_bbbbqq)
+    #104 done up to now
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj2_H2_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj2_Z_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj3_H1_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj3_H2_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_dalpha_gj3_Z_HHZ_bbbbqq)
+    #109 done up to now
+    hist_vec_HHZ_parton_list.append(h_mass_gj1_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_gj2_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_mass_gj3_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_sqrtS_gj_sum_all)
+    hist_vec_HHZ_parton_list.append(h_sqrtS_gj_sum_HHZ_bbbbqq)
+    #114 done until now
+    hist_vec_HHZ_parton_list.append(h_sqrtS_gj_sum_plus_InvVec_all)
+    hist_vec_HHZ_parton_list.append(h_sqrtS_gj_sum_plus_InvVec_HHZ_bbbbqq)
+    hist_vec_HHZ_parton_list.append(h_sqrtS_e1_e2_effective_HHZ_bbbbqq)
+
+    hist_vec_HHZ_parton_list.append(h_H1_P)
+    hist_vec_HHZ_parton_list.append(h_H2_P)
+    #119 done until now
+    hist_vec_HHZ_parton_list.append(h_Z_P)
+    hist_vec_HHZ_parton_list.append(h_d_ij_H1_Z)
+    hist_vec_HHZ_parton_list.append(h_d_ij_H2_Z)
 
     for hist in hist_vec_HHZ_parton_list:
         hist.Sumw2()
@@ -694,15 +1027,17 @@ def process_files():
     print 'start processing of files'
 
     cross_section_= 6.06e-02
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14_DR7.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190904Prod/VLC7VtxRFJVLC7/polm80/test_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14_DR7_partonlevelOnly.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC10_NJet3_noIsoPhLep/polm80/HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"
+    #eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC15_NJet3/polm80/HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190904Prod/VLC10_NJets3/polm80/test_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14_DR7_partonlevelOnly_noIsoPh.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_)
     print 'finished file', final_histo_name_
 
     lumi_=1000.
     cross_section_= 4.23e-02
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14_DR7.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190904Prod/VLC7VtxRFJVLC7/polp80/test_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14_DR7_partonlevelOnly.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC10_NJet3_noIsoPhLep/polp80/HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"
+    #eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC15_NJet3/polp80/HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HZAnalyzer/190904Prod/VLC10_NJets3/polp80/test_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14_DR7_partonlevelOnly_noIsoPh.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_)
     print 'finished file', final_histo_name_
 
