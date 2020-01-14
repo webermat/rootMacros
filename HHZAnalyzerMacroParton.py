@@ -720,9 +720,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
     t_var_comb_jet1_dtheta = array('f',[0])
     #ratio of more energetic input jet for combination to total sum
     t_var_comb_jet1_E1_over_Etot = array('f',[0])
-    t_var_comb_jet1_jetChargeMax = array('f',[0])
-    t_var_comb_jet1_jetChargeMin = array('f',[0])
-    t_var_comb_jet1_E1_jetCharge = array('f',[0])
+    #t_var_comb_jet1_jetChargeMax = array('f',[0])
+    #t_var_comb_jet1_jetChargeMin = array('f',[0])
+    #t_var_comb_jet1_E1_jetCharge = array('f',[0])
 
     t_var_comb_jet2_mass = array('f',[0])
     t_var_comb_jet2_theta = array('f',[0])
@@ -733,9 +733,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
     t_var_comb_jet2_dphi = array('f',[0])
     t_var_comb_jet2_dtheta = array('f',[0])
     t_var_comb_jet2_E1_over_Etot = array('f',[0])
-    t_var_comb_jet2_jetChargeMax = array('f',[0])
-    t_var_comb_jet2_jetChargeMin = array('f',[0])
-    t_var_comb_jet2_E1_jetCharge = array('f',[0])
+    #t_var_comb_jet2_jetChargeMax = array('f',[0])
+    #t_var_comb_jet2_jetChargeMin = array('f',[0])
+    #t_var_comb_jet2_E1_jetCharge = array('f',[0])
 
     t_var_comb_jet3_mass = array('f',[0])
     t_var_comb_jet3_theta = array('f',[0])
@@ -746,9 +746,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
     t_var_comb_jet3_dphi = array('f',[0])
     t_var_comb_jet3_dtheta = array('f',[0])
     t_var_comb_jet3_E1_over_Etot = array('f',[0])
-    t_var_comb_jet3_jetChargeMax = array('f',[0])
-    t_var_comb_jet3_jetChargeMin = array('f',[0])
-    t_var_comb_jet3_E1_jetCharge = array('f',[0])
+    #t_var_comb_jet3_jetChargeMax = array('f',[0])
+    #t_var_comb_jet3_jetChargeMin = array('f',[0])
+    #t_var_comb_jet3_E1_jetCharge = array('f',[0])
 
     t_var_comb_genjet1_mass = array('f',[0])
     t_var_comb_genjet1_theta = array('f',[0])
@@ -858,9 +858,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
     mytree.Branch('comb_jet1_dphi',t_var_comb_jet1_dphi,'comb_jet1_dphi/F')
     mytree.Branch('comb_jet1_dtheta',t_var_comb_jet1_dtheta,'comb_jet1_dtheta/F')
     mytree.Branch('comb_jet1_E1_over_Etot',t_var_comb_jet1_E1_over_Etot,'comb_jet1_E1_over_Etot/F')
-    mytree.Branch('comb_jet1_jetChargeMax',t_var_comb_jet1_jetChargeMax,'comb_jet1_jetChargeMax/F')
-    mytree.Branch('comb_jet1_jetChargeMin',t_var_comb_jet1_jetChargeMin,'comb_jet1_jetChargeMin/F')
-    mytree.Branch('comb_jet1_E1_jetCharge',t_var_comb_jet1_E1_jetCharge,'comb_jet1_E1_jetCharge/F')
+    #mytree.Branch('comb_jet1_jetChargeMax',t_var_comb_jet1_jetChargeMax,'comb_jet1_jetChargeMax/F')
+    #mytree.Branch('comb_jet1_jetChargeMin',t_var_comb_jet1_jetChargeMin,'comb_jet1_jetChargeMin/F')
+    #mytree.Branch('comb_jet1_E1_jetCharge',t_var_comb_jet1_E1_jetCharge,'comb_jet1_E1_jetCharge/F')
 
     mytree.Branch('comb_jet2_mass',t_var_comb_jet2_mass,'comb_jet2_mass/F')
     mytree.Branch('comb_jet2_theta',t_var_comb_jet2_theta,'comb_jet2_theta/F')
@@ -871,9 +871,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
     mytree.Branch('comb_jet2_dphi',t_var_comb_jet2_dphi,'comb_jet2_dphi/F')
     mytree.Branch('comb_jet2_dtheta',t_var_comb_jet2_dtheta,'comb_jet2_dtheta/F')
     mytree.Branch('comb_jet2_E1_over_Etot',t_var_comb_jet2_E1_over_Etot,'comb_jet2_E1_over_Etot/F')
-    mytree.Branch('comb_jet2_jetChargeMax',t_var_comb_jet2_jetChargeMax,'comb_jet2_jetChargeMax/F')
-    mytree.Branch('comb_jet2_jetChargeMin',t_var_comb_jet2_jetChargeMin,'comb_jet2_jetChargeMin/F')
-    mytree.Branch('comb_jet2_E1_jetCharge',t_var_comb_jet2_E1_jetCharge,'comb_jet2_E1_jetCharge/F')
+    #mytree.Branch('comb_jet2_jetChargeMax',t_var_comb_jet2_jetChargeMax,'comb_jet2_jetChargeMax/F')
+    #mytree.Branch('comb_jet2_jetChargeMin',t_var_comb_jet2_jetChargeMin,'comb_jet2_jetChargeMin/F')
+    #mytree.Branch('comb_jet2_E1_jetCharge',t_var_comb_jet2_E1_jetCharge,'comb_jet2_E1_jetCharge/F')
 
     mytree.Branch('comb_jet3_mass',t_var_comb_jet3_mass,'comb_jet3_mass/F')
     mytree.Branch('comb_jet3_theta',t_var_comb_jet3_theta,'comb_jet3_theta/F')
@@ -884,9 +884,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
     mytree.Branch('comb_jet3_dphi',t_var_comb_jet3_dphi,'comb_jet3_dphi/F')
     mytree.Branch('comb_jet3_dtheta',t_var_comb_jet3_dtheta,'comb_jet3_dtheta/F')
     mytree.Branch('comb_jet3_E1_over_Etot',t_var_comb_jet3_E1_over_Etot,'comb_jet3_E1_over_Etot/F')
-    mytree.Branch('comb_jet3_jetChargeMax',t_var_comb_jet3_jetChargeMax,'comb_jet3_jetChargeMax/F')
-    mytree.Branch('comb_jet3_jetChargeMin',t_var_comb_jet3_jetChargeMin,'comb_jet3_jetChargeMin/F')
-    mytree.Branch('comb_jet3_E1_jetCharge',t_var_comb_jet3_E1_jetCharge,'comb_jet3_E1_jetCharge/F')
+    #mytree.Branch('comb_jet3_jetChargeMax',t_var_comb_jet3_jetChargeMax,'comb_jet3_jetChargeMax/F')
+    #mytree.Branch('comb_jet3_jetChargeMin',t_var_comb_jet3_jetChargeMin,'comb_jet3_jetChargeMin/F')
+    #mytree.Branch('comb_jet3_E1_jetCharge',t_var_comb_jet3_E1_jetCharge,'comb_jet3_E1_jetCharge/F')
 
     mytree.Branch('comb_genjet1_mass',t_var_comb_genjet1_mass,'comb_genjet1_mass/F')
     mytree.Branch('comb_genjet1_theta',t_var_comb_genjet1_theta,'comb_genjet1_theta/F')
@@ -990,10 +990,10 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
 
     for ientry in tree:
         num_entry+=1
-        if num_entry>40:
-            continue;
+        #if num_entry<1040:
+        #    continue;
         
-        print "in entry ",num_entry
+        #print "in entry ",num_entry
 
         if num_entry%(int(tree.GetEntries()/5.)) == 0:
             print "in entry ",num_entry
@@ -1023,9 +1023,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         t_var_comb_jet1_dtheta[0] = -10.
         #ratio of more energetic input jet for combination to total sum
         t_var_comb_jet1_E1_over_Etot[0] = -10.
-        t_var_comb_jet1_jetChargeMax[0] = -10.
-        t_var_comb_jet1_jetChargeMin[0] = -10.
-        t_var_comb_jet1_E1_jetCharge[0] = -10.
+        #t_var_comb_jet1_jetChargeMax[0] = -10.
+        #t_var_comb_jet1_jetChargeMin[0] = -10.
+        #t_var_comb_jet1_E1_jetCharge[0] = -10.
         
         t_var_comb_jet2_mass[0] = -10.
         t_var_comb_jet2_theta[0] = -10.
@@ -1036,9 +1036,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         t_var_comb_jet2_dphi[0] = -10.
         t_var_comb_jet2_dtheta[0] = -10.
         t_var_comb_jet2_E1_over_Etot[0] = -10.
-        t_var_comb_jet2_jetChargeMax[0] = -10.
-        t_var_comb_jet2_jetChargeMin[0] = -10.
-        t_var_comb_jet2_E1_jetCharge[0] = -10.
+        #t_var_comb_jet2_jetChargeMax[0] = -10.
+        #t_var_comb_jet2_jetChargeMin[0] = -10.
+        #t_var_comb_jet2_E1_jetCharge[0] = -10.
         
         t_var_comb_jet3_mass[0] = -10.
         t_var_comb_jet3_theta[0] = -10.
@@ -1049,9 +1049,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         t_var_comb_jet3_dphi[0] = -10.
         t_var_comb_jet3_dtheta[0] = -10.
         t_var_comb_jet3_E1_over_Etot[0] = -10.
-        t_var_comb_jet3_jetChargeMax[0] = -10.
-        t_var_comb_jet3_jetChargeMin[0] = -10.
-        t_var_comb_jet3_E1_jetCharge[0] = -10.
+        #t_var_comb_jet3_jetChargeMax[0] = -10.
+        #t_var_comb_jet3_jetChargeMin[0] = -10.
+        #t_var_comb_jet3_E1_jetCharge[0] = -10.
         
         t_var_comb_genjet1_mass[0] = -10.
         t_var_comb_genjet1_theta[0] = -10.
@@ -1527,9 +1527,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         recojet_Py=ientry.recojet_Py
         recojet_Pz=ientry.recojet_Pz
         
-        if len(recojet_E)<3:
+        if len(recojet_E)<6:
             print 'too small recojet length',len(recojetE)<3
-            
+            continue;
         recojet_vector=[]
             
         for ind in range(len(recojet_E)):
@@ -1561,10 +1561,14 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         recojet_rfj_Py=ientry.recojet_subjet_rfj_j_Py
         recojet_rfj_Pz=ientry.recojet_subjet_rfj_j_Pz
         recojet_rfj_BTag=ientry.recojet_subjet_rfj_j_BTag
-        recojet_rfj_jetcharge=ientry.recojet_subjet_jetChargeE_kappa_0_30
+        #recojet_rfj_jetcharge=ientry.recojet_subjet_jetChargeE_kappa_0_30
 
         if len(recojet_rfj_E)<len(recojet_E):
             print 'rfjet and jet size were supposed to be the same',len(recojet_rfj_E),len(recojet_E)
+            continue
+        #if len(recojet_rfj_jetcharge)<len(recojet_rfj_E):
+        #    print 'rfjet and jet size were supposed to be the same jet charge vs rfjet',len(recojet_rfj_E),len(recojet_rfj_jetcharge)
+            #continue
 
         genjet_vector=[]
         tot_genjet_Vector_=TLorentzVector(0,0,0,0)
@@ -1647,6 +1651,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         #for vect in range(len(recojet_rfj_vector_combto3)):
         #    print num_entry,'reco _rfj mass vect after combination to 3 ',vect,recojet_rfj_vector_combto3[vect].M(),recojet_rfj_vector_combto3[vect].E(),(recojet_rfj_vector[ind_rj_rfj_1[vect]]+recojet_rfj_vector[ind_rj_rfj_2[vect]]).M(),(recojet_rfj_vector[ind_rj_rfj_1[vect]]+recojet_rfj_vector[ind_rj_rfj_2[vect]]).E()
         #for rfj in range(len(recojet_rfj_vector_combto3)):
+        #    print 'rfj M,E, rjf1 E, rfj2 E, ind1/ind2',recojet_rfj_vector_combto3[rfj].M(),recojet_rfj_vector_combto3[rfj].E(),ind_rj_rfj_1[rfj],ind_rj_rfj_2[rfj],len(recojet_rfj_jetcharge)
         #    print 'rfj M,E, rjf1 E, rfj2 E, rfj1 B, rfj2 B',recojet_rfj_vector_combto3[rfj].M(),recojet_rfj_vector_combto3[rfj].E(),recojet_rfj_vector[ind_rj_rfj_1[rfj]].E(),recojet_rfj_BTag[ind_rj_rfj_1[rfj]],recojet_rfj_jetcharge[ind_rj_rfj_1[rfj]],recojet_rfj_vector[ind_rj_rfj_2[rfj]].E(),recojet_rfj_BTag[ind_rj_rfj_2[rfj]],recojet_rfj_jetcharge[ind_rj_rfj_2[rfj]],max(recojet_rfj_jetcharge[ind_rj_rfj_1[rfj]],recojet_rfj_jetcharge[ind_rj_rfj_2[rfj]],key=abs),min(recojet_rfj_jetcharge[ind_rj_rfj_1[rfj]],recojet_rfj_jetcharge[ind_rj_rfj_2[rfj]],key=abs)
 
 
@@ -1661,12 +1666,12 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         t_var_comb_jet1_dtheta[0] = abs(recojet_rfj_vector[ind_rj_rfj_1[0]].Theta()-recojet_rfj_vector[ind_rj_rfj_2[0]].Theta())
         #ratio of more energetic input jet for combination to total sum
         t_var_comb_jet1_E1_over_Etot[0] = max(recojet_rfj_vector[ind_rj_rfj_1[0]].E(),recojet_rfj_vector[ind_rj_rfj_2[0]].E())/recojet_rfj_vector_combto3[0].E()
-        t_var_comb_jet1_jetChargeMax[0] = max(recojet_rfj_jetcharge[ind_rj_rfj_1[0]],recojet_rfj_jetcharge[ind_rj_rfj_2[0]],key=abs)
-        t_var_comb_jet1_jetChargeMin[0] = min(recojet_rfj_jetcharge[ind_rj_rfj_1[0]],recojet_rfj_jetcharge[ind_rj_rfj_2[0]],key=abs)
-        if recojet_rfj_vector[ind_rj_rfj_1[0]].E()>recojet_rfj_vector[ind_rj_rfj_2[0]].E():
-            t_var_comb_jet1_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_1[0]]
-        else:
-            t_var_comb_jet1_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[0]]
+        #t_var_comb_jet1_jetChargeMax[0] = max(recojet_rfj_jetcharge[ind_rj_rfj_1[0]],recojet_rfj_jetcharge[ind_rj_rfj_2[0]],key=abs)
+        #t_var_comb_jet1_jetChargeMin[0] = min(recojet_rfj_jetcharge[ind_rj_rfj_1[0]],recojet_rfj_jetcharge[ind_rj_rfj_2[0]],key=abs)
+        #if recojet_rfj_vector[ind_rj_rfj_1[0]].E()>recojet_rfj_vector[ind_rj_rfj_2[0]].E():
+        #    t_var_comb_jet1_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_1[0]]
+        #else:
+        #    t_var_comb_jet1_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[0]]
 
         t_var_comb_jet2_mass[0] = recojet_rfj_vector_combto3[1].M()
         t_var_comb_jet2_theta[0] = recojet_rfj_vector_combto3[1].Theta()
@@ -1679,12 +1684,12 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         t_var_comb_jet2_dtheta[0] = abs(recojet_rfj_vector[ind_rj_rfj_1[1]].Theta()-recojet_rfj_vector[ind_rj_rfj_2[1]].Theta())
         #ratio of more energetic input jet for combination to total sum
         t_var_comb_jet2_E1_over_Etot[0] = max(recojet_rfj_vector[ind_rj_rfj_1[1]].E(),recojet_rfj_vector[ind_rj_rfj_2[1]].E())/recojet_rfj_vector_combto3[1].E()
-        t_var_comb_jet2_jetChargeMax[0] = max(recojet_rfj_jetcharge[ind_rj_rfj_1[1]],recojet_rfj_jetcharge[ind_rj_rfj_2[1]],key=abs)
-        t_var_comb_jet2_jetChargeMin[0] = min(recojet_rfj_jetcharge[ind_rj_rfj_1[1]],recojet_rfj_jetcharge[ind_rj_rfj_2[1]],key=abs)
-        if recojet_rfj_vector[ind_rj_rfj_1[1]].E()>recojet_rfj_vector[ind_rj_rfj_2[1]].E():
-            t_var_comb_jet2_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_1[1]]
-        else:
-            t_var_comb_jet2_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[1]]
+        #t_var_comb_jet2_jetChargeMax[0] = max(recojet_rfj_jetcharge[ind_rj_rfj_1[1]],recojet_rfj_jetcharge[ind_rj_rfj_2[1]],key=abs)
+        #t_var_comb_jet2_jetChargeMin[0] = min(recojet_rfj_jetcharge[ind_rj_rfj_1[1]],recojet_rfj_jetcharge[ind_rj_rfj_2[1]],key=abs)
+        #if recojet_rfj_vector[ind_rj_rfj_1[1]].E()>recojet_rfj_vector[ind_rj_rfj_2[1]].E():
+        #    t_var_comb_jet2_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_1[1]]
+        #else:
+        #    t_var_comb_jet2_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[1]]
 
         t_var_comb_jet3_mass[0] = recojet_rfj_vector_combto3[2].M()
         t_var_comb_jet3_theta[0] = recojet_rfj_vector_combto3[2].Theta()
@@ -1697,12 +1702,12 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         t_var_comb_jet3_dtheta[0] = abs(recojet_rfj_vector[ind_rj_rfj_1[2]].Theta()-recojet_rfj_vector[ind_rj_rfj_2[2]].Theta())
         #ratio of more energetic input jet for combination to total sum
         t_var_comb_jet3_E1_over_Etot[0] = max(recojet_rfj_vector[ind_rj_rfj_1[2]].E(),recojet_rfj_vector[ind_rj_rfj_2[2]].E())/recojet_rfj_vector_combto3[2].E()
-        t_var_comb_jet3_jetChargeMax[0] = max(recojet_rfj_jetcharge[ind_rj_rfj_1[2]],recojet_rfj_jetcharge[ind_rj_rfj_2[2]],key=abs)
-        t_var_comb_jet3_jetChargeMin[0] = min(recojet_rfj_jetcharge[ind_rj_rfj_1[2]],recojet_rfj_jetcharge[ind_rj_rfj_2[2]],key=abs)
-        if recojet_rfj_vector[ind_rj_rfj_1[2]].E()>recojet_rfj_vector[ind_rj_rfj_2[2]].E():
-            t_var_comb_jet3_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_1[2]]
-        else:
-            t_var_comb_jet3_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[2]]
+        #t_var_comb_jet3_jetChargeMax[0] = max(recojet_rfj_jetcharge[ind_rj_rfj_1[2]],recojet_rfj_jetcharge[ind_rj_rfj_2[2]],key=abs)
+        #t_var_comb_jet3_jetChargeMin[0] = min(recojet_rfj_jetcharge[ind_rj_rfj_1[2]],recojet_rfj_jetcharge[ind_rj_rfj_2[2]],key=abs)
+        #if recojet_rfj_vector[ind_rj_rfj_1[2]].E()>recojet_rfj_vector[ind_rj_rfj_2[2]].E():
+        #    t_var_comb_jet3_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_1[2]]
+        #else:
+        #    t_var_comb_jet3_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[2]]
  
         t_var_comb_genjet1_mass[0] = genjet_vector_combto3[0].M()
         t_var_comb_genjet1_theta[0] = genjet_vector_combto3[0].Theta()
