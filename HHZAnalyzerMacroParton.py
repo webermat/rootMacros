@@ -1527,9 +1527,9 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         recojet_Py=ientry.recojet_Py
         recojet_Pz=ientry.recojet_Pz
         
-        if len(recojet_E)<6:
-            print 'too small recojet length',len(recojetE)<3
-            continue;
+        #if len(recojet_E)<6:
+        #    print 'too small recojet length',len(recojetE)<3
+       #     continue;
         recojet_vector=[]
             
         for ind in range(len(recojet_E)):
@@ -1538,23 +1538,6 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
             recojet_vector.append(temp_)
                 
         recojet_vector.sort(key=lambda x: x.M(), reverse=True)
-        
-        #for vect in range(len(recojet_vector)):
-        #    print 'mass vect after ',vect,recojet_vector[vect].M()
-        #    a, b = map(list, zip(*y))
-        recojet_vector_combto3,ind_rj_1,ind_rj_2=map(list,zip(*orderedThreeVector(recojet_vector)))
-
- 
-
-
-        #for vect in range(len(recojet_vector_combto3)):
-        #    print num_entry,'reco mass vect after combination to 3 ',vect,recojet_vector_combto3[vect].M(),recojet_vector_combto3[vect].E(),recojet_vector_combto3[vect].P(),(recojet_vector[ind_rj_1[vect]]+recojet_vector[ind_rj_2[vect]]).M(),(recojet_vector[ind_rj_1[vect]]+recojet_vector[ind_rj_2[vect]]).E()
-        
-
-        #print 'index vector reco',len(index_recojet_vector_combto3),index_recojet_vector_combto3
-        #print'vector index sum 0',  (recojet_vector[index_recojet_vector_combto3[0]]+recojet_vector[index_recojet_vector_combto3[1]]).M(),(recojet_vector[index_recojet_vector_combto3[0]]+recojet_vector[index_recojet_vector_combto3[1]]).E(),index_group[0]
-        #print'vector index sum 1',  (recojet_vector[index_recojet_vector_combto3[2]]+recojet_vector[index_recojet_vector_combto3[3]]).M(),(recojet_vector[index_recojet_vector_combto3[2]]+recojet_vector[index_recojet_vector_combto3[3]]).E(),index_group[1]
-        #print'vector index sum 2',  (recojet_vector[index_recojet_vector_combto3[4]]+recojet_vector[index_recojet_vector_combto3[5]]).M(),(recojet_vector[index_recojet_vector_combto3[4]]+recojet_vector[index_recojet_vector_combto3[5]]).E(),index_group[2]
 
         recojet_rfj_E=ientry.recojet_subjet_rfj_j_E
         recojet_rfj_Px=ientry.recojet_subjet_rfj_j_Px
@@ -1565,6 +1548,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
 
         if len(recojet_rfj_E)<len(recojet_E):
             print 'rfjet and jet size were supposed to be the same',len(recojet_rfj_E),len(recojet_E)
+        if len(recojet_rfj_E)<6:
             continue
         #if len(recojet_rfj_jetcharge)<len(recojet_rfj_E):
         #    print 'rfjet and jet size were supposed to be the same jet charge vs rfjet',len(recojet_rfj_E),len(recojet_rfj_jetcharge)
@@ -1585,7 +1569,8 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         genjet_vector.sort(key=lambda x: x.M(), reverse=True)
         #for vect in range(len(genjet_vector)):
         #    print num_entry,'gen mass vect after, index ',vect,genjet_vector[vect].M(),genjet_vector[vect].E()
-        genjet_vector_combto3,ind_gj1,ind_gj2=map(list,zip(*orderedThreeVector(genjet_vector)))
+        if len(genjet_E)>3:
+            genjet_vector_combto3,ind_gj1,ind_gj2=map(list,zip(*orderedThreeVector(genjet_vector)))
         #for vect in genjet_vector_combto3:
         #   print num_entry,'gen mass vect after combination to 3 ',vect.M(),vect.E()
 
@@ -1616,32 +1601,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
 
         recojet_rfj_BTag_Set_sorted=sorted(recojet_rfj_BTag_Set, key=lambda x:x[1], reverse=True)
 
-        #checked here that it worked properly, original still not sorted by BTags, set_sorted is indeed properly sorted by BTags
-        #for btset in recojet_rfj_BTag_Set:
-        #    print 'btagset',btset[0].M(),btset[1]
-
-        #for btsetsorted in recojet_rfj_BTag_Set_sorted:
-        #    print 'btagset sorted',btsetsorted[0].M(),btsetsorted[1]
-
-        case_jet_throwaway=-10
-        reco_orderedBTagtuple,case_jet_throwaway=orderedThreeVectorBTagSort(recojet_rfj_BTag_Set_sorted)
-        recojet_rfj_vector_combto3_wBTag,ind_rj_rfj_1_btag,ind_rj_rfj_2_btag=map(list,zip(*reco_orderedBTagtuple))
-        if len(ind_rj_rfj_1_btag)>len(ind_rj_rfj_2_btag):
-            print 'interesting combination, indices are different ', ind_rj_rfj_1_btag,ind_rj_rfj_2_btag, 'in case',case_jet_throwaway
-
-
-        for vect in range(len(recojet_rfj_vector_combto3_wBTag)):
-            if ind_rj_rfj_2_btag[vect]!=-1:
-   
-                whateverdosomething=True
-                #print num_entry,'reco mass vect after combination to 3 with btag info ',vect,recojet_rfj_vector_combto3_wBTag[vect].M(),recojet_rfj_vector_combto3_wBTag[vect].E(),recojet_rfj_vector_combto3_wBTag[vect].P(),ind_rj_rfj_1_btag[vect],ind_rj_rfj_2_btag[vect],recojet_rfj_BTag_Set_sorted[ind_rj_rfj_1_btag[vect]][1],recojet_rfj_BTag_Set_sorted[ind_rj_rfj_2_btag[vect]][1]
-            else:
-                whateverdosomething=False
-                #print num_entry,'reco mass vect after combination to 3 with btag info ',vect,recojet_rfj_vector_combto3_wBTag[vect].M(),recojet_rfj_vector_combto3_wBTag[vect].E(),recojet_rfj_vector_combto3_wBTag[vect].P(),ind_rj_rfj_1_btag[vect],ind_rj_rfj_2_btag[vect],recojet_rfj_BTag_Set_sorted[ind_rj_rfj_1_btag[vect]][1]
-        #for vect in recojet_rfj_BTag_Set_sorted:
-        #    print 'mass vect after BTag sort',vect[0].M(),vect[1]
-        #for vect in range(len(recojet_vector)):
-        #    print 'mass vect after ',vect,recojet_vector[vect].M()
+ 
 
 
         #don't use rfjet BTag info here
@@ -1709,39 +1669,41 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         #else:
         #    t_var_comb_jet3_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[2]]
  
-        t_var_comb_genjet1_mass[0] = genjet_vector_combto3[0].M()
-        t_var_comb_genjet1_theta[0] = genjet_vector_combto3[0].Theta()
-        t_var_comb_genjet1_phi[0] = genjet_vector_combto3[0].Phi()
-        t_var_comb_genjet1_E[0] = genjet_vector_combto3[0].E()
+        if len(genjet_vector)>0 and len(genjet_vector_combto3)>0:
+            t_var_comb_genjet1_mass[0] = genjet_vector_combto3[0].M()
+            t_var_comb_genjet1_theta[0] = genjet_vector_combto3[0].Theta()
+            t_var_comb_genjet1_phi[0] = genjet_vector_combto3[0].Phi()
+            t_var_comb_genjet1_E[0] = genjet_vector_combto3[0].E()
         #angles between original jets combined in this one
-        t_var_comb_genjet1_dalpha[0] = genjet_vector[ind_gj1[0]].Angle(genjet_vector[ind_gj2[0]].Vect())
-        t_var_comb_genjet1_dphi[0] = genjet_vector[ind_gj1[0]].DeltaPhi(genjet_vector[ind_gj2[0]])
-        t_var_comb_genjet1_dtheta[0] = abs(genjet_vector[ind_gj1[0]].Theta()-genjet_vector[ind_gj2[0]].Theta())
+            t_var_comb_genjet1_dalpha[0] = genjet_vector[ind_gj1[0]].Angle(genjet_vector[ind_gj2[0]].Vect())
+            t_var_comb_genjet1_dphi[0] = genjet_vector[ind_gj1[0]].DeltaPhi(genjet_vector[ind_gj2[0]])
+            t_var_comb_genjet1_dtheta[0] = abs(genjet_vector[ind_gj1[0]].Theta()-genjet_vector[ind_gj2[0]].Theta())
         #ratio of more energetic input jet for combination to total sum
-        t_var_comb_genjet1_E1_over_Etot[0] = max(genjet_vector[ind_gj1[0]].E(),genjet_vector[ind_gj2[0]].E())/genjet_vector_combto3[0].E()
+            t_var_comb_genjet1_E1_over_Etot[0] = max(genjet_vector[ind_gj1[0]].E(),genjet_vector[ind_gj2[0]].E())/genjet_vector_combto3[0].E()
 
-
-        t_var_comb_genjet2_mass[0] = genjet_vector_combto3[1].M()
-        t_var_comb_genjet2_theta[0] = genjet_vector_combto3[1].Theta()
-        t_var_comb_genjet2_phi[0] = genjet_vector_combto3[1].Phi()
-        t_var_comb_genjet2_E[0] = genjet_vector_combto3[1].E()
+        if len(genjet_vector)>1 and len(genjet_vector_combto3)>1:
+            t_var_comb_genjet2_mass[0] = genjet_vector_combto3[1].M()
+            t_var_comb_genjet2_theta[0] = genjet_vector_combto3[1].Theta()
+            t_var_comb_genjet2_phi[0] = genjet_vector_combto3[1].Phi()
+            t_var_comb_genjet2_E[0] = genjet_vector_combto3[1].E()
         #angles between original jets combined in this one
-        t_var_comb_genjet2_dalpha[0] = genjet_vector[ind_gj1[1]].Angle(genjet_vector[ind_gj2[1]].Vect())
-        t_var_comb_genjet2_dphi[0] = genjet_vector[ind_gj1[1]].DeltaPhi(genjet_vector[ind_gj2[1]])
-        t_var_comb_genjet2_dtheta[0] = abs(genjet_vector[ind_gj1[1]].Theta()-genjet_vector[ind_gj2[1]].Theta())
+            t_var_comb_genjet2_dalpha[0] = genjet_vector[ind_gj1[1]].Angle(genjet_vector[ind_gj2[1]].Vect())
+            t_var_comb_genjet2_dphi[0] = genjet_vector[ind_gj1[1]].DeltaPhi(genjet_vector[ind_gj2[1]])
+            t_var_comb_genjet2_dtheta[0] = abs(genjet_vector[ind_gj1[1]].Theta()-genjet_vector[ind_gj2[1]].Theta())
         #ratio of more energetic input jet for combination to total sum
-        t_var_comb_genjet2_E1_over_Etot[0] = max(genjet_vector[ind_gj1[1]].E(),genjet_vector[ind_gj2[1]].E())/genjet_vector_combto3[1].E()
+            t_var_comb_genjet2_E1_over_Etot[0] = max(genjet_vector[ind_gj1[1]].E(),genjet_vector[ind_gj2[1]].E())/genjet_vector_combto3[1].E()
 
-        t_var_comb_genjet3_mass[0] = genjet_vector_combto3[2].M()
-        t_var_comb_genjet3_theta[0] = genjet_vector_combto3[2].Theta()
-        t_var_comb_genjet3_phi[0] = genjet_vector_combto3[2].Phi()
-        t_var_comb_genjet3_E[0] = genjet_vector_combto3[2].E()
+        if len(genjet_vector)>2 and len(genjet_vector_combto3)>2:
+            t_var_comb_genjet3_mass[0] = genjet_vector_combto3[2].M()
+            t_var_comb_genjet3_theta[0] = genjet_vector_combto3[2].Theta()
+            t_var_comb_genjet3_phi[0] = genjet_vector_combto3[2].Phi()
+            t_var_comb_genjet3_E[0] = genjet_vector_combto3[2].E()
         #angles between original jets combined in this one
-        t_var_comb_genjet3_dalpha[0] = genjet_vector[ind_gj1[2]].Angle(genjet_vector[ind_gj2[2]].Vect())
-        t_var_comb_genjet3_dphi[0] = genjet_vector[ind_gj1[2]].DeltaPhi(genjet_vector[ind_gj2[2]])
-        t_var_comb_genjet3_dtheta[0] = abs(genjet_vector[ind_gj1[2]].Theta()-genjet_vector[ind_gj2[2]].Theta())
+            t_var_comb_genjet3_dalpha[0] = genjet_vector[ind_gj1[2]].Angle(genjet_vector[ind_gj2[2]].Vect())
+            t_var_comb_genjet3_dphi[0] = genjet_vector[ind_gj1[2]].DeltaPhi(genjet_vector[ind_gj2[2]])
+            t_var_comb_genjet3_dtheta[0] = abs(genjet_vector[ind_gj1[2]].Theta()-genjet_vector[ind_gj2[2]].Theta())
         #ratio of more energetic input jet for combination to total sum
-        t_var_comb_genjet3_E1_over_Etot[0] = max(genjet_vector[ind_gj1[2]].E(),genjet_vector[ind_gj2[2]].E())/genjet_vector_combto3[2].E()
+            t_var_comb_genjet3_E1_over_Etot[0] = max(genjet_vector[ind_gj1[2]].E(),genjet_vector[ind_gj2[2]].E())/genjet_vector_combto3[2].E()
 
         recojet_rfj_vector_wBTag_E_ordered=recojet_rfj_BTag_Set_sorted[:]
         recojet_rfj_vector_wBTag_E_ordered.sort(key=lambda x: x[0].E(), reverse=True)
@@ -1827,6 +1789,54 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
         mytree.Fill()
         #for later histo filling
         if len(hist_vec_reco_1D_parton)>0:
+
+        #for vect in range(len(recojet_vector)):
+            #    print 'mass vect after ',vect,recojet_vector[vect].M()
+            #    a, b = map(list, zip(*y))
+            if len(recojet_vector)>2:
+                recojet_vector_combto3,ind_rj_1,ind_rj_2=map(list,zip(*orderedThreeVector(recojet_vector)))
+                
+ 
+
+
+        #for vect in range(len(recojet_vector_combto3)):
+        #    print num_entry,'reco mass vect after combination to 3 ',vect,recojet_vector_combto3[vect].M(),recojet_vector_combto3[vect].E(),recojet_vector_combto3[vect].P(),(recojet_vector[ind_rj_1[vect]]+recojet_vector[ind_rj_2[vect]]).M(),(recojet_vector[ind_rj_1[vect]]+recojet_vector[ind_rj_2[vect]]).E()
+        
+
+        #print 'index vector reco',len(index_recojet_vector_combto3),index_recojet_vector_combto3
+        #print'vector index sum 0',  (recojet_vector[index_recojet_vector_combto3[0]]+recojet_vector[index_recojet_vector_combto3[1]]).M(),(recojet_vector[index_recojet_vector_combto3[0]]+recojet_vector[index_recojet_vector_combto3[1]]).E(),index_group[0]
+        #print'vector index sum 1',  (recojet_vector[index_recojet_vector_combto3[2]]+recojet_vector[index_recojet_vector_combto3[3]]).M(),(recojet_vector[index_recojet_vector_combto3[2]]+recojet_vector[index_recojet_vector_combto3[3]]).E(),index_group[1]
+        #print'vector index sum 2',  (recojet_vector[index_recojet_vector_combto3[4]]+recojet_vector[index_recojet_vector_combto3[5]]).M(),(recojet_vector[index_recojet_vector_combto3[4]]+recojet_vector[index_recojet_vector_combto3[5]]).E(),index_group[2]
+
+       #checked here that it worked properly, original still not sorted by BTags, set_sorted is indeed properly sorted by BTags
+        #for btset in recojet_rfj_BTag_Set:
+            #    print 'btagset',btset[0].M(),btset[1]
+            
+        #for btsetsorted in recojet_rfj_BTag_Set_sorted:
+            #    print 'btagset sorted',btsetsorted[0].M(),btsetsorted[1]
+            
+            case_jet_throwaway=-10
+            reco_orderedBTagtuple,case_jet_throwaway=orderedThreeVectorBTagSort(recojet_rfj_BTag_Set_sorted)
+            recojet_rfj_vector_combto3_wBTag,ind_rj_rfj_1_btag,ind_rj_rfj_2_btag=map(list,zip(*reco_orderedBTagtuple))
+            if len(ind_rj_rfj_1_btag)>len(ind_rj_rfj_2_btag):
+                print 'interesting combination, indices are different ', ind_rj_rfj_1_btag,ind_rj_rfj_2_btag, 'in case',case_jet_throwaway
+                
+                
+                for vect in range(len(recojet_rfj_vector_combto3_wBTag)):
+                    if ind_rj_rfj_2_btag[vect]!=-1:
+                        
+                        whateverdosomething=True
+                #print num_entry,'reco mass vect after combination to 3 with btag info ',vect,recojet_rfj_vector_combto3_wBTag[vect].M(),recojet_rfj_vector_combto3_wBTag[vect].E(),recojet_rfj_vector_combto3_wBTag[vect].P(),ind_rj_rfj_1_btag[vect],ind_rj_rfj_2_btag[vect],recojet_rfj_BTag_Set_sorted[ind_rj_rfj_1_btag[vect]][1],recojet_rfj_BTag_Set_sorted[ind_rj_rfj_2_btag[vect]][1]
+                    else:
+                        whateverdosomething=False
+                #print num_entry,'reco mass vect after combination to 3 with btag info ',vect,recojet_rfj_vector_combto3_wBTag[vect].M(),recojet_rfj_vector_combto3_wBTag[vect].E(),recojet_rfj_vector_combto3_wBTag[vect].P(),ind_rj_rfj_1_btag[vect],ind_rj_rfj_2_btag[vect],recojet_rfj_BTag_Set_sorted[ind_rj_rfj_1_btag[vect]][1]
+        #for vect in recojet_rfj_BTag_Set_sorted:
+        #    print 'mass vect after BTag sort',vect[0].M(),vect[1]
+        #for vect in range(len(recojet_vector)):
+        #    print 'mass vect after ',vect,recojet_vector[vect].M()
+                        
+
+
             hist_vec_reco_1D_parton[113].Fill(temp_gj_sum.M(),weight)
             hist_vec_reco_1D_parton[115].Fill((temp_true_inv+temp_gj_sum).M(),weight)
             hist_vec_reco_1D_parton[117].Fill(tempTotEventP4.M(),weight)
@@ -1914,15 +1924,16 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
 
             for rj_wbtag in range(len(recojet_rfj_vector_combto3_wBTag)):
                 min_angle = 200.
-                for gj in genjet_vector_combto3:
-                    if( degrees(recojet_rfj_vector_combto3_wBTag[rj_wbtag].Angle(gj.Vect()))<min_angle) :
-                        min_angle=degrees(recojet_rfj_vector_combto3_wBTag[rj_wbtag].Angle(gj.Vect()))
-                if rj_wbtag==0:
-                    hist_vec_reco_1D_parton[212].Fill(min_angle,weight)
-                elif rj_wbtag==1:
-                    hist_vec_reco_1D_parton[213].Fill(min_angle,weight)
-                elif rj_wbtag==2:
-                    hist_vec_reco_1D_parton[214].Fill(min_angle,weight)
+                if len(genjet_vector)>2: 
+                    for gj in genjet_vector_combto3:
+                        if( degrees(recojet_rfj_vector_combto3_wBTag[rj_wbtag].Angle(gj.Vect()))<min_angle) :
+                            min_angle=degrees(recojet_rfj_vector_combto3_wBTag[rj_wbtag].Angle(gj.Vect()))
+                    if rj_wbtag==0:
+                        hist_vec_reco_1D_parton[212].Fill(min_angle,weight)
+                    elif rj_wbtag==1:
+                        hist_vec_reco_1D_parton[213].Fill(min_angle,weight)
+                    elif rj_wbtag==2:
+                        hist_vec_reco_1D_parton[214].Fill(min_angle,weight)
 
             hist_vec_reco_1D_parton[215].Fill(degrees(min(recojet_rfj_vector_combto3_wBTag[0].Angle(tempH1P4.Vect()),recojet_rfj_vector_combto3_wBTag[0].Angle(tempH2P4.Vect()))),weight)
             hist_vec_reco_1D_parton[216].Fill(degrees(recojet_rfj_vector_combto3_wBTag[0].Angle(tempZP4.Vect())),weight)
@@ -1971,35 +1982,36 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
             else:
                 print 'sth wrong in Z to rfj rj com wBTag lineup'
 
-            if(tempH1P4.E()>tempH2P4.E()):
-                hist_vec_reco_1D_parton[77].Fill(degrees(recojet_vector[0].Angle(tempH1P4.Vect())),weight)
-                hist_vec_reco_1D_parton[78].Fill(degrees(recojet_vector[0].Angle(tempH2P4.Vect())),weight)
-                
-                hist_vec_reco_1D_parton[80].Fill(degrees(recojet_vector[1].Angle(tempH1P4.Vect())),weight)
-                hist_vec_reco_1D_parton[81].Fill(degrees(recojet_vector[1].Angle(tempH2P4.Vect())),weight)
-                
-                hist_vec_reco_1D_parton[83].Fill(degrees(recojet_vector[2].Angle(tempH1P4.Vect())),weight)
-                hist_vec_reco_1D_parton[84].Fill(degrees(recojet_vector[2].Angle(tempH2P4.Vect())),weight)
-            else:
-                hist_vec_reco_1D_parton[77].Fill(degrees(recojet_vector[0].Angle(tempH2P4.Vect())),weight)
-                hist_vec_reco_1D_parton[78].Fill(degrees(recojet_vector[0].Angle(tempH1P4.Vect())),weight)
-                
-                hist_vec_reco_1D_parton[80].Fill(degrees(recojet_vector[1].Angle(tempH2P4.Vect())),weight)
-                hist_vec_reco_1D_parton[81].Fill(degrees(recojet_vector[1].Angle(tempH1P4.Vect())),weight)
-                
-                hist_vec_reco_1D_parton[83].Fill(degrees(recojet_vector[2].Angle(tempH2P4.Vect())),weight)
-                hist_vec_reco_1D_parton[84].Fill(degrees(recojet_vector[2].Angle(tempH1P4.Vect())),weight)
+            if len(recojet_vector)>2:
+                if(tempH1P4.E()>tempH2P4.E()):
+                    hist_vec_reco_1D_parton[77].Fill(degrees(recojet_vector[0].Angle(tempH1P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[78].Fill(degrees(recojet_vector[0].Angle(tempH2P4.Vect())),weight)
+                    
+                    hist_vec_reco_1D_parton[80].Fill(degrees(recojet_vector[1].Angle(tempH1P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[81].Fill(degrees(recojet_vector[1].Angle(tempH2P4.Vect())),weight)
+                    
+                    hist_vec_reco_1D_parton[83].Fill(degrees(recojet_vector[2].Angle(tempH1P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[84].Fill(degrees(recojet_vector[2].Angle(tempH2P4.Vect())),weight)
+                else:
+                    hist_vec_reco_1D_parton[77].Fill(degrees(recojet_vector[0].Angle(tempH2P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[78].Fill(degrees(recojet_vector[0].Angle(tempH1P4.Vect())),weight)
+                    
+                    hist_vec_reco_1D_parton[80].Fill(degrees(recojet_vector[1].Angle(tempH2P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[81].Fill(degrees(recojet_vector[1].Angle(tempH1P4.Vect())),weight)
+                    
+                    hist_vec_reco_1D_parton[83].Fill(degrees(recojet_vector[2].Angle(tempH2P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[84].Fill(degrees(recojet_vector[2].Angle(tempH1P4.Vect())),weight)
 
-            hist_vec_reco_1D_parton[79].Fill(degrees(recojet_vector[1].Angle(tempZP4.Vect())),weight)
-            hist_vec_reco_1D_parton[82].Fill(degrees(recojet_vector[1].Angle(tempZP4.Vect())),weight)
-            hist_vec_reco_1D_parton[85].Fill(degrees(recojet_vector[2].Angle(tempZP4.Vect())),weight)
-            
-            hist_vec_reco_1D_parton[86].Fill(recojet_vector[0].M(),weight)
-            hist_vec_reco_1D_parton[87].Fill(recojet_vector[1].M(),weight)
-            hist_vec_reco_1D_parton[88].Fill(recojet_vector[2].M(),weight)
-            hist_vec_reco_1D_parton[133].Fill(recojet_vector[0].E(),weight)
-            hist_vec_reco_1D_parton[134].Fill(recojet_vector[1].E(),weight)
-            hist_vec_reco_1D_parton[135].Fill(recojet_vector[2].E(),weight)
+                hist_vec_reco_1D_parton[79].Fill(degrees(recojet_vector[1].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[82].Fill(degrees(recojet_vector[1].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[85].Fill(degrees(recojet_vector[2].Angle(tempZP4.Vect())),weight)
+                
+                hist_vec_reco_1D_parton[86].Fill(recojet_vector[0].M(),weight)
+                hist_vec_reco_1D_parton[87].Fill(recojet_vector[1].M(),weight)
+                hist_vec_reco_1D_parton[88].Fill(recojet_vector[2].M(),weight)
+                hist_vec_reco_1D_parton[133].Fill(recojet_vector[0].E(),weight)
+                hist_vec_reco_1D_parton[134].Fill(recojet_vector[1].E(),weight)
+                hist_vec_reco_1D_parton[135].Fill(recojet_vector[2].E(),weight)
             if len(recojet_vector)>3:
                 hist_vec_reco_1D_parton[127].Fill(degrees(min(recojet_vector[3].Angle(tempH1P4.Vect()),recojet_vector[3].Angle(tempH2P4.Vect()))),weight)
                 hist_vec_reco_1D_parton[128].Fill(degrees(recojet_vector[3].Angle(tempZP4.Vect())),weight)
@@ -2015,128 +2027,130 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
 
             for rj in range(len(recojet_vector)):
                 min_angle = 200.
-                for gj in genjet_vector:
-                    if( degrees(recojet_vector[rj].Angle(gj.Vect()))<min_angle) :
-                        min_angle=degrees(recojet_vector[rj].Angle(gj.Vect()))
-                if rj==0:
-                    hist_vec_reco_1D_parton[145].Fill(min_angle,weight)
-                elif rj==1:
-                    hist_vec_reco_1D_parton[146].Fill(min_angle,weight)
-                elif rj==2:
-                    hist_vec_reco_1D_parton[147].Fill(min_angle,weight)
-                elif rj==3:
-                    hist_vec_reco_1D_parton[148].Fill(min_angle,weight)
-                elif rj==4:
-                    hist_vec_reco_1D_parton[149].Fill(min_angle,weight)
-                elif rj==5:
-                    hist_vec_reco_1D_parton[150].Fill(min_angle,weight)
+                if len(genjet_vector)>2: 
+                   for gj in genjet_vector:
+                       if( degrees(recojet_vector[rj].Angle(gj.Vect()))<min_angle) :
+                           min_angle=degrees(recojet_vector[rj].Angle(gj.Vect()))
+                   if rj==0:
+                       hist_vec_reco_1D_parton[145].Fill(min_angle,weight)
+                   elif rj==1:
+                       hist_vec_reco_1D_parton[146].Fill(min_angle,weight)
+                   elif rj==2:
+                       hist_vec_reco_1D_parton[147].Fill(min_angle,weight)
+                   elif rj==3:
+                       hist_vec_reco_1D_parton[148].Fill(min_angle,weight)
+                   elif rj==4:
+                       hist_vec_reco_1D_parton[149].Fill(min_angle,weight)
+                   elif rj==5:
+                       hist_vec_reco_1D_parton[150].Fill(min_angle,weight)
 
             hist_vec_reco_1D_parton[114].Fill(temp_gj_sum.M(),weight)
             hist_vec_reco_1D_parton[116].Fill((temp_true_inv+temp_gj_sum).M(),weight)
-            hist_vec_reco_1D_parton[154].Fill(recojet_vector_combto3[0].M(),weight)
-            hist_vec_reco_1D_parton[155].Fill(recojet_vector_combto3[1].M(),weight)
-            hist_vec_reco_1D_parton[156].Fill(recojet_vector_combto3[2].M(),weight)
-
-            hist_vec_reco_1D_parton[200].Fill(recojet_vector_combto3[0].M(),weight)
-            hist_vec_reco_1D_parton[201].Fill(recojet_vector_combto3[1].M(),weight)
-            hist_vec_reco_1D_parton[202].Fill(recojet_vector_combto3[2].M(),weight)
+            if len(recojet_vector)>2:
+                hist_vec_reco_1D_parton[154].Fill(recojet_vector_combto3[0].M(),weight)
+                hist_vec_reco_1D_parton[155].Fill(recojet_vector_combto3[1].M(),weight)
+                hist_vec_reco_1D_parton[156].Fill(recojet_vector_combto3[2].M(),weight)
+                
+                hist_vec_reco_1D_parton[200].Fill(recojet_vector_combto3[0].M(),weight)
+                hist_vec_reco_1D_parton[201].Fill(recojet_vector_combto3[1].M(),weight)
+                hist_vec_reco_1D_parton[202].Fill(recojet_vector_combto3[2].M(),weight)
 
         #first comb jet and H1
-            if(recojet_vector_combto3[0].Angle(tempH1P4.Vect())<recojet_vector_combto3[0].Angle(tempH2P4.Vect()) and recojet_vector_combto3[0].Angle(tempH1P4.Vect())<recojet_vector_combto3[0].Angle(tempZP4.Vect())):
-                hist_vec_reco_1D_parton[224].Fill(recojet_vector_combto3[0].P()/tempH1P4.P(),weight)
+                if(recojet_vector_combto3[0].Angle(tempH1P4.Vect())<recojet_vector_combto3[0].Angle(tempH2P4.Vect()) and recojet_vector_combto3[0].Angle(tempH1P4.Vect())<recojet_vector_combto3[0].Angle(tempZP4.Vect())):
+                    hist_vec_reco_1D_parton[224].Fill(recojet_vector_combto3[0].P()/tempH1P4.P(),weight)
        #first comb jet and H2
-            elif(recojet_vector_combto3[0].Angle(tempH2P4.Vect())<recojet_vector_combto3[0].Angle(tempH1P4.Vect()) and recojet_vector_combto3[0].Angle(tempH2P4.Vect())<recojet_vector_combto3[0].Angle(tempZP4.Vect())):
-                hist_vec_reco_1D_parton[224].Fill(recojet_vector_combto3[0].P()/tempH2P4.P(),weight)
+                elif(recojet_vector_combto3[0].Angle(tempH2P4.Vect())<recojet_vector_combto3[0].Angle(tempH1P4.Vect()) and recojet_vector_combto3[0].Angle(tempH2P4.Vect())<recojet_vector_combto3[0].Angle(tempZP4.Vect())):
+                    hist_vec_reco_1D_parton[224].Fill(recojet_vector_combto3[0].P()/tempH2P4.P(),weight)
       #first comb jet and Z
-            elif(recojet_vector_combto3[0].Angle(tempZP4.Vect())<recojet_vector_combto3[0].Angle(tempH1P4.Vect()) and recojet_vector_combto3[0].Angle(tempZP4.Vect())<recojet_vector_combto3[0].Angle(tempH2P4.Vect())):
-                hist_vec_reco_1D_parton[224].Fill(recojet_vector_combto3[0].P()/tempZP4.P(),weight)
-            else:
-                print 'rj1 should have done all combinations'
+                elif(recojet_vector_combto3[0].Angle(tempZP4.Vect())<recojet_vector_combto3[0].Angle(tempH1P4.Vect()) and recojet_vector_combto3[0].Angle(tempZP4.Vect())<recojet_vector_combto3[0].Angle(tempH2P4.Vect())):
+                    hist_vec_reco_1D_parton[224].Fill(recojet_vector_combto3[0].P()/tempZP4.P(),weight)
+                else:
+                    print 'rj1 should have done all combinations'
 
         #second comb jet and H1
-            if(recojet_vector_combto3[1].Angle(tempH1P4.Vect())<recojet_vector_combto3[1].Angle(tempH2P4.Vect()) and recojet_vector_combto3[1].Angle(tempH1P4.Vect())<recojet_vector_combto3[1].Angle(tempZP4.Vect())):
-                hist_vec_reco_1D_parton[225].Fill(recojet_vector_combto3[1].P()/tempH1P4.P(),weight)
+                if(recojet_vector_combto3[1].Angle(tempH1P4.Vect())<recojet_vector_combto3[1].Angle(tempH2P4.Vect()) and recojet_vector_combto3[1].Angle(tempH1P4.Vect())<recojet_vector_combto3[1].Angle(tempZP4.Vect())):
+                    hist_vec_reco_1D_parton[225].Fill(recojet_vector_combto3[1].P()/tempH1P4.P(),weight)
        #second comb jet and H2
-            elif(recojet_vector_combto3[1].Angle(tempH2P4.Vect())<recojet_vector_combto3[1].Angle(tempH1P4.Vect()) and recojet_vector_combto3[1].Angle(tempH2P4.Vect())<recojet_vector_combto3[1].Angle(tempZP4.Vect())):
-                hist_vec_reco_1D_parton[225].Fill(recojet_vector_combto3[1].P()/tempH2P4.P(),weight)
+                elif(recojet_vector_combto3[1].Angle(tempH2P4.Vect())<recojet_vector_combto3[1].Angle(tempH1P4.Vect()) and recojet_vector_combto3[1].Angle(tempH2P4.Vect())<recojet_vector_combto3[1].Angle(tempZP4.Vect())):
+                    hist_vec_reco_1D_parton[225].Fill(recojet_vector_combto3[1].P()/tempH2P4.P(),weight)
       #second comb jet and Z
-            elif(recojet_vector_combto3[1].Angle(tempZP4.Vect())<recojet_vector_combto3[1].Angle(tempH1P4.Vect()) and recojet_vector_combto3[1].Angle(tempZP4.Vect())<recojet_vector_combto3[1].Angle(tempH2P4.Vect())):
-                hist_vec_reco_1D_parton[225].Fill(recojet_vector_combto3[2].P()/tempZP4.P(),weight)
-            else:
-                print 'rj2 should have done all combinations'
+                elif(recojet_vector_combto3[1].Angle(tempZP4.Vect())<recojet_vector_combto3[1].Angle(tempH1P4.Vect()) and recojet_vector_combto3[1].Angle(tempZP4.Vect())<recojet_vector_combto3[1].Angle(tempH2P4.Vect())):
+                    hist_vec_reco_1D_parton[225].Fill(recojet_vector_combto3[2].P()/tempZP4.P(),weight)
+                else:
+                    print 'rj2 should have done all combinations'
 
         #third comb jet and H1
-            if(recojet_vector_combto3[2].Angle(tempH1P4.Vect())<recojet_vector_combto3[2].Angle(tempH2P4.Vect()) and recojet_vector_combto3[2].Angle(tempH1P4.Vect())<recojet_vector_combto3[2].Angle(tempZP4.Vect())):
-                hist_vec_reco_1D_parton[226].Fill(recojet_vector_combto3[2].P()/tempH1P4.P(),weight)
+                if(recojet_vector_combto3[2].Angle(tempH1P4.Vect())<recojet_vector_combto3[2].Angle(tempH2P4.Vect()) and recojet_vector_combto3[2].Angle(tempH1P4.Vect())<recojet_vector_combto3[2].Angle(tempZP4.Vect())):
+                    hist_vec_reco_1D_parton[226].Fill(recojet_vector_combto3[2].P()/tempH1P4.P(),weight)
         #third comb jet and H2
-            elif(recojet_vector_combto3[2].Angle(tempH2P4.Vect())<recojet_vector_combto3[2].Angle(tempH1P4.Vect()) and recojet_vector_combto3[2].Angle(tempH2P4.Vect())<recojet_vector_combto3[2].Angle(tempZP4.Vect())):
-                hist_vec_reco_1D_parton[226].Fill(recojet_vector_combto3[2].P()/tempH2P4.P(),weight)
+                elif(recojet_vector_combto3[2].Angle(tempH2P4.Vect())<recojet_vector_combto3[2].Angle(tempH1P4.Vect()) and recojet_vector_combto3[2].Angle(tempH2P4.Vect())<recojet_vector_combto3[2].Angle(tempZP4.Vect())):
+                    hist_vec_reco_1D_parton[226].Fill(recojet_vector_combto3[2].P()/tempH2P4.P(),weight)
         #third comb jet and Z
-            elif(recojet_vector_combto3[2].Angle(tempZP4.Vect())<recojet_vector_combto3[2].Angle(tempH1P4.Vect()) and recojet_vector_combto3[2].Angle(tempZP4.Vect())<recojet_vector_combto3[2].Angle(tempH2P4.Vect())):
-                hist_vec_reco_1D_parton[226].Fill(recojet_vector_combto3[2].P()/tempZP4.P(),weight)
-            else:
-                print 'rj3 should have done all combinations'
+                elif(recojet_vector_combto3[2].Angle(tempZP4.Vect())<recojet_vector_combto3[2].Angle(tempH1P4.Vect()) and recojet_vector_combto3[2].Angle(tempZP4.Vect())<recojet_vector_combto3[2].Angle(tempH2P4.Vect())):
+                    hist_vec_reco_1D_parton[226].Fill(recojet_vector_combto3[2].P()/tempZP4.P(),weight)
+                else:
+                    print 'rj3 should have done all combinations'
                 
         #now histos of H1 and combination of vectors
-            if(tempH1P4.Angle(recojet_vector_combto3[0].Vect())<tempH1P4.Angle(recojet_vector_combto3[1].Vect()) and tempH1P4.Angle(recojet_vector_combto3[0].Vect())<tempH1P4.Angle(recojet_vector_combto3[2].Vect())):
-                hist_vec_reco_1D_parton[233].Fill(recojet_vector_combto3[0].P()/tempH1P4.P(),weight)
-                hist_vec_reco_1D_parton[242].Fill(degrees(tempH1P4.Angle(recojet_vector_combto3[0].Vect())),weight)
-            elif(tempH1P4.Angle(recojet_vector_combto3[1].Vect())<tempH1P4.Angle(recojet_vector_combto3[0].Vect()) and tempH1P4.Angle(recojet_vector_combto3[1].Vect())<tempH1P4.Angle(recojet_vector_combto3[2].Vect())):
-                hist_vec_reco_1D_parton[233].Fill(recojet_vector_combto3[1].P()/tempH1P4.P(),weight)
-                hist_vec_reco_1D_parton[242].Fill(degrees(tempH1P4.Angle(recojet_vector_combto3[1].Vect())),weight)
-            elif(tempH1P4.Angle(recojet_vector_combto3[2].Vect())<tempH1P4.Angle(recojet_vector_combto3[0].Vect()) and tempH1P4.Angle(recojet_vector_combto3[2].Vect())<tempH1P4.Angle(recojet_vector_combto3[1].Vect())):
-                hist_vec_reco_1D_parton[233].Fill(recojet_vector_combto3[2].P()/tempH1P4.P(),weight)
-                hist_vec_reco_1D_parton[242].Fill(degrees(tempH1P4.Angle(recojet_vector_combto3[2].Vect())),weight)
-            else:
-                print 'sth wrong in H1 to rj comb lineup'
+                if(tempH1P4.Angle(recojet_vector_combto3[0].Vect())<tempH1P4.Angle(recojet_vector_combto3[1].Vect()) and tempH1P4.Angle(recojet_vector_combto3[0].Vect())<tempH1P4.Angle(recojet_vector_combto3[2].Vect())):
+                    hist_vec_reco_1D_parton[233].Fill(recojet_vector_combto3[0].P()/tempH1P4.P(),weight)
+                    hist_vec_reco_1D_parton[242].Fill(degrees(tempH1P4.Angle(recojet_vector_combto3[0].Vect())),weight)
+                elif(tempH1P4.Angle(recojet_vector_combto3[1].Vect())<tempH1P4.Angle(recojet_vector_combto3[0].Vect()) and tempH1P4.Angle(recojet_vector_combto3[1].Vect())<tempH1P4.Angle(recojet_vector_combto3[2].Vect())):
+                    hist_vec_reco_1D_parton[233].Fill(recojet_vector_combto3[1].P()/tempH1P4.P(),weight)
+                    hist_vec_reco_1D_parton[242].Fill(degrees(tempH1P4.Angle(recojet_vector_combto3[1].Vect())),weight)
+                elif(tempH1P4.Angle(recojet_vector_combto3[2].Vect())<tempH1P4.Angle(recojet_vector_combto3[0].Vect()) and tempH1P4.Angle(recojet_vector_combto3[2].Vect())<tempH1P4.Angle(recojet_vector_combto3[1].Vect())):
+                    hist_vec_reco_1D_parton[233].Fill(recojet_vector_combto3[2].P()/tempH1P4.P(),weight)
+                    hist_vec_reco_1D_parton[242].Fill(degrees(tempH1P4.Angle(recojet_vector_combto3[2].Vect())),weight)
+                else:
+                    print 'sth wrong in H1 to rj comb lineup'
 
        #now histos of H2 and combination of vectors
-            if(tempH2P4.Angle(recojet_vector_combto3[0].Vect())<tempH2P4.Angle(recojet_vector_combto3[1].Vect()) and tempH2P4.Angle(recojet_vector_combto3[0].Vect())<tempH2P4.Angle(recojet_vector_combto3[2].Vect())):
-                hist_vec_reco_1D_parton[234].Fill(recojet_vector_combto3[0].P()/tempH2P4.P(),weight)
-                hist_vec_reco_1D_parton[243].Fill(degrees(tempH2P4.Angle(recojet_vector_combto3[0].Vect())),weight)
-            elif(tempH2P4.Angle(recojet_vector_combto3[1].Vect())<tempH2P4.Angle(recojet_vector_combto3[0].Vect()) and tempH2P4.Angle(recojet_vector_combto3[1].Vect())<tempH2P4.Angle(recojet_vector_combto3[2].Vect())):
-                hist_vec_reco_1D_parton[234].Fill(recojet_vector_combto3[1].P()/tempH2P4.P(),weight)
-                hist_vec_reco_1D_parton[243].Fill(degrees(tempH2P4.Angle(recojet_vector_combto3[1].Vect())),weight)
-            elif(tempH2P4.Angle(recojet_vector_combto3[2].Vect())<tempH2P4.Angle(recojet_vector_combto3[0].Vect()) and tempH2P4.Angle(recojet_vector_combto3[2].Vect())<tempH2P4.Angle(recojet_vector_combto3[1].Vect())):
-                hist_vec_reco_1D_parton[234].Fill(recojet_vector_combto3[2].P()/tempH2P4.P(),weight)
-                hist_vec_reco_1D_parton[243].Fill(degrees(tempH2P4.Angle(recojet_vector_combto3[2].Vect())),weight)
-            else:
-                print 'sth wrong in H2 to rj comb lineup'
+                if(tempH2P4.Angle(recojet_vector_combto3[0].Vect())<tempH2P4.Angle(recojet_vector_combto3[1].Vect()) and tempH2P4.Angle(recojet_vector_combto3[0].Vect())<tempH2P4.Angle(recojet_vector_combto3[2].Vect())):
+                    hist_vec_reco_1D_parton[234].Fill(recojet_vector_combto3[0].P()/tempH2P4.P(),weight)
+                    hist_vec_reco_1D_parton[243].Fill(degrees(tempH2P4.Angle(recojet_vector_combto3[0].Vect())),weight)
+                elif(tempH2P4.Angle(recojet_vector_combto3[1].Vect())<tempH2P4.Angle(recojet_vector_combto3[0].Vect()) and tempH2P4.Angle(recojet_vector_combto3[1].Vect())<tempH2P4.Angle(recojet_vector_combto3[2].Vect())):
+                    hist_vec_reco_1D_parton[234].Fill(recojet_vector_combto3[1].P()/tempH2P4.P(),weight)
+                    hist_vec_reco_1D_parton[243].Fill(degrees(tempH2P4.Angle(recojet_vector_combto3[1].Vect())),weight)
+                elif(tempH2P4.Angle(recojet_vector_combto3[2].Vect())<tempH2P4.Angle(recojet_vector_combto3[0].Vect()) and tempH2P4.Angle(recojet_vector_combto3[2].Vect())<tempH2P4.Angle(recojet_vector_combto3[1].Vect())):
+                    hist_vec_reco_1D_parton[234].Fill(recojet_vector_combto3[2].P()/tempH2P4.P(),weight)
+                    hist_vec_reco_1D_parton[243].Fill(degrees(tempH2P4.Angle(recojet_vector_combto3[2].Vect())),weight)
+                else:
+                    print 'sth wrong in H2 to rj comb lineup'
                 
       #now histos of Z and combination of vectors
-            if(tempZP4.Angle(recojet_vector_combto3[0].Vect())<tempZP4.Angle(recojet_vector_combto3[1].Vect()) and tempZP4.Angle(recojet_vector_combto3[0].Vect())<tempZP4.Angle(recojet_vector_combto3[2].Vect())):
-                hist_vec_reco_1D_parton[235].Fill(recojet_vector_combto3[0].P()/tempZP4.P(),weight)
-                hist_vec_reco_1D_parton[244].Fill(degrees(tempZP4.Angle(recojet_vector_combto3[0].Vect())),weight)
-            elif(tempZP4.Angle(recojet_vector_combto3[1].Vect())<tempZP4.Angle(recojet_vector_combto3[0].Vect()) and tempZP4.Angle(recojet_vector_combto3[1].Vect())<tempZP4.Angle(recojet_vector_combto3[2].Vect())):
-                hist_vec_reco_1D_parton[235].Fill(recojet_vector_combto3[1].P()/tempZP4.P(),weight)
-                hist_vec_reco_1D_parton[244].Fill(degrees(tempZP4.Angle(recojet_vector_combto3[1].Vect())),weight)
-            elif(tempZP4.Angle(recojet_vector_combto3[2].Vect())<tempZP4.Angle(recojet_vector_combto3[0].Vect()) and tempZP4.Angle(recojet_vector_combto3[2].Vect())<tempZP4.Angle(recojet_vector_combto3[1].Vect())):
-                hist_vec_reco_1D_parton[235].Fill(recojet_vector_combto3[2].P()/tempZP4.P(),weight)
-                hist_vec_reco_1D_parton[244].Fill(degrees(tempZP4.Angle(recojet_vector_combto3[2].Vect())),weight)
-            else:
-                print 'sth wrong in Z to rj comb lineup'
+                if(tempZP4.Angle(recojet_vector_combto3[0].Vect())<tempZP4.Angle(recojet_vector_combto3[1].Vect()) and tempZP4.Angle(recojet_vector_combto3[0].Vect())<tempZP4.Angle(recojet_vector_combto3[2].Vect())):
+                    hist_vec_reco_1D_parton[235].Fill(recojet_vector_combto3[0].P()/tempZP4.P(),weight)
+                    hist_vec_reco_1D_parton[244].Fill(degrees(tempZP4.Angle(recojet_vector_combto3[0].Vect())),weight)
+                elif(tempZP4.Angle(recojet_vector_combto3[1].Vect())<tempZP4.Angle(recojet_vector_combto3[0].Vect()) and tempZP4.Angle(recojet_vector_combto3[1].Vect())<tempZP4.Angle(recojet_vector_combto3[2].Vect())):
+                    hist_vec_reco_1D_parton[235].Fill(recojet_vector_combto3[1].P()/tempZP4.P(),weight)
+                    hist_vec_reco_1D_parton[244].Fill(degrees(tempZP4.Angle(recojet_vector_combto3[1].Vect())),weight)
+                elif(tempZP4.Angle(recojet_vector_combto3[2].Vect())<tempZP4.Angle(recojet_vector_combto3[0].Vect()) and tempZP4.Angle(recojet_vector_combto3[2].Vect())<tempZP4.Angle(recojet_vector_combto3[1].Vect())):
+                    hist_vec_reco_1D_parton[235].Fill(recojet_vector_combto3[2].P()/tempZP4.P(),weight)
+                    hist_vec_reco_1D_parton[244].Fill(degrees(tempZP4.Angle(recojet_vector_combto3[2].Vect())),weight)
+                else:
+                    print 'sth wrong in Z to rj comb lineup'
 
-            for rj in range(len(recojet_vector_combto3)):
-                min_angle = 200.
-                for gj in genjet_vector_combto3:
-                    if( degrees(recojet_vector_combto3[rj].Angle(gj.Vect()))<min_angle) :
-                        min_angle=degrees(recojet_vector_combto3[rj].Angle(gj.Vect()))
-                if rj==0:
-                    hist_vec_reco_1D_parton[157].Fill(min_angle,weight)
-                elif rj==1:
-                    hist_vec_reco_1D_parton[158].Fill(min_angle,weight)
-                elif rj==2:
-                    hist_vec_reco_1D_parton[159].Fill(min_angle,weight)
+                for rj in range(len(recojet_vector_combto3)):
+                    min_angle = 200.
+                    if len(genjet_vector)>2: 
+                        for gj in genjet_vector_combto3:
+                            if( degrees(recojet_vector_combto3[rj].Angle(gj.Vect()))<min_angle) :
+                                min_angle=degrees(recojet_vector_combto3[rj].Angle(gj.Vect()))
+                        if rj==0:
+                            hist_vec_reco_1D_parton[157].Fill(min_angle,weight)
+                        elif rj==1:
+                            hist_vec_reco_1D_parton[158].Fill(min_angle,weight)
+                        elif rj==2:
+                            hist_vec_reco_1D_parton[159].Fill(min_angle,weight)
                     
-            hist_vec_reco_1D_parton[160].Fill(degrees(min(recojet_vector_combto3[0].Angle(tempH1P4.Vect()),recojet_vector_combto3[0].Angle(tempH2P4.Vect()))),weight)
-            hist_vec_reco_1D_parton[161].Fill(degrees(recojet_vector_combto3[0].Angle(tempZP4.Vect())),weight)
-            hist_vec_reco_1D_parton[162].Fill(degrees(min(recojet_vector_combto3[1].Angle(tempH1P4.Vect()),recojet_vector_combto3[1].Angle(tempH2P4.Vect()))),weight)
-            hist_vec_reco_1D_parton[163].Fill(degrees(recojet_vector_combto3[1].Angle(tempZP4.Vect())),weight)
-            hist_vec_reco_1D_parton[164].Fill(degrees(min(recojet_vector_combto3[2].Angle(tempH1P4.Vect()),recojet_vector_combto3[2].Angle(tempH2P4.Vect()))),weight)
-            hist_vec_reco_1D_parton[165].Fill(degrees(recojet_vector_combto3[2].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[160].Fill(degrees(min(recojet_vector_combto3[0].Angle(tempH1P4.Vect()),recojet_vector_combto3[0].Angle(tempH2P4.Vect()))),weight)
+                hist_vec_reco_1D_parton[161].Fill(degrees(recojet_vector_combto3[0].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[162].Fill(degrees(min(recojet_vector_combto3[1].Angle(tempH1P4.Vect()),recojet_vector_combto3[1].Angle(tempH2P4.Vect()))),weight)
+                hist_vec_reco_1D_parton[163].Fill(degrees(recojet_vector_combto3[1].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[164].Fill(degrees(min(recojet_vector_combto3[2].Angle(tempH1P4.Vect()),recojet_vector_combto3[2].Angle(tempH2P4.Vect()))),weight)
+                hist_vec_reco_1D_parton[165].Fill(degrees(recojet_vector_combto3[2].Angle(tempZP4.Vect())),weight)
             
  
-
             hist_vec_reco_1D_parton[178].Fill(recojet_rfj_BTag[ind_rj_rfj_1[0]]+recojet_rfj_BTag[ind_rj_rfj_2[0]],weight)
             hist_vec_reco_1D_parton[179].Fill(recojet_rfj_BTag[ind_rj_rfj_1[1]]+recojet_rfj_BTag[ind_rj_rfj_2[1]],weight)
             hist_vec_reco_1D_parton[180].Fill(recojet_rfj_BTag[ind_rj_rfj_1[2]]+recojet_rfj_BTag[ind_rj_rfj_2[2]],weight)
@@ -2155,15 +2169,16 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
 
             for rj in range(len(recojet_rfj_vector_combto3)):
                 min_angle = 200.
-                for gj in genjet_vector_combto3:
-                    if( degrees(recojet_rfj_vector_combto3[rj].Angle(gj.Vect()))<min_angle) :
-                        min_angle=degrees(recojet_rfj_vector_combto3[rj].Angle(gj.Vect()))
-                if rj==0:
-                    hist_vec_reco_1D_parton[169].Fill(min_angle,weight)
-                elif rj==1:
-                    hist_vec_reco_1D_parton[170].Fill(min_angle,weight)
-                elif rj==2:
-                    hist_vec_reco_1D_parton[171].Fill(min_angle,weight)
+                if len(genjet_vector)>2: 
+                    for gj in genjet_vector_combto3:
+                        if( degrees(recojet_rfj_vector_combto3[rj].Angle(gj.Vect()))<min_angle) :
+                            min_angle=degrees(recojet_rfj_vector_combto3[rj].Angle(gj.Vect()))
+                    if rj==0:
+                        hist_vec_reco_1D_parton[169].Fill(min_angle,weight)
+                    elif rj==1:
+                        hist_vec_reco_1D_parton[170].Fill(min_angle,weight)
+                    elif rj==2:
+                        hist_vec_reco_1D_parton[171].Fill(min_angle,weight)
 
             hist_vec_reco_1D_parton[172].Fill(degrees(min(recojet_rfj_vector_combto3[0].Angle(tempH1P4.Vect()),recojet_rfj_vector_combto3[0].Angle(tempH2P4.Vect()))),weight)
             hist_vec_reco_1D_parton[173].Fill(degrees(recojet_rfj_vector_combto3[0].Angle(tempZP4.Vect())),weight)
@@ -2251,41 +2266,41 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile)
                 print 'sth wrong in Z to rfj rj comb lineup'
 
 
+            if len(genjet_vector)>2: 
+                if(tempH1P4.E()>tempH2P4.E()):
+                    hist_vec_reco_1D_parton[101].Fill(degrees(genjet_vector[0].Angle(tempH1P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[102].Fill(degrees(genjet_vector[0].Angle(tempH2P4.Vect())),weight)
+                    
+                    hist_vec_reco_1D_parton[107].Fill(degrees(genjet_vector[1].Angle(tempH1P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[108].Fill(degrees(genjet_vector[1].Angle(tempH2P4.Vect())),weight)
+                    
+                    hist_vec_reco_1D_parton[83].Fill(degrees(genjet_vector[2].Angle(tempH1P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[84].Fill(degrees(genjet_vector[2].Angle(tempH2P4.Vect())),weight)
+                else:
+                    hist_vec_reco_1D_parton[101].Fill(degrees(genjet_vector[0].Angle(tempH2P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[102].Fill(degrees(genjet_vector[0].Angle(tempH1P4.Vect())),weight)
 
-            if(tempH1P4.E()>tempH2P4.E()):
-                hist_vec_reco_1D_parton[101].Fill(degrees(genjet_vector[0].Angle(tempH1P4.Vect())),weight)
-                hist_vec_reco_1D_parton[102].Fill(degrees(genjet_vector[0].Angle(tempH2P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[104].Fill(degrees(genjet_vector[1].Angle(tempH2P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[105].Fill(degrees(genjet_vector[1].Angle(tempH1P4.Vect())),weight)
+                    
+                    hist_vec_reco_1D_parton[107].Fill(degrees(genjet_vector[2].Angle(tempH2P4.Vect())),weight)
+                    hist_vec_reco_1D_parton[108].Fill(degrees(genjet_vector[2].Angle(tempH1P4.Vect())),weight)
+                    
+                hist_vec_reco_1D_parton[103].Fill(degrees(genjet_vector[1].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[106].Fill(degrees(genjet_vector[1].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[109].Fill(degrees(genjet_vector[2].Angle(tempZP4.Vect())),weight)
                 
-                hist_vec_reco_1D_parton[107].Fill(degrees(genjet_vector[1].Angle(tempH1P4.Vect())),weight)
-                hist_vec_reco_1D_parton[108].Fill(degrees(genjet_vector[1].Angle(tempH2P4.Vect())),weight)
-                
-                hist_vec_reco_1D_parton[83].Fill(degrees(genjet_vector[2].Angle(tempH1P4.Vect())),weight)
-                hist_vec_reco_1D_parton[84].Fill(degrees(genjet_vector[2].Angle(tempH2P4.Vect())),weight)
-            else:
-                hist_vec_reco_1D_parton[101].Fill(degrees(genjet_vector[0].Angle(tempH2P4.Vect())),weight)
-                hist_vec_reco_1D_parton[102].Fill(degrees(genjet_vector[0].Angle(tempH1P4.Vect())),weight)
-                
-                hist_vec_reco_1D_parton[104].Fill(degrees(genjet_vector[1].Angle(tempH2P4.Vect())),weight)
-                hist_vec_reco_1D_parton[105].Fill(degrees(genjet_vector[1].Angle(tempH1P4.Vect())),weight)
-                
-                hist_vec_reco_1D_parton[107].Fill(degrees(genjet_vector[2].Angle(tempH2P4.Vect())),weight)
-                hist_vec_reco_1D_parton[108].Fill(degrees(genjet_vector[2].Angle(tempH1P4.Vect())),weight)
-                
-            hist_vec_reco_1D_parton[103].Fill(degrees(genjet_vector[1].Angle(tempZP4.Vect())),weight)
-            hist_vec_reco_1D_parton[106].Fill(degrees(genjet_vector[1].Angle(tempZP4.Vect())),weight)
-            hist_vec_reco_1D_parton[109].Fill(degrees(genjet_vector[2].Angle(tempZP4.Vect())),weight)
+                hist_vec_reco_1D_parton[110].Fill(genjet_vector[0].M(),weight)
+                hist_vec_reco_1D_parton[111].Fill(genjet_vector[1].M(),weight)
+                hist_vec_reco_1D_parton[112].Fill(genjet_vector[2].M(),weight)
             
-            hist_vec_reco_1D_parton[110].Fill(genjet_vector[0].M(),weight)
-            hist_vec_reco_1D_parton[111].Fill(genjet_vector[1].M(),weight)
-            hist_vec_reco_1D_parton[112].Fill(genjet_vector[2].M(),weight)
+                hist_vec_reco_1D_parton[129].Fill(genjet_vector[0].E(),weight)
+                hist_vec_reco_1D_parton[130].Fill(genjet_vector[1].E(),weight)
+                hist_vec_reco_1D_parton[131].Fill(genjet_vector[2].E(),weight)
             
-            hist_vec_reco_1D_parton[129].Fill(genjet_vector[0].E(),weight)
-            hist_vec_reco_1D_parton[130].Fill(genjet_vector[1].E(),weight)
-            hist_vec_reco_1D_parton[131].Fill(genjet_vector[2].E(),weight)
-            
-            hist_vec_reco_1D_parton[151].Fill(genjet_vector_combto3[0].M(),weight)
-            hist_vec_reco_1D_parton[152].Fill(genjet_vector_combto3[1].M(),weight)
-            hist_vec_reco_1D_parton[153].Fill(genjet_vector_combto3[2].M(),weight)
+                hist_vec_reco_1D_parton[151].Fill(genjet_vector_combto3[0].M(),weight)
+                hist_vec_reco_1D_parton[152].Fill(genjet_vector_combto3[1].M(),weight)
+                hist_vec_reco_1D_parton[153].Fill(genjet_vector_combto3[2].M(),weight)
 
             if len(genjet_vector)>3:
                 hist_vec_reco_1D_parton[123].Fill(genjet_vector[3].M(),weight)
@@ -3105,119 +3120,119 @@ def process_files():
     ishhzfile_=False
 #9,8,5
     cross_section_= 4.18E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     ishhzfile_=True
     cross_section_= 6.06e-02
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     fillPartonHistos_=False
 
     cross_section_= 3.83
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 1269.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 902.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 9.2271753E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbcbbc_13094_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_bbcbbc_13094_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbcbbc_13094_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_bbcbbc_13094_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 9.1731760E-03 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbubbu_13095_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_bbubbu_13095_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbubbu_13095_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_bbubbu_13095_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.3757137E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ddcyyc_13096_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_ddcyyc_13096_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ddcyyc_13096_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_ddcyyc_13096_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.4498909E+01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_dduyyu_13097_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_dduyyu_13097_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_dduyyu_13097_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_dduyyu_13097_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.2499614E+01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscbbc_13098_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_sscbbc_13098_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscbbc_13098_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_sscbbc_13098_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.1651315E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscssc_13099_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_sscssc_13099_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscssc_13099_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_sscssc_13099_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.2615661E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssussu_13123_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_ssussu_13123_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssussu_13123_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_ssussu_13123_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  5.4145233E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssubbu_13292_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_ssubbu_13292_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssubbu_13292_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_ssubbu_13292_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  1.3394883E+01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycbbu_13318_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yycbbu_13318_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycbbu_13318_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yycbbu_13318_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_   
 
     cross_section_=  2.0054737E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycddu_13326_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yycddu_13326_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycddu_13326_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yycddu_13326_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_= 2.0248353E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycssu_13323_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yycssu_13323_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycssu_13323_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yycssu_13323_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_=  1.3330064E+01
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyubbc_13320_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yyubbc_13320_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyubbc_13320_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yyubbc_13320_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  2.0034170E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyuddc_13328_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yyuddc_13328_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyuddc_13328_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yyuddc_13328_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  2.0189010E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyussc_13325_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yyussc_13325_polm80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyussc_13325_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ee_yyussc_13325_polm80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_               
                       
@@ -3227,119 +3242,119 @@ def process_files():
     ishhzfile_=False
 #9,8,5
     cross_section_=   2.898E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     ishhzfile_=True
     cross_section_=  4.23E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     fillPartonHistos_=False
 
     cross_section_=  2.67
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 786.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 120.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 2.9986901E-03 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbcbbc_13071_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_bbcbbc_13071_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbcbbc_13071_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_bbcbbc_13071_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_)
     print 'finished file', final_histo_name_
 
     cross_section_= 2.9825397E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbubbu_13072_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_bbubbu_13072_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbubbu_13072_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_bbubbu_13072_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.7824610E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ddcyyc_13073_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_ddcyyc_13073_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ddcyyc_13073_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_ddcyyc_13073_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 5.0109474E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_dduyyu_13074_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_dduyyu_13074_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_dduyyu_13074_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_dduyyu_13074_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 4.8938333E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscbbc_13075_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_sscbbc_13075_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscbbc_13075_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_sscbbc_13075_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.3677677E-01
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscssc_13076_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_sscssc_13076_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscssc_13076_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_sscssc_13076_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 3.3776171E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssussu_13077_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_ssussu_13077_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssussu_13077_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_ssussu_13077_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  2.3216638E-02
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssubbu_13293_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_ssubbu_13293_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssubbu_13293_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_ssubbu_13293_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 5.2101109E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycbbu_13322_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yycbbu_13322_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycbbu_13322_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yycbbu_13322_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_   
 
     cross_section_= 4.0984879E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycddu_13319_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yycddu_13319_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycddu_13319_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yycddu_13319_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_= 4.1853929E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycssu_13327_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yycssu_13327_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycssu_13327_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yycssu_13327_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_= 5.2070149E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyubbc_13324_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yyubbc_13324_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyubbc_13324_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yyubbc_13324_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 4.1203686E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyuddc_13321_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yyuddc_13321_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyuddc_13321_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yyuddc_13321_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 4.2245034E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyussc_13329_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yyussc_13329_polp80_3TeV_wO_CLIC_o3_v14.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyussc_13329_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ee_yyussc_13329_polp80_3TeV_wO_CLIC_o3_v14.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_) 
     print 'finished file', final_histo_name_               
 
