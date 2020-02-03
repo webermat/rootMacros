@@ -55,9 +55,9 @@ def process_event(i_final_histo_name_,i_input_signal_file_name_,i_input_bkg_file
     dataloader.AddVariable("comb_jet1_dalpha", 'F')
     dataloader.AddVariable("comb_jet2_dalpha", 'F')
     dataloader.AddVariable("comb_jet3_dalpha", 'F')
-    dataloader.AddVariable("comb_jet1_E1_over_Etot", 'F')
-    dataloader.AddVariable("comb_jet2_E1_over_Etot", 'F')
-    dataloader.AddVariable("comb_jet3_E1_over_Etot", 'F')
+    dataloader.AddSpectator("comb_jet1_E1_over_Etot", 'F')
+    dataloader.AddSpectator("comb_jet2_E1_over_Etot", 'F')
+    dataloader.AddSpectator("comb_jet3_E1_over_Etot", 'F')
     dataloader.AddVariable("comb_jet1_BTagMax", 'F')
     dataloader.AddVariable("comb_jet2_BTagMax", 'F')
     dataloader.AddVariable("comb_jet3_BTagMax", 'F')
@@ -71,6 +71,19 @@ def process_event(i_final_histo_name_,i_input_signal_file_name_,i_input_bkg_file
     dataloader.AddVariable("BTag_sum_max3", 'F')
     dataloader.AddSpectator("BTag_sum_max4", 'F')
     dataloader.AddSpectator("BTag_sum_all", 'F')
+    #CTag and LTag variables, only present for tight mass selection
+    dataloader.AddVariable("CTag_sum_max2", 'F')
+    dataloader.AddVariable("CTag_sum_max3", 'F')
+    dataloader.AddVariable("LTag_sum_all", 'F')
+    dataloader.AddVariable("comb_jet1_CTagMax", 'F')
+    dataloader.AddVariable("comb_jet2_CTagMax", 'F')
+    dataloader.AddVariable("comb_jet3_CTagMax", 'F')
+    dataloader.AddVariable("comb_jet1_LTagMax", 'F')
+    dataloader.AddVariable("comb_jet2_LTagMax", 'F')
+    dataloader.AddVariable("comb_jet3_LTagMax", 'F')
+    dataloader.AddVariable("comb_jet1_LTagMin", 'F')
+    dataloader.AddVariable("comb_jet2_LTagMin", 'F')
+    dataloader.AddVariable("comb_jet3_LTagMin", 'F')
     dataloader.AddVariable("jet1_theta", 'F')
     dataloader.AddVariable("jet2_theta", 'F')
     dataloader.AddVariable("jet3_theta", 'F')
@@ -99,9 +112,9 @@ def process_event(i_final_histo_name_,i_input_signal_file_name_,i_input_bkg_file
 
     dataloader.AddSignalTree(tree_sig, def_weight,"Training and Testing")
     dataloader.AddBackgroundTree(tree_bkg_hzqq,def_weight,"Training and Testing")
-    dataloader.AddBackgroundTree(tree_bkg_ee_qq,def_weight,"Training and Testing")
-    dataloader.AddBackgroundTree(tree_bkg_ee_qqqq, def_weight,"Training and Testing")
     dataloader.AddBackgroundTree(tree_bkg_ee_qqqqqq, def_weight,"Training and Testing")
+    dataloader.AddBackgroundTree(tree_bkg_ee_qqqq, def_weight,"Training and Testing")
+    dataloader.AddBackgroundTree(tree_bkg_ee_qq,def_weight,"Training and Testing")
 
     cut_S = TCut("")
     cut_B = TCut("")
@@ -121,7 +134,7 @@ def process_event(i_final_histo_name_,i_input_signal_file_name_,i_input_bkg_file
                                  "NTrees=300",
                                  "MaxDepth=3",
                                  #"BoostType=Grad",
-                                 #"Shrinkage=1.00",
+                                 #"Shrinkage=1.50",
                                  "BoostType=AdaBoost",
                                  "AdaBoostBeta=0.20",
                                  #"SeparationType=GiniIndexWithLaplace",
@@ -145,13 +158,13 @@ def process_files():
 
 
     print 'start VLC7 polm80'
-    input_file_signal_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_signal_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hhqq_14364.root"
 
     input_files_bkg_VLC7_polm80_=[] 
-    input_file_hzqq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqqqq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq_polm80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_hzqq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hzqq_13391.root"
+    input_file_ee_qq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13399_to_13402.root"
+    input_file_ee_qqqq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13394_to_13397.root"
+    input_file_ee_qqqqqq_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq.root"
 
     input_files_bkg_VLC7_polm80_.append(input_file_hzqq_VLC7_polm80_)
     input_files_bkg_VLC7_polm80_.append(input_file_ee_qq_VLC7_polm80_)
@@ -159,11 +172,11 @@ def process_files():
     input_files_bkg_VLC7_polm80_.append(input_file_ee_qqqqqq_VLC7_polm80_)
 
 
-    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/')
-    #os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
-    #os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
+    #os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/')
+    #os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_ee_qqqqqq')
+    #os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_ee_qqqqqq')
 
-    final_histo_name_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hhqq__vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
+    final_histo_name_VLC7_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20_noEratio__hhqq__vs_ee_qqqqqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
     #process_event(final_histo_name_VLC7_polm80_,input_file_signal_VLC7_polm80_,input_files_bkg_VLC7_polm80_)
 
     print 'start VLC7 polp80'
@@ -179,96 +192,96 @@ def process_files():
     input_files_bkg_VLC7_polp80_.append(input_file_ee_qqqq_VLC7_polp80_)
     input_files_bkg_VLC7_polp80_.append(input_file_ee_qqqqqq_VLC7_polp80_)
 
-    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/')
-    #os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
-    #os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
+    #os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/')
+    #os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
+    #os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
 
-    final_histo_name_VLC7_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hhqq__vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
+    #final_histo_name_VLC7_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020_E_theta_BTagCuts/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20_noEratio__hhqq__vs_ee_qqqqqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
     #process_event(final_histo_name_VLC7_polp80_,input_file_signal_VLC7_polp80_,input_files_bkg_VLC7_polp80_)
 
     print 'start VLC11 polm80'
-    input_file_signal_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_signal_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hhqq_14364.root"
 
     input_files_bkg_VLC11_polm80_=[] 
-    input_file_hzqq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqqqq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq_polm80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_hzqq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hzqq_13391.root"
+    input_file_ee_qq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qq_13399_to_13402.root"
+    input_file_ee_qqqq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qqqq_13394_to_13397.root"
+    input_file_ee_qqqqqq_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qqqqqq.root"
     input_files_bkg_VLC11_polm80_.append(input_file_hzqq_VLC11_polm80_)
     input_files_bkg_VLC11_polm80_.append(input_file_ee_qq_VLC11_polm80_)
     input_files_bkg_VLC11_polm80_.append(input_file_ee_qqqq_VLC11_polm80_)
     input_files_bkg_VLC11_polm80_.append(input_file_ee_qqqqqq_VLC11_polm80_)
 
 
-    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/')
-    #os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
-    #os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
+    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020_E_theta_BTag_tight_Mass_Cuts/')
+    os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
+    os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
 
-    final_histo_name_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hhqq__vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
-    #process_event(final_histo_name_VLC11_polm80_,input_file_signal_VLC11_polm80_,input_files_bkg_VLC11_polm80_)
+    final_histo_name_VLC11_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020_E_theta_BTag_tight_Mass_Cuts/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20_noEratio__hhqq__vs_ee_qqqqqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
+    process_event(final_histo_name_VLC11_polm80_,input_file_signal_VLC11_polm80_,input_files_bkg_VLC11_polm80_)
 
     print 'start VLC11 polp80'
-    input_file_signal_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_signal_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hhqq_14365.root"
 
     input_files_bkg_VLC11_polp80_=[] 
-    input_file_hzqq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqqqq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq_polp80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_hzqq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hzqq_13392.root"
+    input_file_ee_qq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qq_13398.root"
+    input_file_ee_qqqq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qqqq_13393.root"
+    input_file_ee_qqqqqq_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qqqqqq.root"
     input_files_bkg_VLC11_polp80_.append(input_file_hzqq_VLC11_polp80_)
     input_files_bkg_VLC11_polp80_.append(input_file_ee_qq_VLC11_polp80_)
     input_files_bkg_VLC11_polp80_.append(input_file_ee_qqqq_VLC11_polp80_)
     input_files_bkg_VLC11_polp80_.append(input_file_ee_qqqqqq_VLC11_polp80_)
 
+              
+    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020_E_theta_BTag_tight_Mass_Cuts/')
+    os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
+    os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
 
-    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/')
-    os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
-    os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
-
-    final_histo_name_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hhqq__vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
+    final_histo_name_VLC11_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020_E_theta_BTag_tight_Mass_Cuts/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20_noEratio__hhqq__vs_ee_qqqqqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
     process_event(final_histo_name_VLC11_polp80_,input_file_signal_VLC11_polp80_,input_files_bkg_VLC11_polp80_)
 
     print 'start VLC14 polm80'
-    input_file_signal_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_signal_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hhqq_14364.root"
 
     input_files_bkg_VLC14_polm80_=[] 
-    input_file_hzqq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqqqq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq_polm80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_hzqq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_hzqq_13391.root"
+    input_file_ee_qq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13399_to_13402.root"
+    input_file_ee_qqqq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13394_to_13397.root"
+    input_file_ee_qqqqqq_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq.root"
     input_files_bkg_VLC14_polm80_.append(input_file_hzqq_VLC14_polm80_)
     input_files_bkg_VLC14_polm80_.append(input_file_ee_qq_VLC14_polm80_)
     input_files_bkg_VLC14_polm80_.append(input_file_ee_qqqq_VLC14_polm80_)
     input_files_bkg_VLC14_polm80_.append(input_file_ee_qqqqqq_VLC14_polm80_)
 
 
-    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/')
-    os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
-    os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
+    #os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/')
+    #os.mkdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
+    #os.chdir('dataset/filesPolm80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
 
-    final_histo_name_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hhqq__vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
-    process_event(final_histo_name_VLC14_polm80_,input_file_signal_VLC14_polm80_,input_files_bkg_VLC14_polm80_)
+    final_histo_name_VLC14_polm80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20_noEratio__hhqq__vs_ee_qqqqqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
+    #process_event(final_histo_name_VLC14_polm80_,input_file_signal_VLC14_polm80_,input_files_bkg_VLC14_polm80_)
 
     print 'start VLC14 polp80'
-    input_file_signal_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_signal_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_hhqq_14365.root"
 
     input_files_bkg_VLC14_polp80_=[] 
-    input_file_hzqq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"
-    input_file_ee_qqqqqq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq_polp80_3TeV_wO_CLIC_o3_v14.root"
+    input_file_hzqq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_hzqq_13392.root"
+    input_file_ee_qq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qq_13398.root"
+    input_file_ee_qqqq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qqqq_13393.root"
+    input_file_ee_qqqqqq_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ee_qqqqqq.root"
     input_files_bkg_VLC14_polp80_.append(input_file_hzqq_VLC14_polp80_)
     input_files_bkg_VLC14_polp80_.append(input_file_ee_qq_VLC14_polp80_)
     input_files_bkg_VLC14_polp80_.append(input_file_ee_qqqq_VLC14_polp80_)
     input_files_bkg_VLC14_polp80_.append(input_file_ee_qqqqqq_VLC14_polp80_)
 
 
-    os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/')
-    os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
-    os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_hhqq_vs_hzqq_qq_qqqq_qqqqqq')
+    #os.chdir('/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/')
+    #os.mkdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
+    #os.chdir('dataset/filesPolp80GiniIndexNormNumEventsMaxDepth3NTrees300AdaBoostBeta020NCuts_noEratios__hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq')
 
-    final_histo_name_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20__hhqq__vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
-    process_event(final_histo_name_VLC14_polp80_,input_file_signal_VLC14_polp80_,input_files_bkg_VLC14_polp80_)
+    final_histo_name_VLC14_polp80_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC14_NJets6_finalAnalysis/polp80/MVATrainingTrees_Jan2020/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20_noEratio__hhqq__vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root"  
+    #process_event(final_histo_name_VLC14_polp80_,input_file_signal_VLC14_polp80_,input_files_bkg_VLC14_polp80_)
 
     return None
 
