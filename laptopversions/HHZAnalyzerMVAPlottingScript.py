@@ -306,10 +306,10 @@ def process_files():
  
  
     h_comb_jet1_mass_HHZ_polm80_AllEvents_massCuts_=file_polm80_preselection_.Get("hhqq_AllEvents/h_comb_jet1_mass");
-    h_comb_jet1_mass_HHZ_polm80_AllEvents_massCuts_.GetXaxis().SetTitle("comb jet1 mass [GeV]");
+    h_comb_jet1_mass_HHZ_polm80_AllEvents_massCuts_.GetXaxis().SetTitle("H1 candidate mass [GeV]");
     h_comb_jet1_mass_HHZ_polm80_AllEvents_massCuts_.SetLineWidth(3);
     h_comb_jet1_mass_HHZ_polm80_massCuts_=file_polm80_preselection_.Get("hhqq/h_comb_jet1_mass");
-    h_comb_jet1_mass_HHZ_polm80_massCuts_.GetXaxis().SetTitle("comb jet1 mass [GeV]");
+    h_comb_jet1_mass_HHZ_polm80_massCuts_.GetXaxis().SetTitle("H1 candidate mass [GeV]");
     h_comb_jet1_mass_HHZ_polm80_massCuts_.SetLineWidth(3);
     h_comb_jet1_mass_HHZ_polm80_massCuts_.SetFillColor(kWhite)
     h_comb_jet1_mass_HHZ_polm80_massCuts_.SetLineColor(kBlack)
@@ -371,7 +371,7 @@ def process_files():
     #h_tot_norm_comb_jet1_mass_BG.GetXaxis().SetRangeUser(91,161)
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.Draw("hist");
     #hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
-    hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetTitle("comb jet1 mass [GeV]");
+    hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetTitle("H1 candidate mass [GeV]");
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetYaxis().SetTitle("Events");
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.SetMaximum(150000.)
     h_comb_jet1_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
@@ -432,7 +432,7 @@ def process_files():
     #h_tot_norm_comb_jet1_mass_BG.GetXaxis().SetRangeUser(91,161)
     hhqq_norm_BG_comb_jet1_mass_polm80_massCuts_.Draw("hist");
     #hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
-    hhqq_norm_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetTitle("comb jet1 mass [GeV]");
+    hhqq_norm_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetTitle("H1 candidate mass [GeV]");
     hhqq_norm_BG_comb_jet1_mass_polm80_massCuts_.GetYaxis().SetTitle("A.U.");
     hhqq_norm_BG_comb_jet1_mass_polm80_massCuts_.SetMaximum(2.5)
     h_comb_jet1_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
@@ -472,17 +472,17 @@ def process_files():
     
     #comb jet2
     h_comb_jet2_mass_HHZ_polm80_AllEvents_massCuts_=file_polm80_preselection_.Get("hhqq_AllEvents/h_comb_jet2_mass");
-    h_comb_jet2_mass_HHZ_polm80_AllEvents_massCuts_.GetXaxis().SetTitle("comb jet2 mass [GeV]");
+    h_comb_jet2_mass_HHZ_polm80_AllEvents_massCuts_.GetXaxis().SetTitle("H2 candidate mass [GeV]");
     h_comb_jet2_mass_HHZ_polm80_AllEvents_massCuts_.SetLineWidth(3);
     h_comb_jet2_mass_HHZ_polm80_massCuts_=file_polm80_preselection_.Get("hhqq/h_comb_jet2_mass");
-    h_comb_jet2_mass_HHZ_polm80_massCuts_.GetXaxis().SetTitle("comb jet2 mass [GeV]");
+    h_comb_jet2_mass_HHZ_polm80_massCuts_.GetXaxis().SetTitle("H2 candidate mass [GeV]");
     h_comb_jet2_mass_HHZ_polm80_massCuts_.SetLineWidth(3);
     h_comb_jet2_mass_HHZ_polm80_massCuts_.SetFillColor(kWhite)
     h_comb_jet2_mass_HHZ_polm80_massCuts_.SetLineColor(kBlack)
     
 
     h_comb_jet2_mass_hzqq_polm80_massCuts_=file_polm80_preselection_.Get("hzqq/h_comb_jet2_mass");
-    h_comb_jet2_mass_hzqq_polm80_massCuts_.GetXaxis().SetTitle("comb jet2 mass [GeV]");
+    h_comb_jet2_mass_hzqq_polm80_massCuts_.GetXaxis().SetTitle("H2 candidate mass [GeV]");
     h_comb_jet2_mass_hzqq_polm80_massCuts_.SetLineWidth(3);
     h_comb_jet2_mass_hzqq_polm80_massCuts_.SetFillColor(kCyan+1)
     h_comb_jet2_mass_hzqq_polm80_massCuts_.SetLineColor(kCyan+1)
@@ -533,7 +533,7 @@ def process_files():
     canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack = setUpperCanvas("canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack");
     canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack.cd();
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.Draw("hist");
-    hhqq_BG_comb_jet2_mass_polm80_massCuts_.GetXaxis().SetTitle("comb jet2 mass [GeV]");
+    hhqq_BG_comb_jet2_mass_polm80_massCuts_.GetXaxis().SetTitle("H2 candidate mass [GeV]");
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.GetYaxis().SetTitle("Events");
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.SetMaximum(175000.)
     h_comb_jet2_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
@@ -596,7 +596,7 @@ def process_files():
     #h_tot_norm_comb_jet2_mass_BG.GetXaxis().SetRangeUser(91,161)
     hhqq_norm_BG_comb_jet2_mass_polm80_massCuts_.Draw("hist");
     #hhqq_BG_comb_jet2_mass_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
-    hhqq_norm_BG_comb_jet2_mass_polm80_massCuts_.GetXaxis().SetTitle("comb jet2 mass [GeV]");
+    hhqq_norm_BG_comb_jet2_mass_polm80_massCuts_.GetXaxis().SetTitle("H2 candidate mass [GeV]");
     hhqq_norm_BG_comb_jet2_mass_polm80_massCuts_.GetYaxis().SetTitle("A.U.");
     hhqq_norm_BG_comb_jet2_mass_polm80_massCuts_.SetMaximum(2.5)
     h_comb_jet2_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
@@ -639,14 +639,14 @@ def process_files():
     h_comb_jet3_mass_HHZ_polm80_AllEvents_massCuts_.GetXaxis().SetTitle("comb jet3 mass [GeV]");
     h_comb_jet3_mass_HHZ_polm80_AllEvents_massCuts_.SetLineWidth(3);
     h_comb_jet3_mass_HHZ_polm80_massCuts_=file_polm80_preselection_.Get("hhqq/h_comb_jet3_mass");
-    h_comb_jet3_mass_HHZ_polm80_massCuts_.GetXaxis().SetTitle("comb jet3 mass [GeV]");
+    h_comb_jet3_mass_HHZ_polm80_massCuts_.GetXaxis().SetTitle("Z candidate mass [GeV]");
     h_comb_jet3_mass_HHZ_polm80_massCuts_.SetLineWidth(3);
     h_comb_jet3_mass_HHZ_polm80_massCuts_.SetFillColor(kWhite)
     h_comb_jet3_mass_HHZ_polm80_massCuts_.SetLineColor(kBlack)
     
     
     h_comb_jet3_mass_hzqq_polm80_massCuts_=file_polm80_preselection_.Get("hzqq/h_comb_jet3_mass");
-    h_comb_jet3_mass_hzqq_polm80_massCuts_.GetXaxis().SetTitle("comb jet3 mass [GeV]");
+    h_comb_jet3_mass_hzqq_polm80_massCuts_.GetXaxis().SetTitle("Z candidate mass [GeV]");
     h_comb_jet3_mass_hzqq_polm80_massCuts_.SetLineWidth(3);
     h_comb_jet3_mass_hzqq_polm80_massCuts_.SetFillColor(kCyan+1)
     h_comb_jet3_mass_hzqq_polm80_massCuts_.SetLineColor(kCyan+1)
@@ -701,7 +701,7 @@ def process_files():
     #h_tot_norm_comb_jet3_mass_BG.GetXaxis().SetRangeUser(91,161)
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.Draw("hist");
     #hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
-    hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetTitle("comb jet3 mass [GeV]");
+    hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetTitle("Z candidate mass [GeV]");
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetYaxis().SetTitle("Events");
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.SetMaximum(450000.)
     h_comb_jet3_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
@@ -771,7 +771,7 @@ def process_files():
     #h_tot_norm_comb_jet3_mass_BG.GetXaxis().SetRangeUser(91,161)
     hhqq_norm_BG_comb_jet3_mass_polm80_massCuts_.Draw("hist");
     #hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
-    hhqq_norm_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetTitle("comb jet3 mass [GeV]");
+    hhqq_norm_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetTitle("Z candidate mass [GeV]");
     hhqq_norm_BG_comb_jet3_mass_polm80_massCuts_.GetYaxis().SetTitle("A.U.");
     hhqq_norm_BG_comb_jet3_mass_polm80_massCuts_.SetMaximum(3.5)
     h_comb_jet3_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")

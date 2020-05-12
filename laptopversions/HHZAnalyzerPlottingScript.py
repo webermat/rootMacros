@@ -547,7 +547,7 @@ def process_files():
     canvas_d_ij_qqbar_fromB_polm80 = setUpperCanvas("canvas_hhz_d_ij_qqbar_fromB_polm80");
     canvas_d_ij_qqbar_fromB_polm80.cd()
 
-    leg_d_ij_qqbar_fromB_polm80_test=TLegend(0.70,0.61,0.90,0.87);
+    leg_d_ij_qqbar_fromB_polm80_test=TLegend(0.60,0.61,0.80,0.87);
     leg_d_ij_qqbar_fromB_polm80_test.SetBorderSize(0);
     leg_d_ij_qqbar_fromB_polm80_test.SetTextAlign(12);
     leg_d_ij_qqbar_fromB_polm80_test.SetTextSize(0.050);
@@ -720,7 +720,7 @@ def process_files():
     h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.Rebin(4)
     h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetLineWidth(2)
     h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetLineColor(1)
-    h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('jet mass [GeV]')
+    h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('boson candidate mass [GeV]')
     h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Events')
     h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetMaximum(15)
     h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetMinimum(0)
@@ -755,9 +755,9 @@ def process_files():
     leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillColor(0);
     leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillStyle(0);
     leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetHeader("HHZ Events, N_{jet}=4");
-    leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"j1");
-    leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet4_VLC10_mass_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j2");
-    leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet4_VLC10_mass_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j3");
+    leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet4_VLC10_mass_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1");
+    leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet4_VLC10_mass_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2");
+    leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet4_VLC10_mass_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"Z");
     leg_njet4_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.Draw();
     
     l.DrawLatex(x,y,label);
@@ -820,7 +820,7 @@ def process_files():
     h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.Rebin(4)
     h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetLineWidth(2)
     h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetLineColor(1)
-    h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('jet mass [GeV]')
+    h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('boson candidate mass [GeV]')
     h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Events')
     h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetMaximum(15)
     h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetMinimum(0)
@@ -855,9 +855,9 @@ def process_files():
     leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillColor(0);
     leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillStyle(0);
     leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetHeader("HHZ Events, N_{jet}=5");
-    leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"j1");
-    leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet5_VLC10_mass_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j2");
-    leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet5_VLC10_mass_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j3");
+    leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet5_VLC10_mass_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1");
+    leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet5_VLC10_mass_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2");
+    leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet5_VLC10_mass_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H3");
     leg_njet5_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.Draw();
     
     l.DrawLatex(x,y,label);
@@ -919,7 +919,7 @@ def process_files():
     h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.Rebin(4)
     h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetLineWidth(2)
     h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetLineColor(1)
-    h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('jet mass [GeV]')
+    h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('boson candidate mass [GeV]')
     h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Events')
     h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetMaximum(15)
     h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.SetMinimum(0)
@@ -954,20 +954,20 @@ def process_files():
     leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillColor(0);
     leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillStyle(0);
     leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.SetHeader("HHZ Events, N_{jet}=6");
-    leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"j1");
-    leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j2");
-    leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j3");
+    leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1");
+    leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2");
+    leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"Z");
     leg_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80_test.Draw();
     
     l.DrawLatex(x,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80.Print("~/plotsHHZ_VLC_Jets_rfJets_BTag_NJet3_to_NJet6_noIsoP_191213/canvas_njet6_VLC10_hhz_rj_mass_B_HZZ_bbbbqq_polm80.eps")
+    canvas_njet6_VLC10_rj_mass_B_HZZ_bbbbqq_polm80.Print("~/plotsHHZ_VLC_Jets_rfJets_BTag_NJet3_to_NJet6_noIsoP_191213/canvas_njet6_VLC10_hhz_rj_mass_HZZ_bbbbqq_polm80.eps")
 
     h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80=file_polm80_HHZ_SignalHistos_VLC10_njet6_.Get("h_mass_comb_rfj_rj1_HHZ_bbbbqq")
     h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.Rebin(4)
     h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.SetLineWidth(2)
     h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.SetLineColor(1)
-    h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('jet mass [GeV]')
+    h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('boson candidate mass [GeV]')
     h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Events')
     h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.SetMaximum(15)
     h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.SetMinimum(0)
@@ -1002,14 +1002,14 @@ def process_files():
     leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillColor(0);
     leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.SetFillStyle(0);
     leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.SetHeader("HHZ Events, N_{jet}=6");
-    leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"j1");
-    leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rfj_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j2");
-    leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rfj_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j3");
+    leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rfj_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1");
+    leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rfj_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2");
+    leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_mass_rfj_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"Z");
     leg_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80_test.Draw();
     
     l.DrawLatex(x,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80.Print("~/plotsHHZ_VLC_Jets_rfJets_BTag_NJet3_to_NJet6_noIsoP_191213/canvas_njet6_VLC10_hhz_rfj_rj_mass_B_HZZ_bbbbqq_polm80.eps")
+    canvas_njet6_VLC10_rfj_rj_mass_B_HZZ_bbbbqq_polm80.Print("~/plotsHHZ_VLC_Jets_rfJets_BTag_NJet3_to_NJet6_noIsoP_191213/canvas_njet6_VLC10_hhz_rfj_rj_mass_HZZ_bbbbqq_polm80.eps")
 
 
 
@@ -1019,7 +1019,7 @@ def process_files():
     h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.Rebin(4)
     h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.SetLineWidth(2)
     h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.SetLineColor(1)
-    h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('minimum #Delta#alpha(part,jet) [#circ]')
+    h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('minimum #Delta#alpha(part,B) [#circ]')
     h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Events')
     h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.SetMaximum(60)
     h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.SetMinimum(0)
@@ -1054,9 +1054,9 @@ def process_files():
     leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.SetFillColor(0);
     leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.SetFillStyle(0);
     leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.SetHeader("HHZ Events, N_{jet}=6");
-    leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1-matched jet");
-    leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_dalpha_H2_comb_rfj_rj_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2-matched jet");
-    leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_dalpha_Z_comb_rfj_rj_match_HHZ_bbbbqq.DrawCopy("h,same"),"Z-matched jet");
+    leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_dalpha_H1_comb_rfj_rj_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1 candidate");
+    leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_dalpha_H2_comb_rfj_rj_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2 candidate");
+    leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_dalpha_Z_comb_rfj_rj_match_HHZ_bbbbqq.DrawCopy("h,same"),"Z candidate");
     leg_njet6_VLC10_rfj_rj_dalpha_parton_comb_jet_B_HZZ_bbbbqq_polm80_test.Draw();
     
     l.DrawLatex(x,y,label);
@@ -1108,9 +1108,9 @@ def process_files():
     leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.SetFillColor(0);
     leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.SetFillStyle(0);
     leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.SetHeader("HHZ Events, N_{jet}=6");
-    leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_P_reco_over_P_parton_H1_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1-matched jet");
-    leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_P_reco_over_P_parton_H2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2-matched jet");
-    leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_P_reco_over_P_parton_Z_HHZ_bbbbqq_polm80.DrawCopy("h,same"),"Z-matched jet");
+    leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_P_reco_over_P_parton_H1_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1 candidate");
+    leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_P_reco_over_P_parton_H2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2 candidate");
+    leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_P_reco_over_P_parton_Z_HHZ_bbbbqq_polm80.DrawCopy("h,same"),"Z candidate");
     leg_njet6_VLC10_rfj_rj_P_reco_over_P_partonHZZ_bbbbqq_polm80_test.Draw();
     
     l.DrawLatex(x,y,label);
@@ -1131,8 +1131,8 @@ def process_files():
     h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.Rebin(4)
     h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.SetLineWidth(2)
     h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.SetLineColor(2)
-    h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('jet mass [GeV]')
-    h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Events')
+    h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.GetXaxis().SetTitle(' [GeV]')
+    h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Evejet massnts')
 
     h_njet6_VLC10_BTag_rjf_rj3_HZZ_bbbbqq_polm80=file_polm80_HHZ_SignalHistos_VLC10_njet6_.Get("h_BTagMax_comb_rfj_rj3_HHZ_bbbbqq")
     h_njet6_VLC10_BTag_rjf_rj3_HZZ_bbbbqq_polm80.Rebin(4)
@@ -1157,9 +1157,9 @@ def process_files():
     leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.SetFillColor(0);
     leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.SetFillStyle(0);
     leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.SetHeader("HHZ Events, N_{jet}=6");
-    leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_BTag_rjf_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"j1");
-    leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j2");
-    leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_BTag_rjf_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"j3");
+    leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_BTag_rjf_rj1_HZZ_bbbbqq_polm80.DrawCopy("h"),"H1");
+    leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_BTag_rjf_rj2_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"H2");
+    leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.AddEntry(h_njet6_VLC10_BTag_rjf_rj3_HZZ_bbbbqq_polm80.DrawCopy("h,same"),"Z");
     leg_njet6_VLC10_BTagMax_rjf_rj_B_HZZ_bbbbqq_polm80_test.Draw();
     
     l.DrawLatex(x,y,label);
@@ -1184,14 +1184,14 @@ def process_files():
     h_njet6_VLC10_alpha_comb_rfj_rj2_Hs_HZZ_bbbbqq_polm80.Rebin(4)
     h_njet6_VLC10_alpha_comb_rfj_rj2_Hs_HZZ_bbbbqq_polm80.SetLineWidth(2)
     h_njet6_VLC10_alpha_comb_rfj_rj2_Hs_HZZ_bbbbqq_polm80.SetLineColor(2)
-    h_njet6_VLC10_alpha_comb_rfj_rj2_Hs_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('jet mass [GeV]')
+    h_njet6_VLC10_alpha_comb_rfj_rj2_Hs_HZZ_bbbbqq_polm80.GetXaxis().SetTitle('mass [GeV]')
     h_njet6_VLC10_alpha_comb_rfj_rj2_Hs_HZZ_bbbbqq_polm80.GetYaxis().SetTitle('Events')
 
     h_njet6_VLC10_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq=file_polm80_HHZ_SignalHistos_VLC10_njet6_.Get("h_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq")
     h_njet6_VLC10_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq.Rebin(4)
     h_njet6_VLC10_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq.SetLineWidth(2)
     h_njet6_VLC10_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq.SetLineColor(4)
-    h_njet6_VLC10_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq.GetXaxis().SetTitle('jet mass [GeV]')
+    h_njet6_VLC10_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq.GetXaxis().SetTitle('mass [GeV]')
     h_njet6_VLC10_dalpha_comb_rfj_rj3_Z_HHZ_bbbbqq.GetYaxis().SetTitle('Events')
 
 
