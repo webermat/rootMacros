@@ -377,7 +377,12 @@ void drawFancyPlots(){
 
   //TFile* file_histos_normalRange_jets=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER100_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC.root");
   //TFile* file_histos_normalRange_jets=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181101_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi300_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat_allSCpoints.root");
-  TFile* file_histos_normalRange_jets=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi500_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat.root");
+  //correct for wrong SC file
+  TFile* file_histos_normalRange_jets=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_realVLC_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_emptyLastCosThetaBin_replace380_500_190709_correctZuds100_noSC_File.root");
+
+//afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_realVLC_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_emptyLastCosThetaBin_replace380_500_190709_correctZuds100_noSC_File.root");
+
+//afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi500_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat.root");
 
 //afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi300_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat_allSCpoints_realSamples.root");
   //allSCpoints.root
@@ -391,7 +396,9 @@ void drawFancyPlots(){
 
 
   //380 overlay sample defined below
-  TFile* file_histos_normalRange_jets_SCStudies=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi500_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat.root");
+  TFile* file_histos_normalRange_jets_SCStudies=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_realVLC_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_emptyLastCosThetaBin_replace380_500_190709_correctZuds100_noSC_File.root");
+
+    ///afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi500_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat_realZuds100_noSCFile.root");
 
 //afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi200_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat.root");
 
@@ -404,7 +411,9 @@ void drawFancyPlots(){
   //TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_180810_and_180724_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER100_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC.root");
 
   //do DrawManyBinsJER200ddphi500 for dphi plots and CB fits, for region of 250 and dphi vs E plot use DrawManyBinsJER200ddphi300
-TFile* file_histos_normalRange_jets_drawbins=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi500_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat.root");
+  TFile* file_histos_normalRange_jets_drawbins=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_realVLC_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_emptyLastCosThetaBin_replace380_500_190709_correctZuds100_noSC_File.root");
+
+//afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi500_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat_realZuds100_noSCFile.root");
 
 //afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200dphi300_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx_largeStat.root");
 
@@ -413,6 +422,186 @@ TFile* file_histos_normalRange_jets_drawbins=TFile::Open("/afs/cern.ch/user/w/we
 
   //TFile* file_histos_normalRange_jets_drawbins=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_181011_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBinsJER200_range10_WW_ZZ_mass_histos_pyt380_MeanReal_addNoSC_SetNpx.root");
   //TFile* file_histos_normalRange_jets_drawbins=TFile::Open("afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_wO_180724_histoFitRange_0_00_to_3_00_JetAlgorithms_angMatch_10Deg_for_dphi_dtheta_gj1_gj2_dphi_2_80_DrawManyBins200DPhiDTheta_range10_WW_ZZ_mass_histos_pyt380.root");
+
+
+  TCanvas *resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65");
+  resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65->cd();
+  TGraphErrors* TG_JER_0_65_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_wSC");
+  if(TG_JER_0_65_wSC!=NULL){
+    std::cout<<"at least graph should exist"<<std::endl;
+  }
+  TG_JER_0_65_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
+  TG_JER_0_65_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j}^{R}/E_{j}^{G})/Mean_{90}(E_{j}^{R}/E_{j}^{G})[%]");
+  TG_JER_0_65_wSC->GetYaxis()->SetTitleSize(0.06);
+  //TG_JER_0_65_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
+  TG_JER_0_65_wSC->SetMaximum(10.5);
+  TG_JER_0_65_wSC->SetMinimum(2.4);
+
+  TGraphErrors* TG_JER_0_65_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_noSC");
+  TGraphErrors* TG_JER_0_65_wO_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_wO_wSC");
+  TGraphErrors* TG_JER_0_65_wO_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_wO_noSC");
+
+  TG_JER_0_65_wSC->Draw("PA");
+  TG_JER_0_65_wO_wSC->Draw("P,same");
+  TG_JER_0_65_wO_noSC->Draw("P,same");
+  TG_JER_0_65_noSC->Draw("P,same");
+
+  
+  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_fancy->cd();
+  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetBorderSize(0);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetTextAlign(12);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetTextSize(0.050);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetTextFont(42);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetMargin(0.15);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetLineColor(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetLineStyle(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetLineWidth(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetFillColor(0);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetFillStyle(1001);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetHeader("VLC7 Jets, |cos#theta|<0.65");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_wSC,"with software comp.","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_noSC,"no energy corr.","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_wO_wSC,"with software comp., 3TeV BG","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_wO_noSC,"no energy corr., 3 TeV BG","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->Draw();
+
+  l->DrawLatex(x,y,label.c_str());
+
+
+  TCanvas *resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80");
+  resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80->cd();
+  TGraphErrors* TG_JER_0_65_to_0_80_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_wSC");
+  if(TG_JER_0_65_to_0_80_wSC!=NULL){
+    std::cout<<"at least graph should exist"<<std::endl;
+  }
+  TG_JER_0_65_to_0_80_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
+  TG_JER_0_65_to_0_80_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j}^{R}/E_{j}^{G})/Mean_{90}(E_{j}^{R}/E_{j}^{G})[%]");
+  TG_JER_0_65_to_0_80_wSC->GetYaxis()->SetTitleSize(0.06);
+  //TG_JER_0_65_to_0_80_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
+  TG_JER_0_65_to_0_80_wSC->SetMaximum(10.5);
+  TG_JER_0_65_to_0_80_wSC->SetMinimum(2.4);
+
+  TGraphErrors* TG_JER_0_65_to_0_80_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_noSC");
+  TGraphErrors* TG_JER_0_65_to_0_80_wO_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_wO_wSC");
+  TGraphErrors* TG_JER_0_65_to_0_80_wO_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_wO_noSC");
+
+  TG_JER_0_65_to_0_80_wSC->Draw("PA");
+  TG_JER_0_65_to_0_80_wO_wSC->Draw("P,same");
+  TG_JER_0_65_to_0_80_wO_noSC->Draw("P,same");
+  TG_JER_0_65_to_0_80_noSC->Draw("P,same");
+
+  
+  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_fancy->cd();
+  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetBorderSize(0);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetTextAlign(12);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetTextSize(0.050);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetTextFont(42);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetMargin(0.15);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetLineColor(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetLineStyle(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetLineWidth(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetFillColor(0);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetFillStyle(1001);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetHeader("VLC7 Jets, 0.65<|cos#theta|<0.80");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_wSC,"with software comp.","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_noSC,"no energy corr.","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_wO_wSC,"with software comp., 3TeV BG","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_wO_noSC,"no energy corr., 3 TeV BG","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->Draw();
+
+  l->DrawLatex(x,y,label.c_str());
+
+  TCanvas *resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925");
+  resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925->cd();
+  TGraphErrors* TG_JER_0_80_to_0_925_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_wSC");
+  if(TG_JER_0_80_to_0_925_wSC!=NULL){
+    std::cout<<"at least graph should exist"<<std::endl;
+  }
+  TG_JER_0_80_to_0_925_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
+  TG_JER_0_80_to_0_925_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j}^{R}/E_{j}^{G})/Mean_{90}(E_{j}^{R}/E_{j}^{G})[%]");
+  TG_JER_0_80_to_0_925_wSC->GetYaxis()->SetTitleSize(0.06);
+  //TG_JER_0_80_to_0_925_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
+  TG_JER_0_80_to_0_925_wSC->SetMaximum(10.50);
+  TG_JER_0_80_to_0_925_wSC->SetMinimum(2.4);
+
+  TGraphErrors* TG_JER_0_80_to_0_925_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_noSC");
+  TGraphErrors* TG_JER_0_80_to_0_925_wO_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_wO_wSC");
+  TGraphErrors* TG_JER_0_80_to_0_925_wO_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_wO_noSC");
+
+  TG_JER_0_80_to_0_925_wSC->Draw("PA");
+  TG_JER_0_80_to_0_925_wO_wSC->Draw("P,same");
+  TG_JER_0_80_to_0_925_wO_noSC->Draw("P,same");
+  TG_JER_0_80_to_0_925_noSC->Draw("P,same");
+
+  
+  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->cd();
+  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetBorderSize(0);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetTextAlign(12);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetTextSize(0.050);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetTextFont(42);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetMargin(0.15);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetLineColor(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetLineStyle(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetLineWidth(1);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetFillColor(0);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetFillStyle(1001);
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetHeader("VLC7 Jets, 0.80<|cos#theta|<0.925");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_wSC,"with software comp.","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_noSC,"no energy corr.","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_wO_wSC,"with software comp., 3TeV BG","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_wO_noSC,"no energy corr., 3 TeV BG","PE");
+  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->Draw();
+
+  l->DrawLatex(x,y,label.c_str());
+
+  TFile* file_totE_JER=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_181101_correctMC_histoFitRange_0_00_to_2_00_RedXRange_centralQuark_cosTheta_0_70_RealMeanHisto_RMS90_and_RMS_redBinsForGaussianFit.root");
+
+
+
+  TCanvas *resolutionGraphCanvas_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70");
+  resolutionGraphCanvas_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70->cd();
+  TGraphErrors* TG_JER_totE_0_70_wSC=(TGraphErrors*)file_totE_JER->Get("gre_DR07_RMS90_JER_0_70_wSC");
+  if(TG_JER_totE_0_70_wSC!=NULL){
+    std::cout<<"at least graph should exist"<<std::endl;
+  }
+  TG_JER_totE_0_70_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
+  TG_JER_totE_0_70_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j})/Mean_{90}(E_{j})[%]");
+  TG_JER_totE_0_70_wSC->GetYaxis()->SetTitleSize(0.06);
+  //TG_JER_totE_0_70_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
+  TG_JER_totE_0_70_wSC->SetMaximum(5.50);
+  TG_JER_totE_0_70_wSC->SetMinimum(2.4);
+  TG_JER_totE_0_70_wSC->Draw("PA");
+
+  TGraphErrors* TG_JER_totE_0_70_noSC=(TGraphErrors*) file_totE_JER->Get("gre_DR07_RMS90_JER_0_70_noSC");
+  TG_JER_totE_0_70_noSC->Draw("P,same");
+
+  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->cd();
+  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->BuildLegend(0.20,0.65,0.50,0.85);
+  TLegend *leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetBorderSize(0);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetTextAlign(12);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetTextSize(0.050);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetTextFont(42);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetMargin(0.15);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetLineColor(1);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetLineStyle(1);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetLineWidth(1);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetFillColor(0);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetFillStyle(1001);
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetHeader("VLC7 Jets, 0.80<|cos#theta|<0.925");
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->AddEntry(TG_JER_totE_0_70_wSC,"with software comp.","PE");
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->AddEntry(TG_JER_totE_0_70_noSC,"no energy corr.","PE");
+  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->Draw();
+
+  l->DrawLatex(x,y,label.c_str());
+
+
 
   TH1F* h_Zuds100_JER_DR07 = (TH1F*)file_histos_normalRange_jets->Get("JER_RMS90VsCosTheta_CT_DR07_100");
  //h_Zuds100_JER_DR07->SetLineColor(kRed);
@@ -2877,182 +3066,6 @@ TFile* file_histos_normalRange_jets_drawbins=TFile::Open("/afs/cern.ch/user/w/we
 
   l->DrawLatex(x,y,label.c_str());
 
-  TCanvas *resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65");
-  resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65->cd();
-  TGraphErrors* TG_JER_0_65_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_wSC");
-  if(TG_JER_0_65_wSC!=NULL){
-    std::cout<<"at least graph should exist"<<std::endl;
-  }
-  TG_JER_0_65_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
-  TG_JER_0_65_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j}^{R}/E_{j}^{G})/Mean_{90}(E_{j}^{R}/E_{j}^{G})[%]");
-  TG_JER_0_65_wSC->GetYaxis()->SetTitleSize(0.06);
-  //TG_JER_0_65_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
-  TG_JER_0_65_wSC->SetMaximum(10.5);
-  TG_JER_0_65_wSC->SetMinimum(2.4);
-
-  TGraphErrors* TG_JER_0_65_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_noSC");
-  TGraphErrors* TG_JER_0_65_wO_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_wO_wSC");
-  TGraphErrors* TG_JER_0_65_wO_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_wO_noSC");
-
-  TG_JER_0_65_wSC->Draw("PA");
-  TG_JER_0_65_wO_wSC->Draw("P,same");
-  TG_JER_0_65_wO_noSC->Draw("P,same");
-  TG_JER_0_65_noSC->Draw("P,same");
-
-  
-  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_fancy->cd();
-  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_fancy->BuildLegend(0.20,0.65,0.50,0.85);
-  TLegend *leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetBorderSize(0);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetTextAlign(12);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetTextSize(0.050);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetTextFont(42);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetMargin(0.15);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetLineColor(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetLineStyle(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetLineWidth(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetFillColor(0);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetFillStyle(1001);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->SetHeader("VLC7 Jets, |cos#theta|<0.65");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_wSC,"with software comp.","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_noSC,"no energy corr.","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_wO_wSC,"with software comp., 3TeV BG","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->AddEntry(TG_JER_0_65_wO_noSC,"no energy corr., 3 TeV BG","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_FullSummary->Draw();
-
-  l->DrawLatex(x,y,label.c_str());
-
-
-  TCanvas *resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80");
-  resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80->cd();
-  TGraphErrors* TG_JER_0_65_to_0_80_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_wSC");
-  if(TG_JER_0_65_to_0_80_wSC!=NULL){
-    std::cout<<"at least graph should exist"<<std::endl;
-  }
-  TG_JER_0_65_to_0_80_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
-  TG_JER_0_65_to_0_80_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j}^{R}/E_{j}^{G})/Mean_{90}(E_{j}^{R}/E_{j}^{G})[%]");
-  TG_JER_0_65_to_0_80_wSC->GetYaxis()->SetTitleSize(0.06);
-  //TG_JER_0_65_to_0_80_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
-  TG_JER_0_65_to_0_80_wSC->SetMaximum(10.5);
-  TG_JER_0_65_to_0_80_wSC->SetMinimum(2.4);
-
-  TGraphErrors* TG_JER_0_65_to_0_80_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_noSC");
-  TGraphErrors* TG_JER_0_65_to_0_80_wO_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_wO_wSC");
-  TGraphErrors* TG_JER_0_65_to_0_80_wO_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_65_to_0_80_wO_noSC");
-
-  TG_JER_0_65_to_0_80_wSC->Draw("PA");
-  TG_JER_0_65_to_0_80_wO_wSC->Draw("P,same");
-  TG_JER_0_65_to_0_80_wO_noSC->Draw("P,same");
-  TG_JER_0_65_to_0_80_noSC->Draw("P,same");
-
-  
-  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_fancy->cd();
-  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_fancy->BuildLegend(0.20,0.65,0.50,0.85);
-  TLegend *leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetBorderSize(0);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetTextAlign(12);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetTextSize(0.050);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetTextFont(42);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetMargin(0.15);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetLineColor(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetLineStyle(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetLineWidth(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetFillColor(0);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetFillStyle(1001);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->SetHeader("VLC7 Jets, 0.65<|cos#theta|<0.80");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_wSC,"with software comp.","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_noSC,"no energy corr.","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_wO_wSC,"with software comp., 3TeV BG","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->AddEntry(TG_JER_0_65_to_0_80_wO_noSC,"no energy corr., 3 TeV BG","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_65_to_0_80_FullSummary->Draw();
-
-  l->DrawLatex(x,y,label.c_str());
-
-  TCanvas *resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925");
-  resolutionGraphCanvas_JER_100_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925->cd();
-  TGraphErrors* TG_JER_0_80_to_0_925_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_wSC");
-  if(TG_JER_0_80_to_0_925_wSC!=NULL){
-    std::cout<<"at least graph should exist"<<std::endl;
-  }
-  TG_JER_0_80_to_0_925_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
-  TG_JER_0_80_to_0_925_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j}^{R}/E_{j}^{G})/Mean_{90}(E_{j}^{R}/E_{j}^{G})[%]");
-  TG_JER_0_80_to_0_925_wSC->GetYaxis()->SetTitleSize(0.06);
-  //TG_JER_0_80_to_0_925_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
-  TG_JER_0_80_to_0_925_wSC->SetMaximum(10.50);
-  TG_JER_0_80_to_0_925_wSC->SetMinimum(2.4);
-
-  TGraphErrors* TG_JER_0_80_to_0_925_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_noSC");
-  TGraphErrors* TG_JER_0_80_to_0_925_wO_wSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_wO_wSC");
-  TGraphErrors* TG_JER_0_80_to_0_925_wO_noSC=(TGraphErrors*) file_histos_normalRange_jets->Get("gre_DR07_RMS90_JER_0_80_to_0_925_wO_noSC");
-
-  TG_JER_0_80_to_0_925_wSC->Draw("PA");
-  TG_JER_0_80_to_0_925_wO_wSC->Draw("P,same");
-  TG_JER_0_80_to_0_925_wO_noSC->Draw("P,same");
-  TG_JER_0_80_to_0_925_noSC->Draw("P,same");
-
-  
-  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->cd();
-  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->BuildLegend(0.20,0.65,0.50,0.85);
-  TLegend *leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetBorderSize(0);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetTextAlign(12);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetTextSize(0.050);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetTextFont(42);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetMargin(0.15);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetLineColor(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetLineStyle(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetLineWidth(1);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetFillColor(0);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetFillStyle(1001);
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->SetHeader("VLC7 Jets, 0.80<|cos#theta|<0.925");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_wSC,"with software comp.","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_noSC,"no energy corr.","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_wO_wSC,"with software comp., 3TeV BG","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->AddEntry(TG_JER_0_80_to_0_925_wO_noSC,"no energy corr., 3 TeV BG","PE");
-  leg_JER_100_3000_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary->Draw();
-
-  l->DrawLatex(x,y,label.c_str());
-
-  TFile* file_totE_JER=TFile::Open("/afs/cern.ch/user/w/weberma2/performanceHistoFiles/Zuds_CT_181101_correctMC_histoFitRange_0_00_to_2_00_RedXRange_centralQuark_cosTheta_0_70_RealMeanHisto_RMS90_and_RMS_redBinsForGaussianFit.root");
-
-
-
-  TCanvas *resolutionGraphCanvas_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70 = setUpperCanvas("resolutionGraphCanvas_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70");
-  resolutionGraphCanvas_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70->cd();
-  TGraphErrors* TG_JER_totE_0_70_wSC=(TGraphErrors*)file_totE_JER->Get("gre_DR07_RMS90_JER_0_70_wSC");
-  if(TG_JER_totE_0_70_wSC!=NULL){
-    std::cout<<"at least graph should exist"<<std::endl;
-  }
-  TG_JER_totE_0_70_wSC->GetXaxis()->SetTitle("E_{jet} [GeV]");
-  TG_JER_totE_0_70_wSC->GetYaxis()->SetTitle("RMS_{90}(E_{j})/Mean_{90}(E_{j})[%]");
-  TG_JER_totE_0_70_wSC->GetYaxis()->SetTitleSize(0.06);
-  //TG_JER_totE_0_70_wSC->GetYaxis()->SetRangeUser(1.75,10.1);
-  TG_JER_totE_0_70_wSC->SetMaximum(5.50);
-  TG_JER_totE_0_70_wSC->SetMinimum(2.4);
-  TG_JER_totE_0_70_wSC->Draw("PA");
-
-  TGraphErrors* TG_JER_totE_0_70_noSC=(TGraphErrors*) file_totE_JER->Get("gre_DR07_RMS90_JER_0_70_noSC");
-  TG_JER_totE_0_70_noSC->Draw("P,same");
-
-  //resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->cd();
-  //TLegend *leg_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_FullSummary = resolutionGraphCanvas_JER_3000_wO_DR07_RMS90_CT_SC_comparison_0_80_to_0_925_fancy->BuildLegend(0.20,0.65,0.50,0.85);
-  TLegend *leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary = new TLegend(0.30,0.546,0.65,0.87);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetBorderSize(0);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetTextAlign(12);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetTextSize(0.050);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetTextFont(42);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetMargin(0.15);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetLineColor(1);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetLineStyle(1);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetLineWidth(1);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetFillColor(0);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetFillStyle(1001);
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->SetHeader("VLC7 Jets, 0.80<|cos#theta|<0.925");
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->AddEntry(TG_JER_totE_0_70_wSC,"with software comp.","PE");
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->AddEntry(TG_JER_totE_0_70_noSC,"no energy corr.","PE");
-  leg_JER_100_3000_totE_RMS90_CT_SC_comparison_0_70_FullSummary->Draw();
-
-  l->DrawLatex(x,y,label.c_str());
 
 
 }

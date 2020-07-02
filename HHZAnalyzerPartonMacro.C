@@ -30,6 +30,8 @@
 
 using namespace std;
 
+
+
 float DeltaPhi(float Phi1,float Phi2){
   float deltaphi=fabs(Phi1-Phi2);
   if(deltaphi>M_PI){
@@ -54,6 +56,7 @@ TCanvas* setUpperCanvas(const char* canvas_name) {
     TCanvas* c1= new TCanvas(canvas_name,canvas_name,10,50,600,500);
     c1->cd();
     gPad->SetTopMargin(0.06);
+    gPad->SetRightMargin(0.15);
     return c1;
 }
 
@@ -95,7 +98,7 @@ void CLICdpStyle()
    /* Use visible font for all text*/
    int font = 42; 
    gStyle->SetTitleFont(font);
-   gStyle->SetTitleFontSize(0.06);
+   gStyle->SetTitleFontSize(0.05);
    gStyle->SetStatFont(font);
    gStyle->SetStatFontSize(0.07);
    gStyle->SetTextFont(font);
@@ -152,6 +155,188 @@ void CLICdpStyle()
    gStyle->SetCanvasDefH(700);
 
    gROOT->ForceStyle();
+}
+
+void plot_trips(){
+
+  CLICdpStyle();
+
+  int nbins=12;
+  float n_limit_low=0.5;
+  float n_limit_high =12.5; 
+
+  TH1F* h_multi_trips_per_months=new TH1F("h_multi_trips_per_months","",nbins,n_limit_low,n_limit_high);
+  h_multi_trips_per_months->Sumw2();
+  h_multi_trips_per_months->SetFillColor(kBlue);
+  h_multi_trips_per_months->SetLineColor(kBlue);
+  h_multi_trips_per_months->GetYaxis()->SetTitle("#trips");
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(1,"January");
+  h_multi_trips_per_months->SetBinContent(1,7);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(2,"February");
+  h_multi_trips_per_months->SetBinContent(2,6);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(3,"March");
+  h_multi_trips_per_months->SetBinContent(3,10);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(4,"April");
+  h_multi_trips_per_months->SetBinContent(4,11);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(5,"May");
+  h_multi_trips_per_months->SetBinContent(5,12);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(6,"June");
+  h_multi_trips_per_months->SetBinContent(6,10);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(7,"July");
+  h_multi_trips_per_months->SetBinContent(7,14);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(8,"August");
+  h_multi_trips_per_months->SetBinContent(8,8);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(9,"September");
+  h_multi_trips_per_months->SetBinContent(9,17);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(10,"October");
+  h_multi_trips_per_months->SetBinContent(10,7);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(11,"November");
+  h_multi_trips_per_months->SetBinContent(11,6);
+  h_multi_trips_per_months->GetXaxis()->SetBinLabel(12,"December");
+  h_multi_trips_per_months->SetBinContent(12,7);
+
+  
+  TH1F* h_single_trips_per_months=new TH1F("h_single_trips_per_months","",nbins,n_limit_low,n_limit_high);
+  h_single_trips_per_months->Sumw2();
+  h_single_trips_per_months->SetLineColor(kRed);
+  h_single_trips_per_months->SetFillColor(kRed);
+  h_single_trips_per_months->GetYaxis()->SetTitle("#trips");
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(1,"January");
+  h_single_trips_per_months->SetBinContent(1,9);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(2,"February");
+  h_single_trips_per_months->SetBinContent(2,4);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(3,"March");
+  h_single_trips_per_months->SetBinContent(3,3);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(4,"April");
+  h_single_trips_per_months->SetBinContent(4,7);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(5,"May");
+  h_single_trips_per_months->SetBinContent(5,13);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(6,"June");
+  h_single_trips_per_months->SetBinContent(6,14);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(7,"July");
+  h_single_trips_per_months->SetBinContent(7,13);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(8,"August");
+  h_single_trips_per_months->SetBinContent(8,18);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(9,"September");
+  h_single_trips_per_months->SetBinContent(9,9);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(10,"October");
+  h_single_trips_per_months->SetBinContent(10,9);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(11,"November");
+  h_single_trips_per_months->SetBinContent(11,10);
+  h_single_trips_per_months->GetXaxis()->SetBinLabel(12,"December");
+  h_single_trips_per_months->SetBinContent(12,8);
+
+
+  TCanvas* canvas_trip_per_month =setUpperCanvas("canvas_trip_per_month");
+  THStack *hs_trips_per_months = new THStack("hs_trips_per_months","");
+  //hs_trips_per_months->GetYaxis()->SetTitle("#trips");
+  hs_trips_per_months->Add(h_multi_trips_per_months);
+  hs_trips_per_months->Add(h_single_trips_per_months);
+  hs_trips_per_months->Draw();
+  hs_trips_per_months->GetYaxis()->SetTitle("# trips");
+  canvas_trip_per_month->Modified();
+
+  TLegend *leg_trip_per_month= new TLegend(0.20,0.735,0.37,0.90);
+  leg_trip_per_month->SetBorderSize(0);
+  leg_trip_per_month->SetTextAlign(12);
+  leg_trip_per_month->SetTextSize(0.050);
+  leg_trip_per_month->SetTextFont(42);
+  leg_trip_per_month->SetMargin(0.15);
+  leg_trip_per_month->SetLineColor(1);
+  leg_trip_per_month->SetLineStyle(1);
+  leg_trip_per_month->SetLineWidth(1);
+  leg_trip_per_month->SetFillColor(0);
+  leg_trip_per_month->SetFillStyle(1001);
+  leg_trip_per_month->AddEntry(h_multi_trips_per_months,"multi day");
+  leg_trip_per_month->AddEntry(h_single_trips_per_months,"single day");
+  leg_trip_per_month->Draw();
+
+
+  TH1F* h_multi_trips_duration_per_months=new TH1F("h_multi_trips_duration_per_months","",nbins,n_limit_low,n_limit_high);
+  h_multi_trips_duration_per_months->Sumw2();
+  h_multi_trips_duration_per_months->SetFillColor(kBlue);
+  h_multi_trips_duration_per_months->SetLineColor(kBlue);
+  h_multi_trips_duration_per_months->GetYaxis()->SetTitle("#days on trips");
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(1,"January");
+  h_multi_trips_duration_per_months->SetBinContent(1,31);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(2,"February");
+  h_multi_trips_duration_per_months->SetBinContent(2,13);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(3,"March");
+  h_multi_trips_duration_per_months->SetBinContent(3,46);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(4,"April");
+  h_multi_trips_duration_per_months->SetBinContent(4,42);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(5,"May");
+  h_multi_trips_duration_per_months->SetBinContent(5,31);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(6,"June");
+  h_multi_trips_duration_per_months->SetBinContent(6,70);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(7,"July");
+  h_multi_trips_duration_per_months->SetBinContent(7,68);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(8,"August");
+  h_multi_trips_duration_per_months->SetBinContent(8,40);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(9,"September");
+  h_multi_trips_duration_per_months->SetBinContent(9,60);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(10,"October");
+  h_multi_trips_duration_per_months->SetBinContent(10,21);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(11,"November");
+  h_multi_trips_duration_per_months->SetBinContent(11,22);
+  h_multi_trips_duration_per_months->GetXaxis()->SetBinLabel(12,"December");
+  h_multi_trips_duration_per_months->SetBinContent(12,28);
+  
+  TH1F* h_single_trips_duration_per_months=new TH1F("h_single_trips_duration_per_months","",nbins,n_limit_low,n_limit_high);
+  h_single_trips_duration_per_months->Sumw2();
+  h_single_trips_duration_per_months->SetFillColor(kRed);
+  h_single_trips_duration_per_months->SetLineColor(kRed);
+  h_single_trips_duration_per_months->GetYaxis()->SetTitle("#days on trips");
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(1,"January");
+  h_single_trips_duration_per_months->SetBinContent(1,9);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(2,"February");
+  h_single_trips_duration_per_months->SetBinContent(2,4);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(3,"March");
+  h_single_trips_duration_per_months->SetBinContent(3,3);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(4,"April");
+  h_single_trips_duration_per_months->SetBinContent(4,7);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(5,"May");
+  h_single_trips_duration_per_months->SetBinContent(5,13);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(6,"June");
+  h_single_trips_duration_per_months->SetBinContent(6,14);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(7,"July");
+  h_single_trips_duration_per_months->SetBinContent(7,13);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(8,"August");
+  h_single_trips_duration_per_months->SetBinContent(8,18);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(9,"September");
+  h_single_trips_duration_per_months->SetBinContent(9,9);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(10,"October");
+  h_single_trips_duration_per_months->SetBinContent(10,9);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(11,"November");
+  h_single_trips_duration_per_months->SetBinContent(11,10);
+  h_single_trips_duration_per_months->GetXaxis()->SetBinLabel(12,"December");
+  h_single_trips_duration_per_months->SetBinContent(12,8);
+
+  TCanvas* canvas_trips_duration_per_month =setUpperCanvas("canvas_trips_duration_per_month");
+  THStack *hs_trips_duration_per_months = new THStack("hs_trips_duration_per_months","");
+  //hs_trips_duration_per_months->GetYaxis()->SetTitle("#trips_duration");
+  hs_trips_duration_per_months->Add(h_multi_trips_duration_per_months);
+  hs_trips_duration_per_months->Add(h_single_trips_duration_per_months);
+  hs_trips_duration_per_months->Draw();
+  hs_trips_duration_per_months->GetYaxis()->SetTitle("# total days spend on trips");
+  canvas_trips_duration_per_month->Modified();
+
+  TLegend *leg_trips_duration_per_month= new TLegend(0.20,0.735,0.37,0.90);
+  leg_trips_duration_per_month->SetBorderSize(0);
+  leg_trips_duration_per_month->SetTextAlign(12);
+  leg_trips_duration_per_month->SetTextSize(0.050);
+  leg_trips_duration_per_month->SetTextFont(42);
+  leg_trips_duration_per_month->SetMargin(0.15);
+  leg_trips_duration_per_month->SetLineColor(1);
+  leg_trips_duration_per_month->SetLineStyle(1);
+  leg_trips_duration_per_month->SetLineWidth(1);
+  leg_trips_duration_per_month->SetFillColor(0);
+  leg_trips_duration_per_month->SetFillStyle(1001);
+  leg_trips_duration_per_month->AddEntry(h_multi_trips_duration_per_months,"multi day");
+  leg_trips_duration_per_month->AddEntry(h_single_trips_duration_per_months,"single day");
+  leg_trips_duration_per_month->Draw();
+
+
 }
 
 
@@ -543,373 +728,6 @@ void fill_HZ_histograms(TFile* file, std::vector<TH1F*> h_hist_vec, std::vector<
     h_hist_vec[45]->Fill((tempTotRecoP4-tempRecoIsoPhP4+tempTotInvGenP4).M());
   
 
-    TLorentzVector tempGenDR10JetSum(0,0,0,0);
-    for(unsigned int i=0;i<genjet10_E->size();i++){
-     TLorentzVector temp(0,0,0,0);
-     temp.SetPxPyPzE((*genjet10_Px)[i],(*genjet10_Py)[i],(*genjet10_Pz)[i],(*genjet10_E)[i]);
-     tempGenDR10JetSum+=temp;
-    }
-    TLorentzVector tempGenDR12JetSum(0,0,0,0);
-    for(unsigned int i=0;i<genjet12_E->size();i++){
-     TLorentzVector temp(0,0,0,0);
-     temp.SetPxPyPzE((*genjet12_Px)[i],(*genjet12_Py)[i],(*genjet12_Pz)[i],(*genjet12_E)[i]);
-     tempGenDR12JetSum+=temp;
-    }
-    TLorentzVector tempRecoDR10JetSum(0,0,0,0);
-    for(unsigned int i=0;i<recojet10_E->size();i++){
-     TLorentzVector temp(0,0,0,0);
-     temp.SetPxPyPzE((*recojet10_Px)[i],(*recojet10_Py)[i],(*recojet10_Pz)[i],(*recojet10_E)[i]);
-     tempRecoDR10JetSum+=temp;
-    }
-    TLorentzVector tempRecoDR12JetSum(0,0,0,0);
-    for(unsigned int i=0;i<recojet12_E->size();i++){
-     TLorentzVector temp(0,0,0,0);
-     temp.SetPxPyPzE((*recojet12_Px)[i],(*recojet12_Py)[i],(*recojet12_Pz)[i],(*recojet12_E)[i]);
-     tempRecoDR12JetSum+=temp;
-    }
-    TLorentzVector gj10_m1(0,0,0,0);
-    TLorentzVector gj10_m2(0,0,0,0);
-    if(genjet10_E->size()==2){
-     gj10_m1.SetPxPyPzE((*genjet10_Px)[0],(*genjet10_Py)[0],(*genjet10_Pz)[0],(*genjet10_E)[0]);
-     gj10_m2.SetPxPyPzE((*genjet10_Px)[1],(*genjet10_Py)[1],(*genjet10_Pz)[1],(*genjet10_E)[1]);
-     if(gj10_m2.M()>gj10_m1.M()){
-       TLorentzVector temp=gj10_m1;
-       gj10_m1=gj10_m2;
-       gj10_m2=temp;
-     }
-     if(gj10_m2.M()>=gj10_m1.M()){
-       std::cout<<"gj10 mass order should have not been the case nowadays "<<gj10_m2.M()<<"/"<<gj10_m1.M()<<std::endl;
-     }
-     if((tempTotGenP4-tempGenIsoPhP4).M()>sqrtS_high_reco){
-       h_hist_vec[46]->Fill(gj10_m1.M());
-       h_hist_vec[47]->Fill(gj10_m2.M());
-       h_hist_vec[54]->Fill(DeltaPhi(tempHP4.Phi(),gj10_m1.Phi())*TMath::RadToDeg());
-       h_hist_vec[55]->Fill(fabs(tempHP4.Theta()-gj10_m1.Theta())*TMath::RadToDeg());
-       h_hist_vec[56]->Fill(DeltaPhi(tempZP4.Phi(),gj10_m2.Phi())*TMath::RadToDeg());
-       h_hist_vec[57]->Fill(fabs(tempZP4.Theta()-gj10_m2.Theta())*TMath::RadToDeg());
-       h_hist_vec[70]->Fill(tempHP4.Angle(gj10_m1.Vect())*TMath::RadToDeg());
-       h_hist_vec[71]->Fill(tempZP4.Angle(gj10_m2.Vect())*TMath::RadToDeg());
-       h_hist_vec[78]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj10_m1.Phi())*TMath::RadToDeg());
-       if(tempTotInvGenP4.Pt()>50){
-	 h_hist_vec[84]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj10_m1.Phi())*TMath::RadToDeg());
-	 if(tempTotInvGenP4.Pt()>100){
-	   h_hist_vec[88]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj10_m1.Phi())*TMath::RadToDeg());
-	   if(tempTotInvGenP4.Pt()>150){
-	     h_hist_vec[92]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj10_m1.Phi())*TMath::RadToDeg());
-	   }
-	 }
-       }
-
-       if(genjet10_subjet_E->size()==4){
-	 if((*genjet10_subjet_jetindex)[0]!=0 || (*genjet10_subjet_jetindex)[1]!=0 || (*genjet10_subjet_jetindex)[2]!=1 || (*genjet10_subjet_jetindex)[3]!=1){
-	   std::cout<<"unexpected subjet ordering "<<(*genjet10_subjet_jetindex)[0]<<"/"<<(*genjet10_subjet_jetindex)[1]<<"/"<<(*genjet10_subjet_jetindex)[2]<<"/"<<(*genjet10_subjet_jetindex)[3]<<std::endl;
-	 }
-	 if(gj10_m1.E()==(*genjet10_E)[0]){
-	   //jet1 is Z jet
-	   //check subjet indices 2 and 3
-	   if((*genjet10_subjet_E)[2]>(*genjet10_subjet_E)[3]){
-	     h_hist_vec[100]->Fill((*genjet10_subjet_E)[2]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	     h_hist_vec[101]->Fill((*genjet10_subjet_E)[3]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	   }else{
-	     h_hist_vec[100]->Fill((*genjet10_subjet_E)[3]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	     h_hist_vec[101]->Fill((*genjet10_subjet_E)[2]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	   }
-	   //jet 0 is H jet, check subjet indices 0 and 1
-	   if((*genjet10_subjet_E)[0]>(*genjet10_subjet_E)[1]){
-	     h_hist_vec[102]->Fill((*genjet10_subjet_E)[0]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	     h_hist_vec[103]->Fill((*genjet10_subjet_E)[1]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	   }else{
-	     h_hist_vec[102]->Fill((*genjet10_subjet_E)[1]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	     h_hist_vec[103]->Fill((*genjet10_subjet_E)[0]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	   }
-	 }else{
-	   //jet 0 is Z jet, check subjet indices 0 and 1
-	   if((*genjet10_subjet_E)[0]>(*genjet10_subjet_E)[1]){
-	     h_hist_vec[100]->Fill((*genjet10_subjet_E)[0]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	     h_hist_vec[101]->Fill((*genjet10_subjet_E)[1]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	   }else{
-	     h_hist_vec[100]->Fill((*genjet10_subjet_E)[1]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	     h_hist_vec[101]->Fill((*genjet10_subjet_E)[0]/((*genjet10_subjet_E)[0]+(*genjet10_subjet_E)[1]));
-	   }
-	   //jet1 is H jet
-	   //check subjet indices 2 and 3
-	   if((*genjet10_subjet_E)[2]>(*genjet10_subjet_E)[3]){
-	     h_hist_vec[102]->Fill((*genjet10_subjet_E)[2]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	     h_hist_vec[103]->Fill((*genjet10_subjet_E)[3]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	   }else{
-	     h_hist_vec[102]->Fill((*genjet10_subjet_E)[3]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	     h_hist_vec[103]->Fill((*genjet10_subjet_E)[2]/((*genjet10_subjet_E)[2]+(*genjet10_subjet_E)[3]));
-	   }
-	 }
-       }
-     }
-    }
-    TLorentzVector gj12_m1(0,0,0,0);
-    TLorentzVector gj12_m2(0,0,0,0);
-    if(genjet12_E->size()==2){
-     gj12_m1.SetPxPyPzE((*genjet12_Px)[0],(*genjet12_Py)[0],(*genjet12_Pz)[0],(*genjet12_E)[0]);
-     gj12_m2.SetPxPyPzE((*genjet12_Px)[1],(*genjet12_Py)[1],(*genjet12_Pz)[1],(*genjet12_E)[1]);
-     if(gj12_m2.M()>gj12_m1.M()){
-       TLorentzVector temp=gj12_m1;
-       gj12_m1=gj12_m2;
-       gj12_m2=temp;
-     }
-     if(gj12_m2.M()>=gj12_m1.M()){
-       std::cout<<"gj12 mass order should have not been the case nowadays "<<gj12_m2.M()<<"/"<<gj12_m1.M()<<std::endl;
-     }
-     if((tempTotGenP4-tempGenIsoPhP4).M()>sqrtS_high_reco){
-       h_hist_vec[48]->Fill(gj12_m1.M());
-       h_hist_vec[49]->Fill(gj12_m2.M());
-       h_hist_vec[58]->Fill(DeltaPhi(tempHP4.Phi(),gj12_m1.Phi())*TMath::RadToDeg());
-       h_hist_vec[59]->Fill(fabs(tempHP4.Theta()-gj12_m1.Theta())*TMath::RadToDeg());
-       h_hist_vec[60]->Fill(DeltaPhi(tempZP4.Phi(),gj12_m2.Phi())*TMath::RadToDeg());
-       h_hist_vec[61]->Fill(fabs(tempZP4.Theta()-gj12_m2.Theta())*TMath::RadToDeg());
-       h_hist_vec[72]->Fill(tempHP4.Angle(gj12_m1.Vect())*TMath::RadToDeg());
-       h_hist_vec[73]->Fill(tempZP4.Angle(gj12_m2.Vect())*TMath::RadToDeg());
-       h_hist_vec[79]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj12_m1.Phi())*TMath::RadToDeg());
-       if(tempTotInvGenP4.Pt()>50){
-	 h_hist_vec[85]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj12_m1.Phi())*TMath::RadToDeg());
-	 if(tempTotInvGenP4.Pt()>100){
-	   h_hist_vec[89]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj12_m1.Phi())*TMath::RadToDeg());
-	   if(tempTotInvGenP4.Pt()>150){
-	     h_hist_vec[93]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),gj12_m1.Phi())*TMath::RadToDeg());
-	   }
-	 }
-       }
-       if(genjet12_subjet_E->size()==4){
-	 if((*genjet12_subjet_jetindex)[0]!=0 || (*genjet12_subjet_jetindex)[1]!=0 || (*genjet12_subjet_jetindex)[2]!=1 || (*genjet12_subjet_jetindex)[3]!=1){
-	   std::cout<<"unexpected subjet ordering "<<(*genjet12_subjet_jetindex)[0]<<"/"<<(*genjet12_subjet_jetindex)[1]<<"/"<<(*genjet12_subjet_jetindex)[2]<<"/"<<(*genjet12_subjet_jetindex)[3]<<std::endl;
-	 }
-	 if(gj12_m1.E()==(*genjet12_E)[0]){
-	   //jet1 is Z jet
-	   //check subjet indices 2 and 3
-	   if((*genjet12_subjet_E)[2]>(*genjet12_subjet_E)[3]){
-	     h_hist_vec[104]->Fill((*genjet12_subjet_E)[2]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	     h_hist_vec[105]->Fill((*genjet12_subjet_E)[3]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	   }else{
-	     h_hist_vec[104]->Fill((*genjet12_subjet_E)[3]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	     h_hist_vec[105]->Fill((*genjet12_subjet_E)[2]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	   }
-	   //jet 0 is H jet, check subjet indices 0 and 1
-	   if((*genjet12_subjet_E)[0]>(*genjet12_subjet_E)[1]){
-	     h_hist_vec[106]->Fill((*genjet12_subjet_E)[0]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	     h_hist_vec[107]->Fill((*genjet12_subjet_E)[1]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	   }else{
-	     h_hist_vec[106]->Fill((*genjet12_subjet_E)[1]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	     h_hist_vec[107]->Fill((*genjet12_subjet_E)[0]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	   }
-	 }else{
-	   //jet 0 is Z jet, check subjet indices 0 and 1
-	   if((*genjet12_subjet_E)[0]>(*genjet12_subjet_E)[1]){
-	     h_hist_vec[104]->Fill((*genjet12_subjet_E)[0]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	     h_hist_vec[105]->Fill((*genjet12_subjet_E)[1]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	   }else{
-	     h_hist_vec[106]->Fill((*genjet12_subjet_E)[1]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	     h_hist_vec[107]->Fill((*genjet12_subjet_E)[0]/((*genjet12_subjet_E)[0]+(*genjet12_subjet_E)[1]));
-	   }
-	   //jet1 is H jet
-	   //check subjet indices 2 and 3
-	   if((*genjet12_subjet_E)[2]>(*genjet12_subjet_E)[3]){
-	     h_hist_vec[106]->Fill((*genjet12_subjet_E)[2]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	     h_hist_vec[107]->Fill((*genjet12_subjet_E)[3]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	   }else{
-	     h_hist_vec[106]->Fill((*genjet12_subjet_E)[3]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	     h_hist_vec[107]->Fill((*genjet12_subjet_E)[2]/((*genjet12_subjet_E)[2]+(*genjet12_subjet_E)[3]));
-	   }
-	 }
-       }
-     }
-    }
-    TLorentzVector rj10_m1(0,0,0,0);
-    TLorentzVector rj10_m2(0,0,0,0);
-    if(recojet10_E->size()==2){
-      rj10_m1.SetPxPyPzE((*recojet10_Px)[0],(*recojet10_Py)[0],(*recojet10_Pz)[0],(*recojet10_E)[0]);
-      rj10_m2.SetPxPyPzE((*recojet10_Px)[1],(*recojet10_Py)[1],(*recojet10_Pz)[1],(*recojet10_E)[1]);
-      if(rj10_m2.M()>rj10_m1.M()){
-	TLorentzVector temp=rj10_m1;
-	rj10_m1=rj10_m2;
-	rj10_m2=temp;
-      }
-      if(rj10_m2.M()>=rj10_m1.M()){
-	std::cout<<"rj10 mass order should have not been the case nowadays "<<rj10_m2.M()<<"/"<<rj10_m1.M()<<std::endl;
-      }
-      if((tempTotRecoP4-tempRecoIsoPhP4).M()>sqrtS_high_reco){
-	h_hist_vec[50]->Fill(rj10_m1.M());
-	h_hist_vec[51]->Fill(rj10_m2.M());
-	h_hist_vec[62]->Fill(DeltaPhi(tempHP4.Phi(),rj10_m1.Phi())*TMath::RadToDeg());
-	h_hist_vec[63]->Fill(fabs(tempHP4.Theta()-rj10_m1.Theta())*TMath::RadToDeg());
-	h_hist_vec[64]->Fill(DeltaPhi(tempZP4.Phi(),rj10_m2.Phi())*TMath::RadToDeg());
-	h_hist_vec[65]->Fill(fabs(tempZP4.Theta()-rj10_m2.Theta())*TMath::RadToDeg());
-	h_hist_vec[74]->Fill(tempHP4.Angle(rj10_m1.Vect())*TMath::RadToDeg());
-	h_hist_vec[75]->Fill(tempZP4.Angle(rj10_m2.Vect())*TMath::RadToDeg());
-	h_hist_vec[80]->Fill(DeltaPhi(tempRecoMETP4.Phi(),rj10_m1.Phi())*TMath::RadToDeg());
-	if(tempRecoMETP4.Pt()>50){
-	 h_hist_vec[86]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),rj10_m1.Phi())*TMath::RadToDeg());
-	 if(tempRecoMETP4.Pt()>100){
-	   h_hist_vec[90]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),rj10_m1.Phi())*TMath::RadToDeg());
-	   if(tempRecoMETP4.Pt()>150){
-	     h_hist_vec[94]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),rj10_m1.Phi())*TMath::RadToDeg());
-	   }
-	 }
-	}
-	if(recojet10_subjet_E->size()==4){
-	  if((*recojet10_subjet_jetindex)[0]!=0 || (*recojet10_subjet_jetindex)[1]!=0 || (*recojet10_subjet_jetindex)[2]!=1 || (*recojet10_subjet_jetindex)[3]!=1){
-	    std::cout<<"unexpected subjet ordering "<<(*recojet10_subjet_jetindex)[0]<<"/"<<(*recojet10_subjet_jetindex)[1]<<"/"<<(*recojet10_subjet_jetindex)[2]<<"/"<<(*recojet10_subjet_jetindex)[3]<<std::endl;
-	  }
-	  if(rj10_m1.E()==(*recojet10_E)[0]){
-	    //jet1 is Z jet
-	    //check subjet indices 2 and 3
-	    if((*recojet10_subjet_E)[2]>(*recojet10_subjet_E)[3]){
-	      h_hist_vec[108]->Fill((*recojet10_subjet_E)[2]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	      h_hist_vec[109]->Fill((*recojet10_subjet_E)[3]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	    }else{
-	      h_hist_vec[108]->Fill((*recojet10_subjet_E)[3]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	      h_hist_vec[109]->Fill((*recojet10_subjet_E)[2]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	    }
-	    //jet 0 is H jet, check subjet indices 0 and 1
-	    if((*recojet10_subjet_E)[0]>(*recojet10_subjet_E)[1]){
-	      h_hist_vec[110]->Fill((*recojet10_subjet_E)[0]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	      h_hist_vec[111]->Fill((*recojet10_subjet_E)[1]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	    }else{
-	      h_hist_vec[110]->Fill((*recojet10_subjet_E)[1]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	      h_hist_vec[111]->Fill((*recojet10_subjet_E)[0]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	    }
-	  }else{
-	    //jet 0 is Z jet, check subjet indices 0 and 1
-	    if((*recojet10_subjet_E)[0]>(*recojet10_subjet_E)[1]){
-	      h_hist_vec[108]->Fill((*recojet10_subjet_E)[0]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	      h_hist_vec[109]->Fill((*recojet10_subjet_E)[1]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	    }else{
-	      h_hist_vec[108]->Fill((*recojet10_subjet_E)[1]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	      h_hist_vec[109]->Fill((*recojet10_subjet_E)[0]/((*recojet10_subjet_E)[0]+(*recojet10_subjet_E)[1]));
-	    }
-	    //jet1 is H jet
-	    //check subjet indices 2 and 3
-	    if((*recojet10_subjet_E)[2]>(*recojet10_subjet_E)[3]){
-	      h_hist_vec[110]->Fill((*recojet10_subjet_E)[2]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	      h_hist_vec[111]->Fill((*recojet10_subjet_E)[3]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	    }else{
-	      h_hist_vec[110]->Fill((*recojet10_subjet_E)[3]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	      h_hist_vec[111]->Fill((*recojet10_subjet_E)[2]/((*recojet10_subjet_E)[2]+(*recojet10_subjet_E)[3]));
-	    }
-	  }
-	}
-      }
-    }
-    TLorentzVector rj12_m1(0,0,0,0);
-    TLorentzVector rj12_m2(0,0,0,0);
-    if(recojet12_E->size()==2){
-     rj12_m1.SetPxPyPzE((*recojet12_Px)[0],(*recojet12_Py)[0],(*recojet12_Pz)[0],(*recojet12_E)[0]);
-     rj12_m2.SetPxPyPzE((*recojet12_Px)[1],(*recojet12_Py)[1],(*recojet12_Pz)[1],(*recojet12_E)[1]);
-     if(rj12_m2.M()>rj12_m1.M()){
-       TLorentzVector temp=rj12_m1;
-       rj12_m1=rj12_m2;
-       rj12_m2=temp;
-     }
-     if(rj12_m2.M()>=rj12_m1.M()){
-       std::cout<<"rj12 mass order should have not been the case nowadays "<<rj12_m2.M()<<"/"<<rj12_m1.M()<<std::endl;
-     }
-     if((tempTotRecoP4-tempRecoIsoPhP4).M()>sqrtS_high_reco){
-       h_hist_vec[52]->Fill(rj12_m1.M());
-       h_hist_vec[53]->Fill(rj12_m2.M());
-       h_hist_vec[66]->Fill(DeltaPhi(tempHP4.Phi(),rj12_m1.Phi())*TMath::RadToDeg());
-       h_hist_vec[67]->Fill(fabs(tempHP4.Theta()-rj12_m1.Theta())*TMath::RadToDeg());
-       h_hist_vec[68]->Fill(DeltaPhi(tempZP4.Phi(),rj12_m2.Phi())*TMath::RadToDeg());
-       h_hist_vec[69]->Fill(fabs(tempZP4.Theta()-rj12_m2.Theta())*TMath::RadToDeg());
-       h_hist_vec[76]->Fill(tempHP4.Angle(rj12_m1.Vect())*TMath::RadToDeg());
-       h_hist_vec[77]->Fill(tempZP4.Angle(rj12_m2.Vect())*TMath::RadToDeg());
-       h_hist_vec[81]->Fill(DeltaPhi(tempRecoMETP4.Phi(),rj12_m1.Phi())*TMath::RadToDeg());
-       if(tempRecoMETP4.Pt()>50){
-	 h_hist_vec[87]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),rj12_m1.Phi())*TMath::RadToDeg());
-	 if(tempRecoMETP4.Pt()>100){
-	   h_hist_vec[91]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),rj12_m1.Phi())*TMath::RadToDeg());
-	   if(tempRecoMETP4.Pt()>150){
-	     h_hist_vec[95]->Fill(DeltaPhi(tempTotInvGenP4.Phi(),rj12_m1.Phi())*TMath::RadToDeg());
-	   }
-	 }
-       }
-
-
-       if(recojet12_subjet_E->size()==4){
-	 if((*recojet12_subjet_jetindex)[0]!=0 || (*recojet12_subjet_jetindex)[1]!=0 || (*recojet12_subjet_jetindex)[2]!=1 || (*recojet12_subjet_jetindex)[3]!=1){
-	   std::cout<<"unexpected subjet ordering "<<(*recojet12_subjet_jetindex)[0]<<"/"<<(*recojet12_subjet_jetindex)[1]<<"/"<<(*recojet12_subjet_jetindex)[2]<<"/"<<(*recojet12_subjet_jetindex)[3]<<std::endl;
-	 }
-	 if(rj12_m1.E()==(*recojet12_E)[0]){
-	   //jet1 is Z jet
-	   //check subjet indices 2 and 3
-	   if((*recojet12_subjet_E)[2]>(*recojet12_subjet_E)[3]){
-	     h_hist_vec[112]->Fill((*recojet12_subjet_E)[2]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	     h_hist_vec[113]->Fill((*recojet12_subjet_E)[3]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	   }else{
-	     h_hist_vec[112]->Fill((*recojet12_subjet_E)[3]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	     h_hist_vec[113]->Fill((*recojet12_subjet_E)[2]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	   }
-	   //jet 0 is H jet, check subjet indices 0 and 1
-	   if((*recojet12_subjet_E)[0]>(*recojet12_subjet_E)[1]){
-	     h_hist_vec[114]->Fill((*recojet12_subjet_E)[0]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	     h_hist_vec[115]->Fill((*recojet12_subjet_E)[1]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	   }else{
-	     h_hist_vec[114]->Fill((*recojet12_subjet_E)[1]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	     h_hist_vec[115]->Fill((*recojet12_subjet_E)[0]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	   }
-	 }else{
-	   //jet 0 is Z jet, check subjet indices 0 and 1
-	   if((*recojet12_subjet_E)[0]>(*recojet12_subjet_E)[1]){
-	     h_hist_vec[112]->Fill((*recojet12_subjet_E)[0]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	     h_hist_vec[113]->Fill((*recojet12_subjet_E)[1]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	   }else{
-	     h_hist_vec[112]->Fill((*recojet12_subjet_E)[1]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	     h_hist_vec[113]->Fill((*recojet12_subjet_E)[0]/((*recojet12_subjet_E)[0]+(*recojet12_subjet_E)[1]));
-	   }
-	   //jet1 is H jet
-	   //check subjet indices 2 and 3
-	   if((*recojet12_subjet_E)[2]>(*recojet12_subjet_E)[3]){
-	     h_hist_vec[114]->Fill((*recojet12_subjet_E)[2]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	     h_hist_vec[115]->Fill((*recojet12_subjet_E)[3]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	   }else{
-	     h_hist_vec[114]->Fill((*recojet12_subjet_E)[3]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	     h_hist_vec[115]->Fill((*recojet12_subjet_E)[2]/((*recojet12_subjet_E)[2]+(*recojet12_subjet_E)[3]));
-	   }
-	 }
-       }
-     }//sqrtS cut
-
-    }
-    h_hist_vec_2D[0]->Fill(tempTotEventP4.M(),(tempTotGenP4-tempGenTruePhP4).M());
-    h_hist_vec_2D[1]->Fill(tempTotEventP4.M(),(tempTotGenP4-tempGenIsoPhP4).M());
-    h_hist_vec_2D[2]->Fill(tempTotEventP4.M(),tempGenDR10JetSum.M());
-    h_hist_vec_2D[3]->Fill(tempTotEventP4.M(),tempGenDR12JetSum.M());
-    h_hist_vec_2D[4]->Fill(tempTotEventP4.M(),(tempTotRecoP4-tempRecoIsoPhP4).M());
-    h_hist_vec_2D[5]->Fill(tempTotEventP4.M(),tempRecoDR10JetSum.M());
-    h_hist_vec_2D[6]->Fill(tempTotEventP4.M(),tempRecoDR12JetSum.M());
-    h_hist_vec_2D[7]->Fill((tempTotGenP4-tempGenIsoPhP4).M(),(tempTotRecoP4-tempRecoIsoPhP4).M());
-    h_hist_vec_2D[8]->Fill(tempGenDR10JetSum.M(),tempRecoDR10JetSum.M());
-    h_hist_vec_2D[9]->Fill(tempGenDR12JetSum.M(),tempRecoDR12JetSum.M());
-    h_hist_vec_2D[10]->Fill(tempTotEventP4.M(),tempTotGenP4.M());
-    h_hist_vec_2D[11]->Fill(tempTotEventP4.M(),tempTotRecoP4.M());
-    h_hist_vec_2D[12]->Fill(tempTotEventP4.M(),(tempTotGenP4-tempGenIsoPhP4+tempTotInvGenP4).M());
-    h_hist_vec_2D[13]->Fill(tempTotEventP4.M(),(tempTotGenP4+tempTotInvGenP4).M());
- 
-    if(tempTotEventP4.M()<sqrtS_low){
-      h_hist_vec[4]->Fill(tempZP4.Pt());
-      h_hist_vec[25]->Fill(tempZP4.Theta()*TMath::RadToDeg());
-      h_hist_vec[28]->Fill(fabs(tempZP4.Theta()-tempHP4.Theta())*TMath::RadToDeg());
-      h_hist_vec[31]->Fill(DeltaPhi(tempZP4.Phi(),tempHP4.Phi())*TMath::RadToDeg());
-      h_hist_vec[34]->Fill(tempZP4.Angle(tempHP4.Vect())*TMath::RadToDeg());
-    }else if(tempTotEventP4.M()<sqrtS_high){
-      h_hist_vec[5]->Fill(tempZP4.Pt());
-      h_hist_vec[26]->Fill(tempZP4.Theta()*TMath::RadToDeg());
-      h_hist_vec[29]->Fill(fabs(tempZP4.Theta()-tempHP4.Theta())*TMath::RadToDeg());
-      h_hist_vec[32]->Fill(DeltaPhi(tempZP4.Phi(),tempHP4.Phi())*TMath::RadToDeg());
-      h_hist_vec[35]->Fill(tempZP4.Angle(tempHP4.Vect())*TMath::RadToDeg());
-    }else{
-      h_hist_vec[6]->Fill(tempZP4.Pt());
-      h_hist_vec[27]->Fill(tempZP4.Theta()*TMath::RadToDeg());
-      h_hist_vec[30]->Fill(fabs(tempZP4.Theta()-tempHP4.Theta())*TMath::RadToDeg());
-      h_hist_vec[33]->Fill(DeltaPhi(tempZP4.Phi(),tempHP4.Phi())*TMath::RadToDeg());
-      h_hist_vec[36]->Fill(tempZP4.Angle(tempHP4.Vect())*TMath::RadToDeg());
-    }
-
   }
 }
 
@@ -998,7 +816,7 @@ void HZAnalyzerFull(){
   TH1F* h_dtheta_allH_diboson_qqbar = new TH1F("h_dtheta_allH_diboson_qqbar","", n_bins_high, lim_dalpha_qqbar_low,lim_dalpha_qqbar_high);
 
   double lim_H1_E_over_allH_E_low=0.5;
-  double lim_H1_E_over_allH_allH_high=1.0;
+  double lim_H1_E_over_allH_E_high=1.0;
 
   TH1F* h_E_H1_over_E_allH = new TH1F("h_E_H1_over_E_allH","", n_bins_high, lim_H1_E_over_allH_E_low,lim_H1_E_over_allH_E_high);
   TH1F* h_E_H1_over_E_allH_bbar = new TH1F("h_E_H1_over_E_allH_bbar","", n_bins_high, lim_H1_E_over_allH_E_low,lim_H1_E_over_allH_E_high);
@@ -1006,50 +824,50 @@ void HZAnalyzerFull(){
 
   std::vector<TH1F*> hist_vec_HZ_parton;
 
-  hist_vec_HZ_parton.push_backh_sqrtS_e1_e2_effective)
-  hist_vec_HZ_parton.push_backh_H1_H2_E_sum)
-  hist_vec_HZ_parton.push_backh_H1_E)
-  hist_vec_HZ_parton.push_backh_H2_E)
-  hist_vec_HZ_parton.push_backh_Z_E)
-  hist_vec_HZ_parton.push_backh_H1_H2_mass)
-  hist_vec_HZ_parton.push_backh_dalpha_H1_H2_comb_vs_Z)
-  hist_vec_HZ_parton.push_backh_dphi_H1_H2_comb_vs_Z)
-  hist_vec_HZ_parton.push_backh_dtheta_H1_H2_comb_vs_Z)
-  hist_vec_HZ_parton.push_backh_dalpha_H1_H2)
-  hist_vec_HZ_parton.push_backh_dphi_H1_H2)
-  hist_vec_HZ_parton.push_backh_dtheta_H1_H2)
-  hist_vec_HZ_parton.push_backh_dalpha_H1_bbar)
-  hist_vec_HZ_parton.push_backh_dphi_H1_bbar)
-  hist_vec_HZ_parton.push_backh_dtheta_H1_bbar)
-  hist_vec_HZ_parton.push_backh_dalpha_H2_bbar)
-  hist_vec_HZ_parton.push_backh_dphi_H2_bbar)
-  hist_vec_HZ_parton.push_backh_dtheta_H2_bbar)
-  hist_vec_HZ_parton.push_backh_dalpha_H1_qqbar)
-  hist_vec_HZ_parton.push_backh_dphi_H1_qqbar)
-  hist_vec_HZ_parton.push_backh_dtheta_H1_qqbar)
-  hist_vec_HZ_parton.push_backh_dalpha_H2_qqbar)
-  hist_vec_HZ_parton.push_backh_dphi_H2_qqbar)
-  hist_vec_HZ_parton.push_backh_dtheta_H2_qqbar)
-  hist_vec_HZ_parton.push_backh_dalpha_Z_qqbar)
-  hist_vec_HZ_parton.push_backh_dphi_Z_qqbar)
-  hist_vec_HZ_parton.push_backh_dtheta_Z_qqbar)
-  hist_vec_HZ_parton.push_backh_dalpha_max_allH_qqbar)
-  hist_vec_HZ_parton.push_backh_dphi_max_allH_qqbar)
-  hist_vec_HZ_parton.push_backh_dtheta_max_allH_qqbar)
-  hist_vec_HZ_parton.push_backh_dalpha_max_allH_bbar)
-  hist_vec_HZ_parton.push_backh_dphi_max_allH_bbar)
-  hist_vec_HZ_parton.push_backh_dtheta_max_allH_bbar)
-  hist_vec_HZ_parton.push_backh_dalpha_allH_diboson_qqbar)
-  hist_vec_HZ_parton.push_backh_dphi_allH_diboson_qqbar)
-  hist_vec_HZ_parton.push_backh_dtheta_allH_diboson_qqbar)
-  hist_vec_HZ_parton.push_backh_E_H1_over_E_allH)
-  hist_vec_HZ_parton.push_backh_E_H1_over_E_allH_bbar)
-  hist_vec_HZ_parton.push_backh_E_H1_over_E_allH_qqbar)
+  hist_vec_HZ_parton.push_back(h_sqrtS_e1_e2_effective);
+  hist_vec_HZ_parton.push_back(h_H1_H2_E_sum);
+  hist_vec_HZ_parton.push_back(h_H1_E);
+  hist_vec_HZ_parton.push_back(h_H2_E);
+  hist_vec_HZ_parton.push_back(h_Z_E);
+  hist_vec_HZ_parton.push_back(h_H1_H2_mass);
+  hist_vec_HZ_parton.push_back(h_dalpha_H1_H2_comb_vs_Z);
+  hist_vec_HZ_parton.push_back(h_dphi_H1_H2_comb_vs_Z);
+  hist_vec_HZ_parton.push_back(h_dtheta_H1_H2_comb_vs_Z);
+  hist_vec_HZ_parton.push_back(h_dalpha_H1_H2);
+  hist_vec_HZ_parton.push_back(h_dphi_H1_H2);
+  hist_vec_HZ_parton.push_back(h_dtheta_H1_H2);
+  hist_vec_HZ_parton.push_back(h_dalpha_H1_bbar);
+  hist_vec_HZ_parton.push_back(h_dphi_H1_bbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_H1_bbar);
+  hist_vec_HZ_parton.push_back(h_dalpha_H2_bbar);
+  hist_vec_HZ_parton.push_back(h_dphi_H2_bbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_H2_bbar);
+  hist_vec_HZ_parton.push_back(h_dalpha_H1_qqbar);
+  hist_vec_HZ_parton.push_back(h_dphi_H1_qqbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_H1_qqbar);
+  hist_vec_HZ_parton.push_back(h_dalpha_H2_qqbar);
+  hist_vec_HZ_parton.push_back(h_dphi_H2_qqbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_H2_qqbar);
+  hist_vec_HZ_parton.push_back(h_dalpha_Z_qqbar);
+  hist_vec_HZ_parton.push_back(h_dphi_Z_qqbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_Z_qqbar);
+  hist_vec_HZ_parton.push_back(h_dalpha_max_allH_qqbar);
+  hist_vec_HZ_parton.push_back(h_dphi_max_allH_qqbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_max_allH_qqbar);
+  hist_vec_HZ_parton.push_back(h_dalpha_max_allH_bbar);
+  hist_vec_HZ_parton.push_back(h_dphi_max_allH_bbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_max_allH_bbar);
+  hist_vec_HZ_parton.push_back(h_dalpha_allH_diboson_qqbar);
+  hist_vec_HZ_parton.push_back(h_dphi_allH_diboson_qqbar);
+  hist_vec_HZ_parton.push_back(h_dtheta_allH_diboson_qqbar);
+  hist_vec_HZ_parton.push_back(h_E_H1_over_E_allH);
+  hist_vec_HZ_parton.push_back(h_E_H1_over_E_allH_bbar);
+  hist_vec_HZ_parton.push_back(h_E_H1_over_E_allH_qqbar);
 
   for(unsigned int i=0;i<hist_vec_HZ_parton.size();i++){
     hist_vec_HZ_parton[i]->Sumw2();
   }
-
+  std::vector<TH2F*> hist_vec_HZ_2DHist;
 
  fill_HZ_histograms(file_CLIC_HZqq,hist_vec_HZ_parton,hist_vec_HZ_2DHist);
 

@@ -2260,7 +2260,7 @@ void JERPlotsFull(){
   gROOT->ProcessLine("#include <vector>");
 
   //const char* final_histo_name="/afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_oldFastJetVLC_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_emptyLastCosThetaBin.root";
-  const char* final_histo_name="/afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_realVLC_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_emptyLastCosThetaBin_replace380_500_190709.root";
+  const char* final_histo_name="/afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_realVLC_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_emptyLastCosThetaBin_replace380_500_190709_correctZuds100_noSC_File.root";
   //afs/cern.ch/user/w/weberma2/performanceHistoFiles181123/Zuds_CT_wO_181011_histoFit_0_00_to_3_00_JetAlg_Match10Deg_dphi_2_8_BinsJER200dphi300_WW_ZZ_mass_histos_allSC_ttbarMET_cosTop_0_7_newCosTheta_0_985.root";
 
   //ROOT::Math::Minimizer* pMinimizer = ROOT::Math::Factory::CreateMinimizer("Minuit2", "Migrad");
@@ -2329,7 +2329,7 @@ void JERPlotsFull(){
   
   TFile* file_CLIC_100_CT=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181011_gcc62_newVLC/JetStudy_Zuds100_11621_noOverlay_CLIC_o3_v14_CT_PandoraPFOs.root");
   TFile* file_CLIC_100_CT_wO=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181011_gcc62_newVLC/JetStudy_Zuds100_11622_3TeVOverlay_CLIC_o3_v14_CT_TightSelectedPandoraPFOs.root");
-  TFile* file_CLIC_100_CT_noSC=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181011_gcc62/JetStudy_Zuds100_11504_3TeVOverlay_noSC_CLIC_o3_v14_CT_TightSelectedPandoraPFOs.root");
+  TFile* file_CLIC_100_CT_noSC=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181011_gcc62/JetStudy_Zuds100_11503_noOverlay_noSC_CLIC_o3_v14_CT_PandoraPFOs.root");
   TFile* file_CLIC_100_CT_noSC_wO=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181011_gcc62/JetStudy_Zuds100_11504_3TeVOverlay_noSC_CLIC_o3_v14_CT_TightSelectedPandoraPFOs.root");
   TFile* file_CLIC_100_CT_wO_380=TFile::Open("/eos/user/w/weberma2/data/JetAnalyzerFiles/181011_gcc62_newVLC/JetStudy_Zuds100_11651_380GeVOverlay_CLIC_o3_v14_CT_LE_LooseSelectedPandoraPFOs.root");
 

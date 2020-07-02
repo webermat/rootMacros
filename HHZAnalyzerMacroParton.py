@@ -695,7 +695,8 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile,
     fCut_theta1_theta2_window=80.
     fCut_thetaRef=90.
 
-    fCut_BTagSum3_min=1.0
+    fCut_BTagSum3_min=2.2
+    fCut_BTagSum4_min=2.2
 
     t_var_weight  = array('f',[0])
     t_var_sqrtS  = array('f',[0])
@@ -1650,7 +1651,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile,
         #fill now bbar only histos
         ####### for filling the histograms ehcek the later stage too ######
         if(H1H2_decays_bbar==False):
-            continue;
+           continue;
         if(Z_decays_qqbar==False):
             continue;
         num_count+=1
@@ -1825,7 +1826,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile,
             #print 'fail theta cut',degrees(t_var_jet1_theta[0]),degrees(t_var_jet2_theta[0])
             pass_theta_cuts=False
 
-        if(f_performBTagCut and t_var_BTag_sum_max3[0]<fCut_BTagSum3_min):
+        if(f_performBTagCut and t_var_BTag_sum_max3[0]<fCut_BTagSum3_min and t_var_BTag_sum_max4[0]<fCut_BTagSum4_min):
             #print 'fail BTag cut',t_var_BTag_sum_max3[0]
             pass_BTag_cuts=False
 
@@ -1914,7 +1915,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile,
         #else:
         #    t_var_comb_jet3_E1_jetCharge[0] = recojet_rfj_jetcharge[ind_rj_rfj_2[2]]
  
-
+        
         for ind_comb in range(len(recojet_rfj_vector_combto3)):
             temp_orig_jet_comb_1=copy.deepcopy(recojet_rfj_vector[ind_rj_rfj_1[ind_comb]])
             temp_orig_jet_comb_2=copy.deepcopy(recojet_rfj_vector[ind_rj_rfj_2[ind_comb]])
@@ -1961,7 +1962,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile,
                     else:
                         t_var_comb_jet2_cosThetaHel_jetChargeMin[0]=cos(temp_orig_jet_comb_2.Angle(recojet_rfj_vector_combto3[ind_comb].Vect()))
                         t_var_comb_jet2_cosThetaHel_jetChargePos[0]=cos(temp_orig_jet_comb_1.Angle(recojet_rfj_vector_combto3[ind_comb].Vect()))
-            else:
+            elif ind_comb==2:
                 t_var_comb_jet3_cosThetaHel_absmax[0]=cos(max(abs(temp_orig_jet_comb_1.Angle(recojet_rfj_vector_combto3[ind_comb].Vect())),abs(temp_orig_jet_comb_2.Angle(recojet_rfj_vector_combto3[ind_comb].Vect()))))
                 t_var_comb_jet3_cosThetaHel_absmin[0]=cos(min(abs(temp_orig_jet_comb_1.Angle(recojet_rfj_vector_combto3[ind_comb].Vect())),abs(temp_orig_jet_comb_2.Angle(recojet_rfj_vector_combto3[ind_comb].Vect()))))
                 #larger absolute value of jetcharge
@@ -1979,7 +1980,7 @@ def fill_HHZ_histograms(file,xsec,mytree,hist_vec_reco_1D_parton,lumi,ishhzfile,
                     else:
                         t_var_comb_jet3_cosThetaHel_jetChargeMin[0]=cos(temp_orig_jet_comb_2.Angle(recojet_rfj_vector_combto3[ind_comb].Vect()))
                         t_var_comb_jet3_cosThetaHel_jetChargePos[0]=cos(temp_orig_jet_comb_1.Angle(recojet_rfj_vector_combto3[ind_comb].Vect()))
-
+        
         genjet_vector=[]
         tot_genjet_Vector_=TLorentzVector(0,0,0,0)
         if len(genjet_E)<3:
@@ -3419,15 +3420,21 @@ def process_event(i_final_histo_name_,i_input_file_name_,i_xsec_,i_lumi_,i_fillP
 
 def process_files():
 
-    f_performECut_=True
-    f_performThetaCut_=True
-    f_performBTagCut_=True
-    f_performMassCut_=True
+    #f_performECut_=True
+    #f_performThetaCut_=True
+    #f_performBTagCut_=True
+    #f_performMassCut_=True
+
+    f_performECut_=False                                                                                                                                                                          
+    f_performThetaCut_=False                                                                                                                                                                           
+    f_performBTagCut_=False                                                                                                                                                                            
+    f_performMassCut_=False 
 
     #ntuple_HHZ_ECut_j1_150_j2_100_j4_50
     #ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80
     #ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_0_50
     #ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50
+    #ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_BTag4_2_20_M2_75_M3_50
 
     lumi_=4000.
     print 'start processing of files'
@@ -3436,175 +3443,189 @@ def process_files():
     ishhzfile_=False
 #9,8,5
     cross_section_= 4.18E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hhqq_14364.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_hhqq_14364_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_hhqq_14364.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     ishhzfile_=True
     cross_section_= 6.06e-02
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hhz_14343.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_hhz_14343_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_hhz_14343.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     fillPartonHistos_=False
 
     cross_section_= 3.83
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hzqq_13391.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_hzqq_13391_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_hzqq_13391.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     cross_section_= 1269.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qq_13399_to_13402.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_qq_13399_to_13402_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_qq_13399_to_13402.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     cross_section_= 902.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qqqq_13394_to_13397.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_qqqq_13394_to_13397_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_qqqq_13394_to_13397.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     ##here this one has to be run, once I realize the qqqq dataset is finished
     cross_section_= 9.2271753E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbcbbc_13094_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bbcbbc_13094.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbcbbc_13094_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bbcbbc_13094.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     ##here and lower all things should have been run by now
     cross_section_= 9.1731760E-03 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbubbu_13095_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bbubbu_13095.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbubbu_13095_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bbubbu_13095.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.3757137E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ddcyyc_13096_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ddcyyc_13096.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ddcyyc_13096_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ddcyyc_13096.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.4498909E+01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_dduyyu_13097_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_dduyyu_13097.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_dduyyu_13097_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_dduyyu_13097.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.2499614E+01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscbbc_13098_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sscbbc_13098.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscbbc_13098_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sscbbc_13098.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.1651315E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscssc_13099_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sscssc_13099.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_sscssc_13099_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sscssc_13099.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.2615661E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssussu_13123_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ssussu_13123.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssussu_13123_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ssussu_13123.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  5.4145233E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssubbu_13292_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ssubbu_13292.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssubbu_13292_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ssubbu_13292.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  1.3394883E+01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycbbu_13318_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yycbbu_13318.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycbbu_13318_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yycbbu_13318.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_   
 
     cross_section_=  2.0054737E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycddu_13326_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yycddu_13326.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycddu_13326_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yycddu_13326.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_= 2.0248353E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycssu_13323_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yycssu_13323.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yycssu_13323_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yycssu_13323.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_=  1.3330064E+01
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyubbc_13320_polm80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yyubbc_13320.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyubbc_13320_polm80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yyubbc_13320.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  2.0034170E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyuddc_13328_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yyuddc_13328.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyuddc_13328_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yyuddc_13328.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_       
     
     cross_section_=  2.0189010E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyussc_13325_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yyussc_13325.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_yyussc_13325_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yyussc_13325.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_                
 
     cross_section_=  3.6427E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbxxxx_14601_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bbxxxx_14601.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_bbxxxx_14601_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bbxxxx_14601.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  7.8948E-03 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_bdxxxx_14603_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bdxxxx_14603.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_bdxxxx_14603_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bdxxxx_14603.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  7.8901E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_bsxxxx_14604_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bsxxxx_14604.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_bsxxxx_14604_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bsxxxx_14604.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=   7.9020E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_dbxxxx_14605_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_dbxxxx_14605.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_dbxxxx_14605_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_dbxxxx_14605.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_= 2.3698E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ddxxxx_14481_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ddxxxx_14481.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ddxxxx_14481_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ddxxxx_14481.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  4.3881E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_dsxxxx_14606_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_dsxxxx_14606.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_dsxxxx_14606_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_dsxxxx_14606.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=   8.0580E-03 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_sbxxxx_14485_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sbxxxx_14485.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_sbxxxx_14485_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sbxxxx_14485.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_= 4.4150E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_sdxxxx_14487_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sdxxxx_14487.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_sdxxxx_14487_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sdxxxx_14487.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  2.2316E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssxxxx_14609_polm80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ssxxxx_14609.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ee_ssxxxx_14609_polm80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ssxxxx_14609.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    print 'finished file', final_histo_name_  
+
+    cross_section_=  4.116E+00
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_WWH_qqqqH_14734_polm80_3TeV_wO_CLIC_o3_v14.root"
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_WWH_qqqqH_14734.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_WWH_qqqqH_14734_polm80_3TeV_wO_CLIC_o3_v14_full.root"  
+    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    print 'finished file', final_histo_name_  
+
+    cross_section_=  1.3943515E-01 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polm80/HHZStudy_ZZH_qqqqH_14726_polm80_3TeV_wO_CLIC_o3_v14.root"
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ZZH_qqqqH_14726.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ZZH_qqqqH_14726_polm80_3TeV_wO_CLIC_o3_v14_full.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
@@ -3613,175 +3634,190 @@ def process_files():
     ishhzfile_=False
 #9,8,5
     cross_section_=   2.898E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hhqq_14365.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_hhqq_14365_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_hhqq_14365.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     ishhzfile_=True
     cross_section_=  4.23E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hhz_14344.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_hhz_14344_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_hhz_14344.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     fillPartonHistos_=False
 
     cross_section_=  2.67
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_hzqq_13392.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_hzqq_13392_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_hzqq_13392.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     cross_section_= 786.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qq_13398.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_qq_13398_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_qq_13398.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     cross_section_= 120.
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_qqqq_13393.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_qqqq_13393_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_qqqq_13393.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     cross_section_= 2.9986901E-03 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbcbbc_13071_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bbcbbc_13071.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbcbbc_13071_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bbcbbc_13071.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_)
     print 'finished file', final_histo_name_
 
     cross_section_= 2.9825397E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbubbu_13072_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bbubbu_13072.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbubbu_13072_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bbubbu_13072.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.7824610E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ddcyyc_13073_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ddcyyc_13073.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ddcyyc_13073_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ddcyyc_13073.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 5.0109474E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_dduyyu_13074_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_dduyyu_13074.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_dduyyu_13074_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_dduyyu_13074.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 4.8938333E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscbbc_13075_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sscbbc_13075.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscbbc_13075_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sscbbc_13075.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 1.3677677E-01
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscssc_13076_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sscssc_13076.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_sscssc_13076_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sscssc_13076.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 3.3776171E-03
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssussu_13077_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ssussu_13077.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssussu_13077_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ssussu_13077.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_=  2.3216638E-02
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssubbu_13293_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ssubbu_13293.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssubbu_13293_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ssubbu_13293.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 5.2101109E+00
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycbbu_13322_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yycbbu_13322.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycbbu_13322_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yycbbu_13322.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_   
 
     cross_section_= 4.0984879E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycddu_13319_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yycddu_13319.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycddu_13319_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yycddu_13319.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_= 4.1853929E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycssu_13327_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yycssu_13327.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yycssu_13327_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yycssu_13327.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_ 
 
     cross_section_= 5.2070149E+00 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyubbc_13324_polp80_3TeV_wO_CLIC_o3_v14.root" 
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yyubbc_13324.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyubbc_13324_polp80_3TeV_wO_CLIC_o3_v14.root" 
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yyubbc_13324.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 4.1203686E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyuddc_13321_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yyuddc_13321.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyuddc_13321_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yyuddc_13321.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_
 
     cross_section_= 4.2245034E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyussc_13329_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_yyussc_13329.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_yyussc_13329_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_yyussc_13329.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_               
 
     cross_section_= 1.1996E-02 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbxxxx_14602_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bbxxxx_14602.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_bbxxxx_14602_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bbxxxx_14602.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  9.1650E-04
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_bdxxxx_14476_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bdxxxx_14476.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_bdxxxx_14476_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bdxxxx_14476.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=   9.0803E-04
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_bsxxxx_14478_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_bsxxxx_14478.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_bsxxxx_14478_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_bsxxxx_14478.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  9.1236E-04 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_dbxxxx_14480_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_dbxxxx_14480.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_dbxxxx_14480_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_dbxxxx_14480.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  2.7583E-01
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ddxxxx_14482_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ddxxxx_14482.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ddxxxx_14482_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ddxxxx_14482.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  5.0859E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_dsxxxx_14607_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_dsxxxx_14607.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_dsxxxx_14607_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_dsxxxx_14607.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=   9.1615E-04 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_sbxxxx_14608_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sbxxxx_14608.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_sbxxxx_14608_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sbxxxx_14608.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  5.1915E-01  
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_sdxxxx_14488_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_sdxxxx_14488.root"  
-    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_sdxxxx_14488_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_sdxxxx_14488.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
     print 'finished file', final_histo_name_  
 
     cross_section_=  2.6630E-01 
-    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC7_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssxxxx_14610_polp80_3TeV_wO_CLIC_o3_v14.root"
-    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC7_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_1_00_M2_75_M3_50_150_ee_ssxxxx_14610.root"  
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ee_ssxxxx_14610_polp80_3TeV_wO_CLIC_o3_v14.root"
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ee_ssxxxx_14610.root"  
+    #process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    print 'finished file', final_histo_name_ 
+
+    cross_section_=  5.176E-01
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_WWH_qqqqH_14735_polp80_3TeV_wO_CLIC_o3_v14.root"
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_WWH_qqqqH_14735.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_WWH_qqqqH_14735_polp80_3TeV_wO_CLIC_o3_v14_full.root"  
     process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
-    print 'finished file', final_histo_name_  
+    print 'finished file', final_histo_name_ 
+
+    cross_section_= 7.1648198E-02 
+    input_file_name_="/eos/user/w/weberma2/data/HHZAnalyzerFiles/VLC11_NJet6_finalAnalysis/polp80/HHZStudy_ZZH_qqqqH_14727_polp80_3TeV_wO_CLIC_o3_v14.root"
+    #final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/ntuple_HHZ_ECut_j1_150_j2_100_j4_50_dTheta12_80_BTag3_2_20_M2_75_M3_50_150_ZZH_qqqqH_14727.root"  
+    final_histo_name_="/eos/user/w/weberma2/HistoFiles/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ZZH_qqqqH_14727_polp80_3TeV_wO_CLIC_o3_v14_full.root"  
+    process_event(final_histo_name_,input_file_name_,cross_section_,lumi_,fillPartonHistos_,ishhzfile_,f_performECut_,f_performThetaCut_,f_performBTagCut_,f_performMassCut_) 
+    print 'finished file', final_histo_name_ 
+
 
 
     return None
