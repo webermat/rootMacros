@@ -243,6 +243,16 @@ def process_files():
     
     
     process_event(i_final_histo_directory_,i_input_file_name_,fileout)
+
+    i_input_file_name_ = "/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_WWH_qqqqH_14734_polm80_3TeV_wO_CLIC_o3_v14.root"
+    i_final_histo_directory_="WWH_qqqqH"
+    
+    process_event(i_final_histo_directory_,i_input_file_name_,fileout)
+
+    i_input_file_name_ = "/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis/ntuple_HHZ_ZZH_qqqqH_14726_polm80_3TeV_wO_CLIC_o3_v14.root"
+    i_final_histo_directory_="ZZH_qqqqH"
+    
+    process_event(i_final_histo_directory_,i_input_file_name_,fileout)
     
     fileout.Close()
     
@@ -278,7 +288,16 @@ def process_files():
     i_final_histo_directory_="ee_qqqqqq"
     
     process_event(i_final_histo_directory_,i_input_file_name_,fileout)
+
+    i_input_file_name_ = "/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_WWH_qqqqH_14735_polp80_3TeV_wO_CLIC_o3_v14.root"
+    i_final_histo_directory_="WWH_qqqqH"
     
+    process_event(i_final_histo_directory_,i_input_file_name_,fileout)
+    
+    i_input_file_name_ = "/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis/ntuple_HHZ_ZZH_qqqqH_14727_polp80_3TeV_wO_CLIC_o3_v14.root"
+    i_final_histo_directory_="ZZH_qqqqH"
+    
+    process_event(i_final_histo_directory_,i_input_file_name_,fileout)
     fileout.Close()
 
 

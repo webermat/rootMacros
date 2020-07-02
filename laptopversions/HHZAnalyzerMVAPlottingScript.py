@@ -1,4 +1,4 @@
-from ROOT import gROOT, TCanvas,THStack, TF1, TH1F, TH1, TH2,  TH2F, TGraph, TGraph2D, TCanvas, TLegend, TTree, TLorentzVector, TVector3, TStyle, gPad,gStyle,TColor,TMVA,TCut,TString,TDirectory,TLatex,TColor,kBlack, kBlue,kRed,kCyan,kGreen,kOrange,kYellow,kWhite, TLine,TArrow,TMath
+from ROOT import gROOT, TCanvas,THStack, TF1, TH1F, TH1, TH2,  TH2F, TGraph, TGraph2D, TCanvas, TLegend, TTree, TLorentzVector, TVector3, TStyle, gPad,gStyle,TColor,TMVA,TCut,TString,TDirectory,TLatex,TColor,kBlack, kBlue,kRed,kCyan,kGreen,kOrange,kYellow,kWhite,kViolet,TLine,TArrow,TMath
 import ROOT as root
 from math import cos, sin, pi, degrees, radians, pow, sqrt,acos
 from array import array
@@ -335,6 +335,16 @@ def process_files():
     h_comb_jet1_mass_ee_qqqqqq_polm80_massCuts_.SetLineColor(kGreen-2);
     h_comb_jet1_mass_ee_qqqqqq_polm80_massCuts_.SetFillStyle(3002);
     
+    h_comb_jet1_mass_WWH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_comb_jet1_mass");
+    h_comb_jet1_mass_WWH_qqqqH_polm80_massCuts_.SetFillColor(kOrange);
+    h_comb_jet1_mass_WWH_qqqqH_polm80_massCuts_.SetLineColor(kOrange);
+    h_comb_jet1_mass_WWH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
+    
+    h_comb_jet1_mass_ZZH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_comb_jet1_mass");
+    h_comb_jet1_mass_ZZH_qqqqH_polm80_massCuts_.SetFillColor(kViolet+2);
+    h_comb_jet1_mass_ZZH_qqqqH_polm80_massCuts_.SetLineColor(kViolet+2);
+    h_comb_jet1_mass_ZZH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
+    
     h_tot_norm_comb_jet1_mass_BG = h_comb_jet1_mass_ee_qq_polm80_massCuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_comb_jet1_mass_BG.Add(h_comb_jet1_mass_ee_qqqq_polm80_massCuts_);
     h_tot_norm_comb_jet1_mass_BG.Add(h_comb_jet1_mass_ee_qqqqqq_polm80_massCuts_);
@@ -358,11 +368,12 @@ def process_files():
     #h_comb_jet1_mass_HZ_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_comb_jet1_mass_polm80_massCuts_= THStack("hhqq_BG_comb_jet1_mass_polm80_massCuts_", "");
+    hhqq_BG_comb_jet1_mass_polm80_massCuts_.Add(h_comb_jet1_mass_ZZH_qqqqH_polm80_massCuts_);
+    hhqq_BG_comb_jet1_mass_polm80_massCuts_.Add(h_comb_jet1_mass_WWH_qqqqH_polm80_massCuts_);
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.Add(h_comb_jet1_mass_hzqq_polm80_massCuts_);
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.Add(h_comb_jet1_mass_ee_qq_polm80_massCuts_);
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.Add(h_comb_jet1_mass_ee_qqqqqq_polm80_massCuts_);
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.Add(h_comb_jet1_mass_ee_qqqq_polm80_massCuts_);
-    
     
     canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack = setUpperCanvas("canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack");
     canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack.cd();
@@ -373,7 +384,7 @@ def process_files():
     #hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetXaxis().SetTitle("H1 candidate mass [GeV]");
     hhqq_BG_comb_jet1_mass_polm80_massCuts_.GetYaxis().SetTitle("Events");
-    hhqq_BG_comb_jet1_mass_polm80_massCuts_.SetMaximum(150000.)
+    hhqq_BG_comb_jet1_mass_polm80_massCuts_.SetMaximum(180000.)
     h_comb_jet1_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
     canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack.Modified();
 
@@ -389,7 +400,7 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_=TLegend(0.20,0.63,0.590,0.88);
+    leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_=TLegend(0.20,0.60,0.590,0.88);
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.SetBorderSize(0);
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.SetTextAlign(12);
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.SetTextSize(0.050);
@@ -404,13 +415,26 @@ def process_files():
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.AddEntry(h_comb_jet1_mass_ee_qqqqqq_polm80_massCuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.AddEntry(h_comb_jet1_mass_ee_qqqq_polm80_massCuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.AddEntry(h_comb_jet1_mass_hzqq_polm80_massCuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.AddEntry(h_comb_jet1_mass_WWH_qqqqH_polm80_massCuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.AddEntry(h_comb_jet1_mass_ZZH_qqqqH_polm80_massCuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.AddEntry(h_comb_jet1_mass_ee_qq_polm80_massCuts_,"ee#rightarrow qq");
     leg_hzqq_BG_comb_jet1_mass_polm80_massCuts_.Draw();
     
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack.Print("h_comb_jet1_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack.Print("h_comb_jet1_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack.cd()
+    hhqq_BG_comb_jet1_mass_polm80_massCuts_.SetMaximum(10.e10)
+    hhqq_BG_comb_jet1_mass_polm80_massCuts_.SetMinimum(0.1)
+    line = TLine(75,0,75,750000)
+    line.SetLineColor(kBlack);
+    line.SetLineWidth(2);
+    line.Draw()
+    arrow = TArrow(79,120000,100,120000,0.025,"|>")
+    arrow.Draw();
+    canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack.SetLogy()
+    canvas_h_SIG_BG_comb_jet1_mass_polm80_massCuts_thstack.Print("h_comb_jet1_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_comb_jet1_mass_HHZ_polm80_massCuts_.Scale(1./50000.)
     
@@ -501,6 +525,16 @@ def process_files():
     h_comb_jet2_mass_ee_qqqqqq_polm80_massCuts_.SetLineColor(kGreen-2);
     h_comb_jet2_mass_ee_qqqqqq_polm80_massCuts_.SetFillStyle(3002);
     
+    h_comb_jet2_mass_WWH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_comb_jet2_mass");
+    h_comb_jet2_mass_WWH_qqqqH_polm80_massCuts_.SetFillColor(kOrange);
+    h_comb_jet2_mass_WWH_qqqqH_polm80_massCuts_.SetLineColor(kOrange);
+    h_comb_jet2_mass_WWH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
+    
+    h_comb_jet2_mass_ZZH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_comb_jet2_mass");
+    h_comb_jet2_mass_ZZH_qqqqH_polm80_massCuts_.SetFillColor(kViolet+2);
+    h_comb_jet2_mass_ZZH_qqqqH_polm80_massCuts_.SetLineColor(kViolet+2);
+    h_comb_jet2_mass_ZZH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
+    
     h_tot_norm_comb_jet2_mass_BG = h_comb_jet2_mass_ee_qq_polm80_massCuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_comb_jet2_mass_BG.Add(h_comb_jet2_mass_ee_qqqq_polm80_massCuts_);
     h_tot_norm_comb_jet2_mass_BG.Add(h_comb_jet2_mass_ee_qqqqqq_polm80_massCuts_);
@@ -524,6 +558,8 @@ def process_files():
     #h_comb_jet2_mass_HZ_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_comb_jet2_mass_polm80_massCuts_= THStack("hhqq_BG_comb_jet2_mass_polm80_massCuts_", "");
+    hhqq_BG_comb_jet2_mass_polm80_massCuts_.Add(h_comb_jet2_mass_ZZH_qqqqH_polm80_massCuts_);
+    hhqq_BG_comb_jet2_mass_polm80_massCuts_.Add(h_comb_jet2_mass_WWH_qqqqH_polm80_massCuts_);
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.Add(h_comb_jet2_mass_hzqq_polm80_massCuts_);
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.Add(h_comb_jet2_mass_ee_qq_polm80_massCuts_);
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.Add(h_comb_jet2_mass_ee_qqqqqq_polm80_massCuts_);
@@ -535,7 +571,7 @@ def process_files():
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.Draw("hist");
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.GetXaxis().SetTitle("H2 candidate mass [GeV]");
     hhqq_BG_comb_jet2_mass_polm80_massCuts_.GetYaxis().SetTitle("Events");
-    hhqq_BG_comb_jet2_mass_polm80_massCuts_.SetMaximum(175000.)
+    hhqq_BG_comb_jet2_mass_polm80_massCuts_.SetMaximum(210000.)
     h_comb_jet2_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
     canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack.Modified();
     
@@ -552,7 +588,7 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_=TLegend(0.30,0.63,0.690,0.88);
+    leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_=TLegend(0.30,0.60,0.690,0.88);
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.SetBorderSize(0);
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.SetTextAlign(12);
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.SetTextSize(0.050);
@@ -567,13 +603,20 @@ def process_files():
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.AddEntry(h_comb_jet2_mass_ee_qqqqqq_polm80_massCuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.AddEntry(h_comb_jet2_mass_ee_qqqq_polm80_massCuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.AddEntry(h_comb_jet2_mass_hzqq_polm80_massCuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.AddEntry(h_comb_jet2_mass_WWH_qqqqH_polm80_massCuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.AddEntry(h_comb_jet2_mass_ZZH_qqqqH_polm80_massCuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.AddEntry(h_comb_jet2_mass_ee_qq_polm80_massCuts_,"ee#rightarrow qq");
     leg_hzqq_BG_comb_jet2_mass_polm80_massCuts_.Draw();
     
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack.Print("h_comb_jet2_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack.Print("h_comb_jet2_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack.cd()
+    hhqq_BG_comb_jet2_mass_polm80_massCuts_.SetMaximum(10.e10)
+    hhqq_BG_comb_jet2_mass_polm80_massCuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack.SetLogy()
+    canvas_h_SIG_BG_comb_jet2_mass_polm80_massCuts_thstack.Print("h_comb_jet2_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     
     h_comb_jet2_mass_HHZ_polm80_massCuts_.Scale(1./50000.)
@@ -665,6 +708,16 @@ def process_files():
     h_comb_jet3_mass_ee_qqqqqq_polm80_massCuts_.SetLineColor(kGreen-2);
     h_comb_jet3_mass_ee_qqqqqq_polm80_massCuts_.SetFillStyle(3002);
     
+    h_comb_jet3_mass_WWH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_comb_jet3_mass");
+    h_comb_jet3_mass_WWH_qqqqH_polm80_massCuts_.SetFillColor(kOrange);
+    h_comb_jet3_mass_WWH_qqqqH_polm80_massCuts_.SetLineColor(kOrange);
+    h_comb_jet3_mass_WWH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
+    
+    h_comb_jet3_mass_ZZH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_comb_jet3_mass");
+    h_comb_jet3_mass_ZZH_qqqqH_polm80_massCuts_.SetFillColor(kViolet+2);
+    h_comb_jet3_mass_ZZH_qqqqH_polm80_massCuts_.SetLineColor(kViolet+2);
+    h_comb_jet3_mass_ZZH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
+    
     h_tot_norm_comb_jet3_mass_BG = h_comb_jet3_mass_ee_qq_polm80_massCuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_comb_jet3_mass_BG.Add(h_comb_jet3_mass_ee_qqqq_polm80_massCuts_);
     h_tot_norm_comb_jet3_mass_BG.Add(h_comb_jet3_mass_ee_qqqqqq_polm80_massCuts_);
@@ -688,6 +741,8 @@ def process_files():
     #h_comb_jet3_mass_HZ_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_comb_jet3_mass_polm80_massCuts_= THStack("hhqq_BG_comb_jet3_mass_polm80_massCuts_", "");
+    hhqq_BG_comb_jet3_mass_polm80_massCuts_.Add(h_comb_jet3_mass_ZZH_qqqqH_polm80_massCuts_);
+    hhqq_BG_comb_jet3_mass_polm80_massCuts_.Add(h_comb_jet3_mass_WWH_qqqqH_polm80_massCuts_);
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.Add(h_comb_jet3_mass_hzqq_polm80_massCuts_);
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.Add(h_comb_jet3_mass_ee_qq_polm80_massCuts_);
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.Add(h_comb_jet3_mass_ee_qqqqqq_polm80_massCuts_);
@@ -703,7 +758,7 @@ def process_files():
     #hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetXaxis().SetTitle("Z candidate mass [GeV]");
     hhqq_BG_comb_jet3_mass_polm80_massCuts_.GetYaxis().SetTitle("Events");
-    hhqq_BG_comb_jet3_mass_polm80_massCuts_.SetMaximum(450000.)
+    hhqq_BG_comb_jet3_mass_polm80_massCuts_.SetMaximum(530000.)
     h_comb_jet3_mass_HHZ_polm80_massCuts_.Draw("hist,e,same")
     canvas_h_SIG_BG_comb_jet3_mass_polm80_massCuts_thstack.Modified();
     
@@ -729,7 +784,7 @@ def process_files():
     arrow2.SetLineWidth(2);
     arrow2.Draw();
     
-    leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_=TLegend(0.35,0.63,0.740,0.88);
+    leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_=TLegend(0.35,0.60,0.740,0.88);
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.SetBorderSize(0);
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.SetTextAlign(12);
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.SetTextSize(0.050);
@@ -744,12 +799,19 @@ def process_files():
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.AddEntry(h_comb_jet3_mass_ee_qqqqqq_polm80_massCuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.AddEntry(h_comb_jet3_mass_ee_qqqq_polm80_massCuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.AddEntry(h_comb_jet3_mass_hzqq_polm80_massCuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.AddEntry(h_comb_jet3_mass_WWH_qqqqH_polm80_massCuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.AddEntry(h_comb_jet3_mass_ZZH_qqqqH_polm80_massCuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.AddEntry(h_comb_jet3_mass_ee_qq_polm80_massCuts_,"ee#rightarrow qq");
     leg_hzqq_BG_comb_jet3_mass_polm80_massCuts_.Draw();
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_comb_jet3_mass_polm80_massCuts_thstack.Print("h_comb_jet3_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_comb_jet3_mass_polm80_massCuts_thstack.Print("h_comb_jet3_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_comb_jet3_mass_polm80_massCuts_thstack.cd()
+    hhqq_BG_comb_jet3_mass_polm80_massCuts_.SetMaximum(10.e10)
+    hhqq_BG_comb_jet3_mass_polm80_massCuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_comb_jet3_mass_polm80_massCuts_thstack.SetLogy()
+    canvas_h_SIG_BG_comb_jet3_mass_polm80_massCuts_thstack.Print("h_comb_jet3_mass_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_comb_jet3_mass_HHZ_polm80_massCuts_.Scale(1./50000.)
     
@@ -849,6 +911,16 @@ def process_files():
     h_jet1_theta_ee_qqqqqq_polm80_ECuts_.SetFillColor(kGreen-2);
     h_jet1_theta_ee_qqqqqq_polm80_ECuts_.SetLineColor(kGreen-2);
     h_jet1_theta_ee_qqqqqq_polm80_ECuts_.SetFillStyle(3002);
+    
+    h_jet1_theta_WWH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_jet1_theta");
+    h_jet1_theta_WWH_qqqqH_polm80_ECuts_.SetFillColor(kOrange);
+    h_jet1_theta_WWH_qqqqH_polm80_ECuts_.SetLineColor(kOrange);
+    h_jet1_theta_WWH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
+    
+    h_jet1_theta_ZZH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_jet1_theta");
+    h_jet1_theta_ZZH_qqqqH_polm80_ECuts_.SetFillColor(kViolet+2);
+    h_jet1_theta_ZZH_qqqqH_polm80_ECuts_.SetLineColor(kViolet+2);
+    h_jet1_theta_ZZH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
       
     h_tot_norm_jet1_theta_BG = h_jet1_theta_ee_qq_polm80_ECuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_jet1_theta_BG.Add(h_jet1_theta_ee_qqqq_polm80_ECuts_);
@@ -873,6 +945,8 @@ def process_files():
     #h_jet1_theta_HZ_polm80_ECuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_jet1_theta_polm80_ECuts_= THStack("hhqq_BG_jet1_theta_polm80_ECuts_", "");
+    hhqq_BG_jet1_theta_polm80_ECuts_.Add(h_jet1_theta_ZZH_qqqqH_polm80_ECuts_);
+    hhqq_BG_jet1_theta_polm80_ECuts_.Add(h_jet1_theta_WWH_qqqqH_polm80_ECuts_);
     hhqq_BG_jet1_theta_polm80_ECuts_.Add(h_jet1_theta_hzqq_polm80_ECuts_);
     hhqq_BG_jet1_theta_polm80_ECuts_.Add(h_jet1_theta_ee_qq_polm80_ECuts_);
     hhqq_BG_jet1_theta_polm80_ECuts_.Add(h_jet1_theta_ee_qqqqqq_polm80_ECuts_);
@@ -914,7 +988,7 @@ def process_files():
     arrow2.SetLineWidth(2);
     arrow2.Draw();
     
-    leg_hzqq_BG_jet1_theta_polm80_ECuts_=TLegend(0.30,0.63,0.690,0.88);
+    leg_hzqq_BG_jet1_theta_polm80_ECuts_=TLegend(0.30,0.60,0.690,0.88);
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.SetBorderSize(0);
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.SetTextAlign(12);
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.SetTextSize(0.050);
@@ -929,12 +1003,19 @@ def process_files():
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.AddEntry(h_jet1_theta_ee_qqqqqq_polm80_ECuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.AddEntry(h_jet1_theta_ee_qqqq_polm80_ECuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.AddEntry(h_jet1_theta_hzqq_polm80_ECuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_jet1_theta_polm80_ECuts_.AddEntry(h_jet1_theta_WWH_qqqqH_polm80_ECuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_jet1_theta_polm80_ECuts_.AddEntry(h_jet1_theta_ZZH_qqqqH_polm80_ECuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.AddEntry(h_jet1_theta_ee_qq_polm80_ECuts_,"ee#rightarrow qq");
     leg_hzqq_BG_jet1_theta_polm80_ECuts_.Draw();
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_jet1_theta_polm80_ECuts_thstack.Print("h_jet1_theta_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet1_theta_polm80_ECuts_thstack.Print("h_jet1_theta_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_50000.eps")
+    canvas_h_SIG_BG_jet1_theta_polm80_ECuts_thstack.cd()
+    hhqq_BG_jet1_theta_polm80_ECuts_.SetMaximum(10.e9)
+    hhqq_BG_jet1_theta_polm80_ECuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_jet1_theta_polm80_ECuts_thstack.SetLogy()
+    canvas_h_SIG_BG_jet1_theta_polm80_ECuts_thstack.Print("h_jet1_theta_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_jet1_theta_HHZ_polm80_ECuts_.Scale(1./50000.)
     
@@ -1034,6 +1115,16 @@ def process_files():
     h_jet2_theta_ee_qqqqqq_polm80_ECuts_.SetFillColor(kGreen-2);
     h_jet2_theta_ee_qqqqqq_polm80_ECuts_.SetLineColor(kGreen-2);
     h_jet2_theta_ee_qqqqqq_polm80_ECuts_.SetFillStyle(3002);
+
+    h_jet2_theta_WWH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_jet2_theta");
+    h_jet2_theta_WWH_qqqqH_polm80_ECuts_.SetFillColor(kOrange);
+    h_jet2_theta_WWH_qqqqH_polm80_ECuts_.SetLineColor(kOrange);
+    h_jet2_theta_WWH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
+    
+    h_jet2_theta_ZZH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_jet2_theta");
+    h_jet2_theta_ZZH_qqqqH_polm80_ECuts_.SetFillColor(kViolet+2);
+    h_jet2_theta_ZZH_qqqqH_polm80_ECuts_.SetLineColor(kViolet+2);
+    h_jet2_theta_ZZH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
     
     h_tot_norm_jet2_theta_BG = h_jet2_theta_ee_qq_polm80_ECuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_jet2_theta_BG.Add(h_jet2_theta_ee_qqqq_polm80_ECuts_);
@@ -1058,6 +1149,8 @@ def process_files():
     #h_jet2_theta_HZ_polm80_ECuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_jet2_theta_polm80_ECuts_= THStack("hhqq_BG_jet2_theta_polm80_ECuts_", "");
+    hhqq_BG_jet2_theta_polm80_ECuts_.Add(h_jet2_theta_ZZH_qqqqH_polm80_ECuts_);
+    hhqq_BG_jet2_theta_polm80_ECuts_.Add(h_jet2_theta_WWH_qqqqH_polm80_ECuts_);
     hhqq_BG_jet2_theta_polm80_ECuts_.Add(h_jet2_theta_hzqq_polm80_ECuts_);
     hhqq_BG_jet2_theta_polm80_ECuts_.Add(h_jet2_theta_ee_qq_polm80_ECuts_);
     hhqq_BG_jet2_theta_polm80_ECuts_.Add(h_jet2_theta_ee_qqqqqq_polm80_ECuts_);
@@ -1100,7 +1193,7 @@ def process_files():
     arrow2.SetLineWidth(2);
     arrow2.Draw();
     
-    leg_hzqq_BG_jet2_theta_polm80_ECuts_=TLegend(0.30,0.63,0.690,0.88);
+    leg_hzqq_BG_jet2_theta_polm80_ECuts_=TLegend(0.30,0.60,0.690,0.88);
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.SetBorderSize(0);
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.SetTextAlign(12);
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.SetTextSize(0.050);
@@ -1115,13 +1208,19 @@ def process_files():
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.AddEntry(h_jet2_theta_ee_qqqqqq_polm80_ECuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.AddEntry(h_jet2_theta_ee_qqqq_polm80_ECuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.AddEntry(h_jet2_theta_hzqq_polm80_ECuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_jet2_theta_polm80_ECuts_.AddEntry(h_jet2_theta_WWH_qqqqH_polm80_ECuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_jet2_theta_polm80_ECuts_.AddEntry(h_jet2_theta_ZZH_qqqqH_polm80_ECuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.AddEntry(h_jet2_theta_ee_qq_polm80_ECuts_,"ee#rightarrow qq");
     leg_hzqq_BG_jet2_theta_polm80_ECuts_.Draw();
       
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_jet2_theta_polm80_ECuts_thstack.Print("h_jet2_theta_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
-      
+    canvas_h_SIG_BG_jet2_theta_polm80_ECuts_thstack.Print("h_jet2_theta_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet2_theta_polm80_ECuts_thstack.cd()
+    hhqq_BG_jet2_theta_polm80_ECuts_.SetMaximum(10.e9)
+    hhqq_BG_jet2_theta_polm80_ECuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_jet2_theta_polm80_ECuts_thstack.SetLogy()
+    canvas_h_SIG_BG_jet2_theta_polm80_ECuts_thstack.Print("h_jet2_theta_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     h_jet2_theta_HHZ_polm80_ECuts_.Scale(1./50000.)
       
     h_jet2_theta_hzqq_polm80_ECuts_.Scale(norm_tot_BG_to_SIG)
@@ -1222,6 +1321,16 @@ def process_files():
     h_jet1_E_ee_qqqqqq_polm80_ECuts_.SetLineColor(kGreen-2);
     h_jet1_E_ee_qqqqqq_polm80_ECuts_.SetFillStyle(3002);
     
+    h_jet1_E_WWH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_jet1_E");
+    h_jet1_E_WWH_qqqqH_polm80_ECuts_.SetFillColor(kOrange);
+    h_jet1_E_WWH_qqqqH_polm80_ECuts_.SetLineColor(kOrange);
+    h_jet1_E_WWH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
+    
+    h_jet1_E_ZZH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_jet1_E");
+    h_jet1_E_ZZH_qqqqH_polm80_ECuts_.SetFillColor(kViolet+2);
+    h_jet1_E_ZZH_qqqqH_polm80_ECuts_.SetLineColor(kViolet+2);
+    h_jet1_E_ZZH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
+    
     h_tot_norm_jet1_E_BG = h_jet1_E_ee_qq_polm80_ECuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_jet1_E_BG.Add(h_jet1_E_ee_qqqq_polm80_ECuts_);
     h_tot_norm_jet1_E_BG.Add(h_jet1_E_ee_qqqqqq_polm80_ECuts_);
@@ -1245,6 +1354,8 @@ def process_files():
     #h_jet1_E_HZ_polm80_ECuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_jet1_E_polm80_ECuts_= THStack("hhqq_BG_jet1_E_polm80_ECuts_", "");
+    hhqq_BG_jet1_E_polm80_ECuts_.Add(h_jet1_E_ZZH_qqqqH_polm80_ECuts_);
+    hhqq_BG_jet1_E_polm80_ECuts_.Add(h_jet1_E_WWH_qqqqH_polm80_ECuts_);
     hhqq_BG_jet1_E_polm80_ECuts_.Add(h_jet1_E_hzqq_polm80_ECuts_);
     hhqq_BG_jet1_E_polm80_ECuts_.Add(h_jet1_E_ee_qq_polm80_ECuts_);
     hhqq_BG_jet1_E_polm80_ECuts_.Add(h_jet1_E_ee_qqqqqq_polm80_ECuts_);
@@ -1277,7 +1388,7 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_BG_jet1_E_polm80_ECuts_=TLegend(0.40,0.63,0.790,0.88);
+    leg_hzqq_BG_jet1_E_polm80_ECuts_=TLegend(0.40,0.60,0.790,0.88);
     leg_hzqq_BG_jet1_E_polm80_ECuts_.SetBorderSize(0);
     leg_hzqq_BG_jet1_E_polm80_ECuts_.SetTextAlign(12);
     leg_hzqq_BG_jet1_E_polm80_ECuts_.SetTextSize(0.050);
@@ -1292,12 +1403,19 @@ def process_files():
     leg_hzqq_BG_jet1_E_polm80_ECuts_.AddEntry(h_jet1_E_ee_qqqqqq_polm80_ECuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_jet1_E_polm80_ECuts_.AddEntry(h_jet1_E_ee_qqqq_polm80_ECuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_jet1_E_polm80_ECuts_.AddEntry(h_jet1_E_hzqq_polm80_ECuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_jet1_E_polm80_ECuts_.AddEntry(h_jet1_E_WWH_qqqqH_polm80_ECuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_jet1_E_polm80_ECuts_.AddEntry(h_jet1_E_ZZH_qqqqH_polm80_ECuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_jet1_E_polm80_ECuts_.AddEntry(h_jet1_E_ee_qq_polm80_ECuts_,"ee#rightarrow qq");
     leg_hzqq_BG_jet1_E_polm80_ECuts_.Draw();
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_jet1_E_polm80_ECuts_thstack.Print("h_jet1_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet1_E_polm80_ECuts_thstack.Print("h_jet1_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet1_E_polm80_ECuts_thstack.cd()
+    hhqq_BG_jet1_E_polm80_ECuts_.SetMaximum(10.e9)
+    hhqq_BG_jet1_E_polm80_ECuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_jet1_E_polm80_ECuts_thstack.SetLogy()
+    canvas_h_SIG_BG_jet1_E_polm80_ECuts_thstack.Print("h_jet1_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_jet1_E_HHZ_polm80_ECuts_.Scale(1./50000.)
     
@@ -1387,6 +1505,15 @@ def process_files():
     h_jet2_E_ee_qqqqqq_polm80_ECuts_.SetFillColor(kGreen-2);
     h_jet2_E_ee_qqqqqq_polm80_ECuts_.SetLineColor(kGreen-2);
     h_jet2_E_ee_qqqqqq_polm80_ECuts_.SetFillStyle(3002);
+    h_jet2_E_WWH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_jet2_E");
+    h_jet2_E_WWH_qqqqH_polm80_ECuts_.SetFillColor(kOrange);
+    h_jet2_E_WWH_qqqqH_polm80_ECuts_.SetLineColor(kOrange);
+    h_jet2_E_WWH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
+    
+    h_jet2_E_ZZH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_jet2_E");
+    h_jet2_E_ZZH_qqqqH_polm80_ECuts_.SetFillColor(kViolet+2);
+    h_jet2_E_ZZH_qqqqH_polm80_ECuts_.SetLineColor(kViolet+2);
+    h_jet2_E_ZZH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
     
     h_tot_norm_jet2_E_BG = h_jet2_E_ee_qq_polm80_ECuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_jet2_E_BG.Add(h_jet2_E_ee_qqqq_polm80_ECuts_);
@@ -1411,6 +1538,8 @@ def process_files():
     #h_jet2_E_HZ_polm80_ECuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_jet2_E_polm80_ECuts_= THStack("hhqq_BG_jet2_E_polm80_ECuts_", "");
+    hhqq_BG_jet2_E_polm80_ECuts_.Add(h_jet2_E_ZZH_qqqqH_polm80_ECuts_);
+    hhqq_BG_jet2_E_polm80_ECuts_.Add(h_jet2_E_WWH_qqqqH_polm80_ECuts_);
     hhqq_BG_jet2_E_polm80_ECuts_.Add(h_jet2_E_hzqq_polm80_ECuts_);
     hhqq_BG_jet2_E_polm80_ECuts_.Add(h_jet2_E_ee_qq_polm80_ECuts_);
     hhqq_BG_jet2_E_polm80_ECuts_.Add(h_jet2_E_ee_qqqqqq_polm80_ECuts_);
@@ -1443,7 +1572,7 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_BG_jet2_E_polm80_ECuts_=TLegend(0.40,0.63,0.790,0.88);
+    leg_hzqq_BG_jet2_E_polm80_ECuts_=TLegend(0.40,0.60,0.790,0.88);
     leg_hzqq_BG_jet2_E_polm80_ECuts_.SetBorderSize(0);
     leg_hzqq_BG_jet2_E_polm80_ECuts_.SetTextAlign(12);
     leg_hzqq_BG_jet2_E_polm80_ECuts_.SetTextSize(0.050);
@@ -1458,12 +1587,19 @@ def process_files():
     leg_hzqq_BG_jet2_E_polm80_ECuts_.AddEntry(h_jet2_E_ee_qqqqqq_polm80_ECuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_jet2_E_polm80_ECuts_.AddEntry(h_jet2_E_ee_qqqq_polm80_ECuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_jet2_E_polm80_ECuts_.AddEntry(h_jet2_E_hzqq_polm80_ECuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_jet2_E_polm80_ECuts_.AddEntry(h_jet2_E_WWH_qqqqH_polm80_ECuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_jet2_E_polm80_ECuts_.AddEntry(h_jet2_E_ZZH_qqqqH_polm80_ECuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_jet2_E_polm80_ECuts_.AddEntry(h_jet2_E_ee_qq_polm80_ECuts_,"ee#rightarrow qq");
     leg_hzqq_BG_jet2_E_polm80_ECuts_.Draw();
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_jet2_E_polm80_ECuts_thstack.Print("h_jet2_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet2_E_polm80_ECuts_thstack.Print("h_jet2_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet2_E_polm80_ECuts_thstack.cd()
+    hhqq_BG_jet2_E_polm80_ECuts_.SetMaximum(10.e9)
+    hhqq_BG_jet2_E_polm80_ECuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_jet2_E_polm80_ECuts_thstack.SetLogy()
+    canvas_h_SIG_BG_jet2_E_polm80_ECuts_thstack.Print("h_jet2_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_jet2_E_HHZ_polm80_ECuts_.Scale(1./50000.)
     
@@ -1553,6 +1689,15 @@ def process_files():
     h_jet3_E_ee_qqqqqq_polm80_ECuts_.SetFillColor(kGreen-2);
     h_jet3_E_ee_qqqqqq_polm80_ECuts_.SetLineColor(kGreen-2);
     h_jet3_E_ee_qqqqqq_polm80_ECuts_.SetFillStyle(3002);
+    h_jet3_E_WWH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_jet3_E");
+    h_jet3_E_WWH_qqqqH_polm80_ECuts_.SetFillColor(kOrange);
+    h_jet3_E_WWH_qqqqH_polm80_ECuts_.SetLineColor(kOrange);
+    h_jet3_E_WWH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
+    
+    h_jet3_E_ZZH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_jet3_E");
+    h_jet3_E_ZZH_qqqqH_polm80_ECuts_.SetFillColor(kViolet+2);
+    h_jet3_E_ZZH_qqqqH_polm80_ECuts_.SetLineColor(kViolet+2);
+    h_jet3_E_ZZH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
     
     h_tot_norm_jet3_E_BG = h_jet3_E_ee_qq_polm80_ECuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_jet3_E_BG.Add(h_jet3_E_ee_qqqq_polm80_ECuts_);
@@ -1577,6 +1722,8 @@ def process_files():
     #h_jet3_E_HZ_polm80_ECuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_jet3_E_polm80_ECuts_= THStack("hhqq_BG_jet3_E_polm80_ECuts_", "");
+    hhqq_BG_jet3_E_polm80_ECuts_.Add(h_jet3_E_ZZH_qqqqH_polm80_ECuts_);
+    hhqq_BG_jet3_E_polm80_ECuts_.Add(h_jet3_E_WWH_qqqqH_polm80_ECuts_);
     hhqq_BG_jet3_E_polm80_ECuts_.Add(h_jet3_E_hzqq_polm80_ECuts_);
     hhqq_BG_jet3_E_polm80_ECuts_.Add(h_jet3_E_ee_qq_polm80_ECuts_);
     hhqq_BG_jet3_E_polm80_ECuts_.Add(h_jet3_E_ee_qqqqqq_polm80_ECuts_);
@@ -1609,7 +1756,7 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_BG_jet3_E_polm80_ECuts_=TLegend(0.40,0.63,0.790,0.88);
+    leg_hzqq_BG_jet3_E_polm80_ECuts_=TLegend(0.40,0.60,0.790,0.88);
     leg_hzqq_BG_jet3_E_polm80_ECuts_.SetBorderSize(0);
     leg_hzqq_BG_jet3_E_polm80_ECuts_.SetTextAlign(12);
     leg_hzqq_BG_jet3_E_polm80_ECuts_.SetTextSize(0.050);
@@ -1624,12 +1771,19 @@ def process_files():
     leg_hzqq_BG_jet3_E_polm80_ECuts_.AddEntry(h_jet3_E_ee_qqqqqq_polm80_ECuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_jet3_E_polm80_ECuts_.AddEntry(h_jet3_E_ee_qqqq_polm80_ECuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_jet3_E_polm80_ECuts_.AddEntry(h_jet3_E_hzqq_polm80_ECuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_jet3_E_polm80_ECuts_.AddEntry(h_jet3_E_WWH_qqqqH_polm80_ECuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_jet3_E_polm80_ECuts_.AddEntry(h_jet3_E_ZZH_qqqqH_polm80_ECuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_jet3_E_polm80_ECuts_.AddEntry(h_jet3_E_ee_qq_polm80_ECuts_,"ee#rightarrow qq");
     leg_hzqq_BG_jet3_E_polm80_ECuts_.Draw();
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_jet3_E_polm80_ECuts_thstack.Print("h_jet3_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet3_E_polm80_ECuts_thstack.Print("h_jet3_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet3_E_polm80_ECuts_thstack.cd()
+    hhqq_BG_jet3_E_polm80_ECuts_.SetMaximum(10.e9)
+    hhqq_BG_jet3_E_polm80_ECuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_jet3_E_polm80_ECuts_thstack.SetLogy()
+    canvas_h_SIG_BG_jet3_E_polm80_ECuts_thstack.Print("h_jet3_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_jet3_E_HHZ_polm80_ECuts_.Scale(1./50000.)
     
@@ -1667,7 +1821,7 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_norm_BG_jet3_E_polm80_ECuts_=TLegend(0.40,0.63,0.790,0.88);
+    leg_hzqq_norm_BG_jet3_E_polm80_ECuts_=TLegend(0.40,0.60,0.790,0.88);
     leg_hzqq_norm_BG_jet3_E_polm80_ECuts_.SetBorderSize(0);
     leg_hzqq_norm_BG_jet3_E_polm80_ECuts_.SetTextAlign(12);
     leg_hzqq_norm_BG_jet3_E_polm80_ECuts_.SetTextSize(0.050);
@@ -1719,6 +1873,15 @@ def process_files():
     h_jet4_E_ee_qqqqqq_polm80_ECuts_.SetFillColor(kGreen-2);
     h_jet4_E_ee_qqqqqq_polm80_ECuts_.SetLineColor(kGreen-2);
     h_jet4_E_ee_qqqqqq_polm80_ECuts_.SetFillStyle(3002);
+    h_jet4_E_WWH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_jet4_E");
+    h_jet4_E_WWH_qqqqH_polm80_ECuts_.SetFillColor(kOrange);
+    h_jet4_E_WWH_qqqqH_polm80_ECuts_.SetLineColor(kOrange);
+    h_jet4_E_WWH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
+    
+    h_jet4_E_ZZH_qqqqH_polm80_ECuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_jet4_E");
+    h_jet4_E_ZZH_qqqqH_polm80_ECuts_.SetFillColor(kViolet+2);
+    h_jet4_E_ZZH_qqqqH_polm80_ECuts_.SetLineColor(kViolet+2);
+    h_jet4_E_ZZH_qqqqH_polm80_ECuts_.SetFillStyle(3002);
     
     h_tot_norm_jet4_E_BG = h_jet4_E_ee_qq_polm80_ECuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_jet4_E_BG.Add(h_jet4_E_ee_qqqq_polm80_ECuts_);
@@ -1743,6 +1906,8 @@ def process_files():
     #h_jet4_E_HZ_polm80_ECuts_.GetXaxis().SetRangeUser(91,161)
     
     hhqq_BG_jet4_E_polm80_ECuts_= THStack("hhqq_BG_jet4_E_polm80_ECuts_", "");
+    hhqq_BG_jet4_E_polm80_ECuts_.Add(h_jet4_E_ZZH_qqqqH_polm80_ECuts_);
+    hhqq_BG_jet4_E_polm80_ECuts_.Add(h_jet4_E_WWH_qqqqH_polm80_ECuts_);
     hhqq_BG_jet4_E_polm80_ECuts_.Add(h_jet4_E_hzqq_polm80_ECuts_);
     hhqq_BG_jet4_E_polm80_ECuts_.Add(h_jet4_E_ee_qq_polm80_ECuts_);
     hhqq_BG_jet4_E_polm80_ECuts_.Add(h_jet4_E_ee_qqqqqq_polm80_ECuts_);
@@ -1775,7 +1940,7 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_BG_jet4_E_polm80_ECuts_=TLegend(0.40,0.63,0.790,0.88);
+    leg_hzqq_BG_jet4_E_polm80_ECuts_=TLegend(0.40,0.60,0.790,0.88);
     leg_hzqq_BG_jet4_E_polm80_ECuts_.SetBorderSize(0);
     leg_hzqq_BG_jet4_E_polm80_ECuts_.SetTextAlign(12);
     leg_hzqq_BG_jet4_E_polm80_ECuts_.SetTextSize(0.050);
@@ -1790,12 +1955,19 @@ def process_files():
     leg_hzqq_BG_jet4_E_polm80_ECuts_.AddEntry(h_jet4_E_ee_qqqqqq_polm80_ECuts_,"ee#rightarrow qqqqqq");
     leg_hzqq_BG_jet4_E_polm80_ECuts_.AddEntry(h_jet4_E_ee_qqqq_polm80_ECuts_,"ee#rightarrow qqqq");
     leg_hzqq_BG_jet4_E_polm80_ECuts_.AddEntry(h_jet4_E_hzqq_polm80_ECuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_jet4_E_polm80_ECuts_.AddEntry(h_jet4_E_WWH_qqqqH_polm80_ECuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_jet4_E_polm80_ECuts_.AddEntry(h_jet4_E_ZZH_qqqqH_polm80_ECuts_,"ZZH#rightarrowqqqqH");
     leg_hzqq_BG_jet4_E_polm80_ECuts_.AddEntry(h_jet4_E_ee_qq_polm80_ECuts_,"ee#rightarrow qq");
     leg_hzqq_BG_jet4_E_polm80_ECuts_.Draw();
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_jet4_E_polm80_ECuts_thstack.Print("h_jet4_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet4_E_polm80_ECuts_thstack.Print("h_jet4_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_jet4_E_polm80_ECuts_thstack.cd()
+    hhqq_BG_jet4_E_polm80_ECuts_.SetMaximum(10.e9)
+    hhqq_BG_jet4_E_polm80_ECuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_jet4_E_polm80_ECuts_thstack.SetLogy()
+    canvas_h_SIG_BG_jet4_E_polm80_ECuts_thstack.Print("h_jet4_E_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_jet4_E_HHZ_polm80_ECuts_.Scale(1./50000.)
     
@@ -1885,6 +2057,15 @@ def process_files():
     h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_.SetFillColor(kGreen-2);
     h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_.SetLineColor(kGreen-2);
     h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_.SetFillStyle(3002);
+    h_BTag_sum_max3_WWH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("WWH_qqqqH/h_BTag_sum_max3");
+    h_BTag_sum_max3_WWH_qqqqH_polm80_massCuts_.SetFillColor(kOrange);
+    h_BTag_sum_max3_WWH_qqqqH_polm80_massCuts_.SetLineColor(kOrange);
+    h_BTag_sum_max3_WWH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
+    
+    h_BTag_sum_max3_ZZH_qqqqH_polm80_massCuts_=file_polm80_preselection_.Get("ZZH_qqqqH/h_BTag_sum_max3");
+    h_BTag_sum_max3_ZZH_qqqqH_polm80_massCuts_.SetFillColor(kViolet+2);
+    h_BTag_sum_max3_ZZH_qqqqH_polm80_massCuts_.SetLineColor(kViolet+2);
+    h_BTag_sum_max3_ZZH_qqqqH_polm80_massCuts_.SetFillStyle(3002);
     
     h_tot_norm_h_BTag_sum_max3_BG = h_BTag_sum_max3_ee_qq_polm80_massCuts_.Clone("h_tot_BG_normalisation")
     h_tot_norm_h_BTag_sum_max3_BG.Add(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_);
@@ -1908,59 +2089,68 @@ def process_files():
     #h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
     #h_BTag_sum_max3_HZ_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
     
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_= THStack("hhqq_BG_h_BTag_sum_max3_polm80_massCuts_", "");
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_hzqq_polm80_massCuts_);
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qq_polm80_massCuts_);
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_);
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_);
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_= THStack("hhqq_BG_BTag_sum_max3_polm80_massCuts_", "");
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ZZH_qqqqH_polm80_massCuts_);
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_WWH_qqqqH_polm80_massCuts_);
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_hzqq_polm80_massCuts_);
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qq_polm80_massCuts_);
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_);
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_);
     
     
-    canvas_h_SIG_BG_h_BTag_sum_max3_polm80_massCuts_thstack = setUpperCanvas("canvas_h_SIG_BG_h_BTag_sum_max3_polm80_massCuts_thstack");
-    canvas_h_SIG_BG_h_BTag_sum_max3_polm80_massCuts_thstack.cd();
+    canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack = setUpperCanvas("canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack");
+    canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack.cd();
     #h_BTag_sum_max3_HZ_polm80_massCuts_.Draw("hist,e")
     #h_tot_norm_h_BTag_sum_max3_BG.Draw("hist,e")
     #h_tot_norm_h_BTag_sum_max3_BG.GetXaxis().SetRangeUser(91,161)
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.Draw("hist");
-    #hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetTitle("#sum BTag (max 3 jets)");
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.GetYaxis().SetTitle("Events");
-    hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetMaximum(450000.)
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.Draw("hist");
+    #hhqq_BG_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetTitle("#sum BTag (max 3 jets)");
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.GetYaxis().SetTitle("Events");
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.SetMaximum(450000.)
     h_BTag_sum_max3_HHZ_polm80_massCuts_.Draw("hist,e,same")
-    canvas_h_SIG_BG_h_BTag_sum_max3_polm80_massCuts_thstack.Modified();
+    canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack.Modified();
     
     h_BTag_sum_max3_HHZ_polm80_massCuts_.Scale(50000.)
     
-    line = TLine(1,0,1,280000)
+    line = TLine(2.2,0,2.2,280000)
     line.SetLineColor(kBlack);
     line.SetLineWidth(2);
     line.Draw()
     #x1,y1,x2,y2,arrow size, direction
-    arrow = TArrow(1.1,150000,1.6,150000,0.025,"|>")
+    arrow = TArrow(2.3,150000,2.9,150000,0.025,"|>")
     #arrow.SetAngle(0);
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_=TLegend(0.35,0.63,0.740,0.88);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetBorderSize(0);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetTextAlign(12);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetTextSize(0.050);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetTextFont(42);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetMargin(0.15);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetLineColor(1);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetLineStyle(1);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetLineWidth(1);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetFillColor(0);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.SetFillStyle(0);
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_HHZ_polm80_massCuts_,"HHZ#rightarrowbbbbqq x 50000");
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_,"ee#rightarrow qqqqqq");
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_,"ee#rightarrow qqqq");
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_hzqq_polm80_massCuts_,"HZ#rightarrowHqq");
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qq_polm80_massCuts_,"ee#rightarrow qq");
-    leg_hzqq_BG_h_BTag_sum_max3_polm80_massCuts_.Draw();
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_=TLegend(0.35,0.60,0.740,0.88);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetBorderSize(0);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetTextAlign(12);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetTextSize(0.050);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetTextFont(42);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetMargin(0.15);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetLineColor(1);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetLineStyle(1);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetLineWidth(1);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetFillColor(0);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.SetFillStyle(0);
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_HHZ_polm80_massCuts_,"HHZ#rightarrowbbbbqq x 50000");
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_,"ee#rightarrow qqqqqq");
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_,"ee#rightarrow qqqq");
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_hzqq_polm80_massCuts_,"HZ#rightarrowHqq");
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_WWH_qqqqH_polm80_massCuts_,"WWH#rightarrowqqqqH");
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ZZH_qqqqH_polm80_massCuts_,"ZZH#rightarrowqqqqH");
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qq_polm80_massCuts_,"ee#rightarrow qq");
+    leg_hzqq_BG_BTag_sum_max3_polm80_massCuts_.Draw();
     
     l.DrawLatex(x0,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_BG_h_BTag_sum_max3_polm80_massCuts_thstack.Print("h_BTag_sum_max3_polm80_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack.Print("h_BTag_sum_max3_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000.eps")
+    canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack.cd()
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.SetMaximum(10.e9)
+    hhqq_BG_BTag_sum_max3_polm80_massCuts_.SetMinimum(0.1)
+    canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack.SetLogy()
+    canvas_h_SIG_BG_BTag_sum_max3_polm80_massCuts_thstack.Print("h_BTag_sum_max3_polm80_hzqq_ee_qqqqqq_qqqq_qq_WWH_ZZH_and_hhqq_50000_logy.eps")
     
     h_BTag_sum_max3_HHZ_polm80_massCuts_.Scale(1./50000.)
     
@@ -1969,24 +2159,24 @@ def process_files():
     h_BTag_sum_max3_ee_qqqq_polm80_massCuts_.Scale(norm_tot_BG_to_SIG)
     h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_.Scale(norm_tot_BG_to_SIG)
     
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_= THStack("hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_", "");
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_hzqq_polm80_massCuts_);
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qq_polm80_massCuts_);
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_);
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_);
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_= THStack("hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_", "");
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_hzqq_polm80_massCuts_);
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qq_polm80_massCuts_);
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_);
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.Add(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_);
     
-    canvas_h_SIG_norm_BG_h_BTag_sum_max3_polm80_massCuts_thstack = setUpperCanvas("canvas_h_SIG_norm_BG_h_BTag_sum_max3_polm80_massCuts_thstack");
-    canvas_h_SIG_norm_BG_h_BTag_sum_max3_polm80_massCuts_thstack.cd();
+    canvas_h_SIG_norm_BG_BTag_sum_max3_polm80_massCuts_thstack = setUpperCanvas("canvas_h_SIG_norm_BG_BTag_sum_max3_polm80_massCuts_thstack");
+    canvas_h_SIG_norm_BG_BTag_sum_max3_polm80_massCuts_thstack.cd();
     #h_BTag_sum_max3_HZ_polm80_massCuts_.Draw("hist,e")
     #h_tot_norm_h_BTag_sum_max3_BG.Draw("hist,e")
     #h_tot_norm_h_BTag_sum_max3_BG.GetXaxis().SetRangeUser(91,161)
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.Draw("hist");
-    #hhqq_BG_h_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetTitle("#sum BTag (max 3 jets)");
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.GetYaxis().SetTitle("A.U.");
-    hhqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetMaximum(3.5)
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.Draw("hist");
+    #hhqq_BG_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetRangeUser(91,161)
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.GetXaxis().SetTitle("#sum BTag (max 3 jets)");
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.GetYaxis().SetTitle("A.U.");
+    hhqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetMaximum(3.5)
     h_BTag_sum_max3_HHZ_polm80_massCuts_.Draw("hist,e,same")
-    canvas_h_SIG_norm_BG_h_BTag_sum_max3_polm80_massCuts_thstack.Modified();
+    canvas_h_SIG_norm_BG_BTag_sum_max3_polm80_massCuts_thstack.Modified();
     
     line = TLine(1,0,1,2.1)
     line.SetLineColor(kBlack);
@@ -1998,28 +2188,28 @@ def process_files():
     arrow.SetLineWidth(2);
     arrow.Draw();
     
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_=TLegend(0.50,0.63,0.890,0.88);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetBorderSize(0);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetTextAlign(12);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetTextSize(0.050);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetTextFont(42);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetMargin(0.15);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetLineColor(1);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetLineStyle(1);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetLineWidth(1);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetFillColor(0);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.SetFillStyle(0);
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_HHZ_polm80_massCuts_,"HHZ#rightarrowbbbbqq");
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_,"ee#rightarrow qqqqqq");
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_,"ee#rightarrow qqqq");
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_hzqq_polm80_massCuts_,"HZ#rightarrowHqq");
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qq_polm80_massCuts_,"ee#rightarrow qq");
-    leg_hzqq_norm_BG_h_BTag_sum_max3_polm80_massCuts_.Draw();
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_=TLegend(0.50,0.63,0.890,0.88);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetBorderSize(0);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetTextAlign(12);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetTextSize(0.050);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetTextFont(42);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetMargin(0.15);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetLineColor(1);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetLineStyle(1);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetLineWidth(1);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetFillColor(0);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.SetFillStyle(0);
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_HHZ_polm80_massCuts_,"HHZ#rightarrowbbbbqq");
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqqqq_polm80_massCuts_,"ee#rightarrow qqqqqq");
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qqqq_polm80_massCuts_,"ee#rightarrow qqqq");
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_hzqq_polm80_massCuts_,"HZ#rightarrowHqq");
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.AddEntry(h_BTag_sum_max3_ee_qq_polm80_massCuts_,"ee#rightarrow qq");
+    leg_hzqq_norm_BG_BTag_sum_max3_polm80_massCuts_.Draw();
     
     l.DrawLatex(x,y,label);
     l.DrawLatex(x2,y2,label2);
-    canvas_h_SIG_norm_BG_h_BTag_sum_max3_polm80_massCuts_thstack.Print("h_BTag_sum_max3_polm80_normed_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq.eps")
-    
+    canvas_h_SIG_norm_BG_BTag_sum_max3_polm80_massCuts_thstack.Print("h_BTag_sum_max3_polm80_normed_hzqq_ee_qqqqqq_qqqq_qq_and_hhqq.eps")
+    '''
     
     file_BDT_Hhqq_sig_vs_BG_polm80 = root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/MVATrainingTrees_Jan2020_E_theta_BTag_tight_Mass_Cuts/MVATrainingWeights_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020NTrees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins___hhqq_vs_hzqq__ee_qq__ee_qqqq__ee_qqqqqq.root")
     
@@ -2236,15 +2426,18 @@ def process_files():
     l.DrawLatex(x2,y2,label2);
     canvas_njet6_VLC11_rfj_rj_mass_B_HZZ_bbbbqq_polm80.Print("~/plotsHHqq_VLC11_rfJets_BTag_NJet6/canvas_njet6_VLC11_comb_BTag_HZZ_bbbbqq_polm80.eps")
 
-    
-    file_polm80_hhqq_SignalHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
-    file_polm80_hhqq_SignalHistos_AllEvents_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins_AllEvents.root")
-    file_polm80_hzqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__hzqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
-    file_polm80_ee_qq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__ee_qq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
-    file_polm80_ee_qqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__ee_qqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
-    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__ee_qqqqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
+   '''
+    file_polm80_hhqq_SignalHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    file_polm80_hhqq_SignalHistos_AllEvents_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins_AllEvents.root")
+    file_polm80_hzqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__hzqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
 
+    file_polm80_ee_qq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ee_qq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    file_polm80_ee_qqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ee_qqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    file_polm80_ee_qqqqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ee_qqqqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
 
+    file_polm80_WWH_qqqqH_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__WWH_qqqqH__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+
+    file_polm80_ZZH_qqqqH_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polm80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ZZH_qqqqH__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
 
     x_polm80_BDTScore = array( 'f' )
     y_polm80_significance = array( 'f' )
@@ -2267,14 +2460,16 @@ def process_files():
         h_BTag_sum_all_polm80_sig_hzqq_BGHistos=file_polm80_hzqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
         h_BTag_sum_all_polm80_sig_ee_qq_BGHistos=file_polm80_ee_qq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
         h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos=file_polm80_ee_qqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
-        h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos=file_polm80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all") 
+        h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos=file_polm80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos=file_polm80_WWH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos=file_polm80_ZZH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
         #print dir_ind,"integral of signal mass",h_BTag_sum_all_polm80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()
         if h_BTag_sum_all_polm80_sig_hhqq.Integral()>0:
             #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polm80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polm80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()
             y_polm80_efficiency.append(100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/norm_polm)
-            y_polm80_purity.append(100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()))
-            y_polm80_significance.append(h_BTag_sum_all_polm80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()))
-            print 'at polm ',dir_ind,'signif/pur/eff/events',h_BTag_sum_all_polm80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/norm_polm,h_BTag_sum_all_polm80_sig_hhqq.Integral()
+            y_polm80_purity.append(100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            y_polm80_significance.append(h_BTag_sum_all_polm80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            print 'at polm ',dir_ind,'signif/pur/eff/events',h_BTag_sum_all_polm80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/norm_polm,h_BTag_sum_all_polm80_sig_hhqq.Integral()
         else:
             y_polm80_efficiency.append(0)
             y_polm80_purity.append(0)
@@ -2283,10 +2478,10 @@ def process_files():
         if h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()>0:
             #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polm80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polm80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()
             y_polm80_AllEvents_efficiency.append(100.*h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/norm_polm_AllEvents)
-            y_polm80_AllEvents_purity.append(100.*h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()))
-            y_polm80_AllEvents_significance.append(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()))
-            print 'at polm ',dir_ind,'signif/pur/eff/events all ',h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/norm_polm,h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()
-            print 'at polm ',dir_ind,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq',h_BTag_sum_all_polm80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()
+            y_polm80_AllEvents_purity.append(100.*h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            y_polm80_AllEvents_significance.append(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            print 'at polm ',dir_ind,'signif/pur/eff/events all ',h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()/norm_polm,h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()
+            print 'at polm ',dir_ind,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq/WWH/ZZH',h_BTag_sum_all_polm80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()
         else:
             y_polm80_AllEvents_efficiency.append(0)
             y_polm80_AllEvents_purity.append(0)
@@ -2365,102 +2560,239 @@ def process_files():
     canvas_polm80_AllEvents_BDT_purity.Print("~/plotsHHqq_VLC11_rfJets_BTag_NJet6/hhqq_bbar_vs_totBG_polm80_AllEvents_signal_purity_vs_BDT.eps")
 
 
-
-
-
-
-
-
-
-
-
-
-    #NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root
-        #NTuplesAnalysis/MVATrainingReaderHHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratio.root
-    file_polp80_hhqq_SignalHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
+    file_polp80_hhqq_SignalHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    file_polp80_hhqq_SignalHistos_AllEvents_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins_AllEvents.root")
+    file_polp80_hzqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__hzqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
     
-    file_polp80_hhqq_SignalHistos_AllEvents_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__hhqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins_AllEvents.root")
-    file_polp80_hzqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__hzqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
-    file_polp80_ee_qq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__ee_qq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
-    file_polp80_ee_qqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__ee_qqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
-    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag_tight_Mass_Cuts/MVATrainingReader_HHZ__ee_qqqqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTag_noLTagMins.root")
+    file_polp80_ee_qq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ee_qq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    file_polp80_ee_qqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ee_qqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    file_polp80_ee_qqqqqq_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ee_qqqqqq__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    
+    file_polp80_WWH_qqqqH_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__WWH_qqqqH__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    
+    file_polp80_ZZH_qqqqH_BGHistos_=root.TFile.Open("/Users/matthiasweber/rootfilesHHZ/HHZAnalyzer/190904Prod/VLC11_NJets6_finalAnalysis/polp80/NTuplesAnalysis_E_theta_BTag3_2_20_tight_Mass_Cuts/MVATrainingReader_BDT__hhqq_vs_hzqq_qq_qqqq_qqqqqq_WWH_WWZ__HHZ__ZZH_qqqqH__histofiles_BDT_GiniIndexNormNumEventsMaxDepth3AdaBoostBeta020Trees300NCuts20_noEratios_noCosThetaHel_noCTagSum_noj3dalphaCTagCTagMax_noLTagMins.root")
+    
+    x_polp80_BDTScore = array( 'f' )
+    y_polp80_significance = array( 'f' )
+    y_polp80_purity = array( 'f' )
+    y_polp80_efficiency = array( 'f' )
+    norm_polp=file_polp80_hhqq_SignalHistos_.Get("-0.2/h_BDT_output").Integral()
+    
+    y_polp80_AllEvents_significance = array( 'f' )
+    y_polp80_AllEvents_purity = array( 'f' )
+    y_polp80_AllEvents_efficiency = array( 'f' )
+    norm_polp_AllEvents=file_polp80_hhqq_SignalHistos_AllEvents_.Get("-0.2/h_BDT_output").Integral()
+    #norm_polp=h_mass_sig_hzqq_norm_polp.Integral()
+    #norm_polp = 10.
+    print 'norm_polp',norm_polp
+    
+    for dir_ind in directory:
+        x_polp80_BDTScore.append(float(dir_ind))
+        h_BTag_sum_all_polp80_sig_hhqq=file_polp80_hhqq_SignalHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polp80_sig_hhqq_AllEvents=file_polp80_hhqq_SignalHistos_AllEvents_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polp80_sig_hzqq_BGHistos=file_polp80_hzqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polp80_sig_ee_qq_BGHistos=file_polp80_ee_qq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos=file_polp80_ee_qqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos=file_polp80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos=file_polp80_WWH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos=file_polp80_ZZH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        #print dir_ind,"integral of signal mass",h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+        if h_BTag_sum_all_polp80_sig_hhqq.Integral()>0:
+            #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+            y_polp80_efficiency.append(100.*h_BTag_sum_all_polp80_sig_hhqq.Integral()/norm_polp)
+            y_polp80_purity.append(100.*h_BTag_sum_all_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            y_polp80_significance.append(h_BTag_sum_all_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            print 'at polp ',dir_ind,'signif/pur/eff/events',h_BTag_sum_all_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polp80_sig_hhqq.Integral()/norm_polp,h_BTag_sum_all_polp80_sig_hhqq.Integral()
+        else:
+            y_polp80_efficiency.append(0)
+            y_polp80_purity.append(0)
+            y_polp80_significance.append(0)
+        #print dir_ind,"integral of signal mass",h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+        if h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()>0:
+            #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+            y_polp80_AllEvents_efficiency.append(100.*h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()/norm_polp_AllEvents)
+            y_polp80_AllEvents_purity.append(100.*h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            y_polp80_AllEvents_significance.append(h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            print 'at polp ',dir_ind,'signif/pur/eff/events all ',h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()/norm_polp,h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()
+            print 'at polp ',dir_ind,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq/WWH/ZZH',h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()
+        else:
+            y_polp80_AllEvents_efficiency.append(0)
+            y_polp80_AllEvents_purity.append(0)
+            y_polp80_AllEvents_significance.append(0)
+    canvas_polp80_BDT_significance = setUpperCanvas("canvas_polp80_BDT_significance");
+    canvas_polp80_BDT_significance.cd()
+    graph_polp80_significance = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_significance )
+    graph_polp80_significance.SetMarkerStyle(20)
+    graph_polp80_significance.SetMarkerColor(1)
+    graph_polp80_significance.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_significance.GetYaxis().SetTitle('significance [#sigma]')
+    graph_polp80_significance.Draw('AP')
+    #canvas_polp80_BDT_significance.Update()
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_BDT_significance.Print("~/plotsHHqq_VLC11_rfJets_BTag_NJet6/hhqq_bbar_vs_totBG_polp80_sigificance_vs_BDT.eps")
+
+    canvas_polp80_BDT_efficiency = setUpperCanvas("canvas_polp80_BDT_efficiency");
+    canvas_polp80_BDT_efficiency.cd()
+    graph_polp80_efficiency = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_efficiency )
+    graph_polp80_efficiency.SetMarkerStyle(21)
+    graph_polp80_efficiency.SetMarkerColor(1)
+    graph_polp80_efficiency.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_efficiency.GetYaxis().SetTitle('signal efficiency [%]')
+    graph_polp80_efficiency.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_BDT_efficiency.Print("hhqq_bbar_vs_totBG_polp80_signal_efficiency_vs_BDT.eps")
+    canvas_polp80_BDT_purity = setUpperCanvas("canvas_polp80_BDT_purity");
+    canvas_polp80_BDT_purity.cd()
+    graph_polp80_purity = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_purity )
+    graph_polp80_purity.SetMarkerStyle(22)
+    graph_polp80_purity.SetMarkerColor(2)
+    graph_polp80_purity.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_purity.GetYaxis().SetTitle('purity [%]')
+    graph_polp80_purity.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_BDT_purity.Print("~/plotsHHqq_VLC11_rfJets_BTag_NJet6/hhqq_bbar_vs_totBG_polp80_signal_purity_vs_BDT.eps")
 
 
-    x1_polm80_vs_polp80_BDTScore = array('f')
-    x2_polm80_vs_polp80_BDTScore = array('f')
-    y_polm80_vs_polp80_significance = array( 'f' )
-    y_polm80_vs_polp80_purity = array( 'f' )
-    y_polm80_vs_polp80_efficiency = array( 'f' )
+    canvas_polp80_AllEvents_BDT_significance = setUpperCanvas("canvas_polp80_AllEvents_BDT_significance");
+    canvas_polp80_AllEvents_BDT_significance.cd()
+    graph_polp80_AllEvents_significance = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_AllEvents_significance )
+    graph_polp80_AllEvents_significance.SetMarkerStyle(20)
+    graph_polp80_AllEvents_significance.SetMarkerColor(1)
+    graph_polp80_AllEvents_significance.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_AllEvents_significance.GetYaxis().SetTitle('significance [#sigma]')
+    graph_polp80_AllEvents_significance.Draw('AP')
+    #canvas_polp80_AllEvents_BDT_significance.Update()
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_AllEvents_BDT_significance.Print("~/plotsHHqq_VLC11_rfJets_BTag_NJet6/hhqq_bbar_vs_totBG_polp80_AllEvents_sigificance_vs_BDT.eps")
+    
+    canvas_polp80_AllEvents_BDT_efficiency = setUpperCanvas("canvas_polp80_AllEvents_BDT_efficiency");
+    canvas_polp80_AllEvents_BDT_efficiency.cd()
+    graph_polp80_AllEvents_efficiency = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_AllEvents_efficiency )
+    graph_polp80_AllEvents_efficiency.SetMarkerStyle(21)
+    graph_polp80_AllEvents_efficiency.SetMarkerColor(1)
+    graph_polp80_AllEvents_efficiency.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_AllEvents_efficiency.GetYaxis().SetTitle('signal efficiency [%]')
+    graph_polp80_AllEvents_efficiency.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_AllEvents_BDT_efficiency.Print("hhqq_bbar_vs_totBG_polp80_AllEvents_signal_efficiency_vs_BDT.eps")
+    canvas_polp80_AllEvents_BDT_purity = setUpperCanvas("canvas_polp80_AllEvents_BDT_purity");
+    canvas_polp80_AllEvents_BDT_purity.cd()
+    graph_polp80_AllEvents_purity = TGraph( n_graphs, x_polp80_BDTScore, y_polp80_AllEvents_purity )
+    graph_polp80_AllEvents_purity.SetMarkerStyle(22)
+    graph_polp80_AllEvents_purity.SetMarkerColor(2)
+    graph_polp80_AllEvents_purity.GetXaxis().SetTitle('BDT Score')
+    graph_polp80_AllEvents_purity.GetYaxis().SetTitle('purity [%]')
+    graph_polp80_AllEvents_purity.Draw('AP')
+    l.DrawLatex(x,y,label);
+    l.DrawLatex(x2,y2,label2);
+    canvas_polp80_AllEvents_BDT_purity.Print("~/plotsHHqq_VLC11_rfJets_BTag_NJet6/hhqq_bbar_vs_totBG_polp80_AllEvents_signal_purity_vs_BDT.eps")
+    
+
+    x_polm80_and_polp80_BDTScore = array( 'f' )
+    y_polm80_and_polp80_significance = array( 'f' )
+    y_polm80_and_polp80_purity = array( 'f' )
+    y_polm80_and_polp80_efficiency = array( 'f' )
     norm_polm80_and_polp80=file_polm80_hhqq_SignalHistos_.Get("-0.2/h_BDT_output").Integral()+file_polp80_hhqq_SignalHistos_.Get("-0.2/h_BDT_output").Integral()
 
-    y_polm80_vs_polp80_AllEvents_significance = array( 'f' )
-    y_polm80_vs_polp80_AllEvents_purity = array( 'f' )
-    y_polm80_vs_polp80_AllEvents_efficiency = array( 'f' )
-    norm_polm80_and_polp80_AllEvents=file_polm80_hhqq_SignalHistos_AllEvents_.Get("-0.2/h_BDT_output").Integral()+file_polp80_hhqq_SignalHistos_AllEvents_.Get("-0.2/h_BDT_output").Integral()
-
-    significance_max=0
-    significanceAllEvents_max=0
-
-    purity_Smax=0
-    efficiency_Smax=0
-    totalSigEvts_Smax=0
-
-    purity_SmaxAllEvents=0
-    efficiency_SmaxAllEvents=0
-    totalSigEvts_SmaxAllEvents=0
-
+    y_polm80_and_polp80_AllEvents_significance = array( 'f' )
+    y_polm80_and_polp80_AllEvents_purity = array( 'f' )
+    y_polm80_and_polp80_AllEvents_efficiency = array( 'f' )
+    norm_polm80_and_polp80_AllEvents=file_polp80_hhqq_SignalHistos_AllEvents_.Get("-0.2/h_BDT_output").Integral()+file_polm80_hhqq_SignalHistos_AllEvents_.Get("-0.2/h_BDT_output").Integral()
+    #norm_polm=h_mass_sig_hzqq_norm_polm.Integral()
+    #norm_polm = 10.
+    print 'norm_polm80_and_polp80',norm_polm80_and_polp80
+    
     for dir_ind in directory:
-        for dir_ind2 in directory:
-            x1_polm80_vs_polp80_BDTScore.append(float(dir_ind))
-            x2_polm80_vs_polp80_BDTScore.append(float(dir_ind2))
-            #print' in filling',dir_ind,dir_ind2
+        x_polm80_and_polp80_BDTScore.append(float(dir_ind))
+        h_BTag_sum_all_polm80_and_polp80_sig_hhqq=file_polm80_hhqq_SignalHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_hhqq_SignalHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents=file_polm80_hhqq_SignalHistos_AllEvents_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_hhqq_SignalHistos_AllEvents_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos=file_polm80_hzqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_hzqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos=file_polm80_ee_qq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ee_qq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos=file_polm80_ee_qqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ee_qqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos=file_polm80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos=file_polm80_WWH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_WWH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos=file_polm80_ZZH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ZZH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+        #print dir_ind,"integral of signal mass",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+        if h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()>0:
+            #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+            y_polm80_and_polp80_efficiency.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/norm_polm80_and_polp80)
+            y_polm80_and_polp80_purity.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            y_polm80_and_polp80_significance.append(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            print 'at polm plus polp ',dir_ind,'signif/pur/eff/events',h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/norm_polm80_and_polp80,h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()
+        else:
+            y_polm80_and_polp80_efficiency.append(0)
+            y_polm80_and_polp80_purity.append(0)
+            y_polm80_and_polp80_significance.append(0)
+        #print dir_ind,"integral of signal mass",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+        if h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()>0:
+            #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+            y_polm80_and_polp80_AllEvents_efficiency.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/norm_polm80_and_polp80_AllEvents)
+            y_polm80_and_polp80_AllEvents_purity.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            y_polm80_and_polp80_AllEvents_significance.append(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+            print 'at polm plus polp ',dir_ind,'signif/pur/eff/events all ',h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/norm_polm80_and_polp80,h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()
+            print 'at polm plus polp ',dir_ind,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq/WWH/ZZH',h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()
+        else:
+            y_polm80_and_polp80_AllEvents_efficiency.append(0)
+            y_polm80_and_polp80_AllEvents_purity.append(0)
+            y_polm80_and_polp80_AllEvents_significance.append(0)
+
+    for dir_ind2 in directory:
+        for dir_ind in directory:
+            x_polm80_and_polp80_BDTScore.append(float(dir_ind))
+            h_BTag_sum_all_polm80_and_polp80_sig_hhqq=file_polm80_hhqq_SignalHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_hhqq_SignalHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents=file_polm80_hhqq_SignalHistos_AllEvents_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_hhqq_SignalHistos_AllEvents_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos=file_polm80_hzqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_hzqq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos=file_polm80_ee_qq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ee_qq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos=file_polm80_ee_qqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ee_qqqq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos=file_polm80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ee_qqqqqq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos=file_polm80_WWH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_WWH_qqqqH_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos=file_polm80_ZZH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")+file_polp80_ZZH_qqqqH_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
             h_BTag_sum_all_polm80_sig_hhqq=file_polm80_hhqq_SignalHistos_.Get(dir_ind+"/h_BTag_sum_all")
             h_BTag_sum_all_polm80_sig_hhqq_AllEvents=file_polm80_hhqq_SignalHistos_AllEvents_.Get(dir_ind+"/h_BTag_sum_all")
             h_BTag_sum_all_polm80_sig_hzqq_BGHistos=file_polm80_hzqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
             h_BTag_sum_all_polm80_sig_ee_qq_BGHistos=file_polm80_ee_qq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
             h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos=file_polm80_ee_qqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
-            h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos=file_polm80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all") 
-            h_BTag_sum_all_polp80_sig_hhqq=file_polp80_hhqq_SignalHistos_.Get(dir_ind2+"/h_BTag_sum_all")
-            print 'at start',h_BTag_sum_all_polp80_sig_hhqq.Integral()
-            h_BTag_sum_all_polp80_sig_hhqq_AllEvents=file_polp80_hhqq_SignalHistos_AllEvents_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos=file_polm80_ee_qqqqqq_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos=file_polm80_WWH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+            h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos=file_polm80_ZZH_qqqqH_BGHistos_.Get(dir_ind+"/h_BTag_sum_all")
+            h_BTag_sum_all_polp80_sig_hhqq=file_polp80_hhqq_SignalHistos_.Get(dir_ind+"/h_BTag_sum_all")
+            h_BTag_sum_all_polp80_sig_hhqq_AllEvents=file_polp80_hhqq_SignalHistos_AllEvents_.Get(dir_ind+"/h_BTag_sum_all")
             h_BTag_sum_all_polp80_sig_hzqq_BGHistos=file_polp80_hzqq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
             h_BTag_sum_all_polp80_sig_ee_qq_BGHistos=file_polp80_ee_qq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
             h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos=file_polp80_ee_qqqq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
-            h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos=file_polp80_ee_qqqqqq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all") 
-            if h_BTag_sum_all_polm80_sig_hhqq.Integral()>0 or h_BTag_sum_all_polp80_sig_hhqq.Integral()>0 :
-                y_polm80_vs_polp80_efficiency.append(100.*(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/norm_polm80_and_polp80)
-                y_polm80_vs_polp80_purity.append(100.*(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()))
-                y_polm80_vs_polp80_significance.append((h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()))
-                print 'at polm_vs_polp ',dir_ind,dir_ind2,'signif/pur/eff/event bbbbqq ',(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/norm_polm80_and_polp80,h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral()
-                if ((h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()))>significance_max:
-                    significance_max=((h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral())/sqrt(h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()))
-
+            h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos=file_polp80_ee_qqqqqq_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos=file_polp80_WWH_qqqqH_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+            h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos=file_polp80_ZZH_qqqqH_BGHistos_.Get(dir_ind2+"/h_BTag_sum_all")
+                    #print dir_ind,"integral of signal mass",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+            if h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()>0:
+                #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+                y_polm80_and_polp80_efficiency.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/norm_polm80_and_polp80)
+                y_polm80_and_polp80_purity.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+                y_polm80_and_polp80_significance.append(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+                print 'at polm plus polp different BDT' ,dir_ind,dir_ind2,'signif/pur/eff/events',h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/norm_polm80_and_polp80,h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()
             else:
-                y_polm80_vs_polp80_efficiency.append(0)
-                y_polm80_vs_polp80_purity.append(0)
-                y_polm80_vs_polp80_significance.append(0)
-            if h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()>0 or h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()>0 :
-            #print '#',dir_ind,"polp significance,purity ",h_BTag_sum_all_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()
-                y_polm80_vs_polp80_AllEvents_efficiency.append(100.*(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral())/norm_polm80_and_polp80_AllEvents)
-                y_polm80_vs_polp80_AllEvents_purity.append(100.*(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral())/(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()))
-                y_polm80_vs_polp80_AllEvents_significance.append((h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral())/sqrt(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral())),h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()
-                print 'at polm_vs_polp ',dir_ind,dir_ind2,'signif/pur/eff/events all ',(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral())/sqrt(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral())/(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*(h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral())/norm_polm80_and_polp80_AllEvents,h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral()
-                print 'at polp vs polp ',dir_ind,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq',h_BTag_sum_all_polm80_sig_hhqq.Integral()+h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()
-                print 'polm all/hzqq/qq/qqqq/qqqqqq', h_BTag_sum_all_polm80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral() ,h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral()
-                error1=root.Double(0.0)
-                nbins=h_BTag_sum_all_polm80_sig_hhqq.GetNbinsX()+1
-                print 'polm all/hzqq/qq/qqqq/qqqqqq and error',h_BTag_sum_all_polm80_sig_hhqq.IntegralAndError(0,nbins,error1),error1,h_BTag_sum_all_polm80_sig_hhqq_AllEvents.IntegralAndError(0,nbins,error1),error1,h_BTag_sum_all_polm80_sig_hzqq_BGHistos.IntegralAndError(0,nbins,error1),error1,h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.IntegralAndError(0,nbins,error1),error1,h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.IntegralAndError(0,nbins,error1),error1,h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.IntegralAndError(0,nbins,error1),error1
-                print 'polp all/hzqq/qq/qqqq/qqqqqq',h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral()
-                error2=root.Double(0.0)
-                nbins=h_BTag_sum_all_polp80_sig_hhqq.GetNbinsX()+1
-                print 'polp all/hzqq/qq/qqqq/qqqqqq and error',h_BTag_sum_all_polp80_sig_hhqq.IntegralAndError(0,nbins,error2),error2,h_BTag_sum_all_polp80_sig_hhqq_AllEvents.IntegralAndError(0,nbins,error2),error2,h_BTag_sum_all_polp80_sig_hzqq_BGHistos.IntegralAndError(0,nbins,error2),error2,h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.IntegralAndError(0,nbins,error2),error2,h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.IntegralAndError(0,nbins,error2),error2,h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.IntegralAndError(0,nbins,error2),error2
-                print 'sum all/hzqq/qq/qqqq/qqqqqq and error',h_BTag_sum_all_polm80_sig_hhqq.IntegralAndError(0,nbins,error1)+h_BTag_sum_all_polp80_sig_hhqq.IntegralAndError(0,nbins,error2),sqrt(TMath.Power(error1,2)+TMath.Power(error2,2)),h_BTag_sum_all_polm80_sig_hhqq_AllEvents.IntegralAndError(0,nbins,error1)+h_BTag_sum_all_polp80_sig_hhqq_AllEvents.IntegralAndError(0,nbins,error2),sqrt(TMath.Power(error1,2)+TMath.Power(error2,2)),h_BTag_sum_all_polm80_sig_hzqq_BGHistos.IntegralAndError(0,nbins,error1)+h_BTag_sum_all_polp80_sig_hzqq_BGHistos.IntegralAndError(0,nbins,error2),sqrt(TMath.Power(error1,2)+TMath.Power(error2,2)),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.IntegralAndError(0,nbins,error1)+h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.IntegralAndError(0,nbins,error2),sqrt(TMath.Power(error1,2)+TMath.Power(error2,2)),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.IntegralAndError(0,nbins,error1)+h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.IntegralAndError(0,nbins,error2),sqrt(TMath.Power(error1,2)+TMath.Power(error2,2)),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.IntegralAndError(0,nbins,error1)+h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.IntegralAndError(0,nbins,error2),sqrt(TMath.Power(error1,2)+TMath.Power(error2,2))
+                y_polm80_and_polp80_efficiency.append(0)
+                y_polm80_and_polp80_purity.append(0)
+                y_polm80_and_polp80_significance.append(0)
+                #print dir_ind,"integral of signal mass",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+            if h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()>0:
+                #print '#',dir_ind,"polm significance,purity ",h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()),h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()
+                y_polm80_and_polp80_AllEvents_efficiency.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/norm_polm80_and_polp80_AllEvents)
+                y_polm80_and_polp80_AllEvents_purity.append(100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+                y_polm80_and_polp80_AllEvents_significance.append(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()))
+                print 'at polm plus polp both BDT all',dir_ind,dir_ind2,'signif/pur/eff/events all ',h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/sqrt(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/(h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral()+h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()),100.*h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()/norm_polm80_and_polp80,h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral()
+                print 'at polm plus polp both BDT ',dir_ind,dir_ind2,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq/WWH/ZZH',h_BTag_sum_all_polm80_and_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ee_qqqqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_WWH_qqqqH_BGHistos.Integral(),h_BTag_sum_all_polm80_and_polp80_sig_ZZH_qqqqH_BGHistos.Integral()
+                print 'at polm both BDT ',dir_ind,dir_ind2,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq/WWH/ZZH',h_BTag_sum_all_polm80_sig_hhqq.Integral(),h_BTag_sum_all_polm80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polm80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ee_qqqqqq_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_WWH_qqqqH_BGHistos.Integral(),h_BTag_sum_all_polm80_sig_ZZH_qqqqH_BGHistos.Integral()
+                print 'at polp both BDT ',dir_ind,dir_ind2,'evt sig/sig all/hzqq/qq/qqqq/qqqqqq/WWH/ZZH',h_BTag_sum_all_polp80_sig_hhqq.Integral(),h_BTag_sum_all_polp80_sig_hhqq_AllEvents.Integral(),h_BTag_sum_all_polp80_sig_hzqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ee_qqqqqq_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_WWH_qqqqH_BGHistos.Integral(),h_BTag_sum_all_polp80_sig_ZZH_qqqqH_BGHistos.Integral()
             else:
-                y_polm80_vs_polp80_AllEvents_efficiency.append(0)
-                y_polm80_vs_polp80_AllEvents_purity.append(0)
-                y_polm80_vs_polp80_AllEvents_significance.append(0)
-
-    print 'do i ever get here'
+                y_polm80_and_polp80_AllEvents_efficiency.append(0)
+                y_polm80_and_polp80_AllEvents_purity.append(0)
+                y_polm80_and_polp80_AllEvents_significance.append(0)
 
     """
     canvas_polm80_vs_polp80_BDT_significance = setUpperCanvas("canvas_polm80_vs_polp80_BDT_significance");
